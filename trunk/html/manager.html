@@ -1,0 +1,70 @@
+<html>
+<body>
+<h1>Manager page</h1>
+
+<a href="addFlight.html">Add Flight</a>
+
+<form>
+<table border="1">
+  <caption>Search Flight</caption>
+  <tr><td rowspan="3">Departure</td><td>Date</td><td><input type="text" name="departDate"></td></tr>
+  <tr><td>Time</td><td><input type="text" name="departTime"></td></tr>
+  <tr><td>Location</td><td><input type="text" name="departLocation"></td></tr>
+  <tr><td rowspan="3">Arrival</td><td>Date</td><td><input type="text" name="arrivalDate"></td></tr>
+  <tr><td>Time</td><td><input type="text" name="arrivalTime"></td></tr>
+  <tr><td>Location</td><td><input type="text" name="arrivalLocation"></td></tr>
+  <tr><td>The number of passengers</td><td colspan="2">
+      <input type="Radio" name="nPassengers" value="1" checked>1<br>
+      <input type="Radio" name="nPassengers" value="2">2<br>
+      <input type="Radio" name="nPassengers" value="3">3<br>
+      <input type="Radio" name="nPassengers" value="4">4<br>
+      <input type="Radio" name="nPassengers" value="5">5<br>
+      <input type="Radio" name="nPassengers" value="6">6<br>
+      <input type="Radio" name="nPassengers" value="7">7</td></tr>
+</table>
+<input type="submit" value="Search"> <a href="">Inventory report</a>
+</form>
+
+<table border="1">
+  <tr><td><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline code/name</a></td>
+    <td>Flight number (3 digits)</td>
+    <td><a href="http://www.orbitz.com/App/global/airportCodes.jsp">Departure location</a></td>
+    <td>Departure day of the week/time</td>
+    <td><a href="http://www.orbitz.com/App/global/airportCodes.jsp">Arrival location</a></td>
+    <td>Arrival day of the week/time</td>
+    <td>cost of business class</td>
+    <td>cost of economy class</td>
+    <td>Seats for business class</td>
+    <td>Seats for economy class</td>
+    <td>Cancel</td></tr>
+
+  <tr><td>AS</td>
+    <td>013</td>
+    <td><a href="http://maps.google.com">ABR</a></td>
+    <td></td>
+    <td><a href="http://maps.google.com">ADK</a></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>8/10</td>
+    <td>12/30</td>
+    <td><a href="">Cancel</a></td>
+  </tr>
+
+  <tr><td>AS</td>
+    <td>013</td>
+    <td><a href="http://maps.google.com">ABR</a></td>
+    <td></td>
+    <td><a href="http://maps.google.com">ADK</a></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>8/10</td>
+    <td>12/30</td>
+    <td><a href="">Cancel</a></td>
+  </tr>
+
+</table>
+
+</body>
+</html>
