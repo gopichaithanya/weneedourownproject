@@ -34,6 +34,7 @@
         <echo message="Available targets are:"/>
         <echo message=""/>
         <echo message="build     --> Build the application"/>
+        <echo message="clean     --> Clean compiled files and WAR file"/>
         <echo message="deploy    --> Deploy application as directory"/>
         <echo message="deploywar --> Deploy application as a WAR file"/>
         <echo message="install   --> Install application in Tomcat"/>
@@ -51,6 +52,15 @@
             <src path="${src.dir}"/>
             <classpath refid="master-classpath"/>
         </javac>
+    </target>
+    
+    <target name="clean" description="Clean compiled files and WAR files">
+        <delete>
+          <fileset dir="${build.dir}" includes="**/*.class" />
+        </delete>
+        <delete>
+          <fileset dir="${dist.dir}" includes="**/*.war" />
+        </delete>
     </target>
 
     <target name="deploy" depends="build" description="Deploy application">
@@ -82,6 +92,7 @@
     </target>
 
     <target name="deploywar" depends="deploy" description="Deploy application as a WAR file">
+        <mkdir dir="${dist.dir}"/>
         <war destfile="${dist.dir}/${name}.war"
              webxml="${xml.dir}/web.xml">
              <fileset dir="${deploy.path}/${name}">
@@ -94,7 +105,7 @@
             </fileset>
         </copy>
     </target>
-    
+
 <!-- ============================================================== -->
 <!-- Tomcat tasks - remove these if you don't have Tomcat installed -->
 <!-- ============================================================== -->
