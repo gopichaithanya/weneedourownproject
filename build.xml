@@ -86,7 +86,7 @@
         </copy>
         <copy todir="${deploy.path}/${name}/WEB-INF" preservelastmodified="true">
             <fileset dir="${xml.dir}">
-                <include name="web.xml"/>
+                <include name="*.xml"/>
             </fileset>
         </copy>
     </target>
