@@ -10,6 +10,7 @@
     <property name="jsp.dir" value="jsp"/>
     <property name="html.dir" value="html"/>
     <property name="dist.dir" value="dist"/>
+    <property name="test.dir" value="test"/>
     <property name="build.dir" value="build/classes"/>
     <property name="name" value="proj4398"/>
 
@@ -33,15 +34,17 @@
         <echo message=""/>
         <echo message="Available targets are:"/>
         <echo message=""/>
-        <echo message="build     --> Build the application"/>
-        <echo message="clean     --> Clean compiled files and WAR file"/>
-        <echo message="deploy    --> Deploy application as directory"/>
-        <echo message="deploywar --> Deploy application as a WAR file"/>
-        <echo message="install   --> Install application in Tomcat"/>
-        <echo message="reload    --> Reload application in Tomcat"/>
-        <echo message="start     --> Start Tomcat application"/>
-        <echo message="stop      --> Stop Tomcat application"/>
-        <echo message="list      --> List Tomcat applications"/>
+        <echo message="build       --> Build the application"/>
+        <echo message="clean       --> Clean compiled files and WAR file"/>
+        <echo message="buildtests  --> Build the tests"/>
+        <echo message="tests       --> Test all the tests"/>
+        <echo message="deploy      --> Deploy application as directory"/>
+        <echo message="deploywar   --> Deploy application as a WAR file"/>
+        <echo message="install     --> Install application in Tomcat"/>
+        <echo message="reload      --> Reload application in Tomcat"/>
+        <echo message="start       --> Start Tomcat application"/>
+        <echo message="stop        --> Stop Tomcat application"/>
+        <echo message="list        --> List Tomcat applications"/>
         <echo message=""/>
     </target>
 
@@ -61,6 +64,43 @@
         <delete>
           <fileset dir="${dist.dir}" includes="**/*.war" />
         </delete>
+    </target>
+
+    <target name="buildtests" description="Compile test tree java files">
+          <mkdir dir="${build.dir}"/>
+          <javac destdir="${build.dir}" source="1.5" target="1.5" debug="true"
+              deprecation="false" optimize="false" failonerror="true">
+              <src path="${test.dir}"/>
+              <classpath refid="master-classpath"/>
+          </javac>
+    </target>
+
+    <target name="tests" depends="build, buildtests" description="Run tests">
+        <junit printsummary="on"
+              fork="false"
+              haltonfailure="false"
+              failureproperty="tests.failed"
+              showoutput="true">
+
+              <classpath refid="master-classpath"/>
+              <formatter type="brief" usefile="false"/>
+
+              <batchtest>
+                    <fileset dir="${build.dir}">
+                          <include name="**/*Tests.*"/>
+                    </fileset>
+              </batchtest>
+              
+        </junit>
+
+        <fail if="tests.failed">
+              tests.failed=${tests.failed}
+              ***********************************************************
+              ***********************************************************
+              ****  One or more tests failed!  Check the output ...  ****
+              ***********************************************************
+              ***********************************************************
+        </fail>
     </target>
 
     <target name="deploy" depends="build" description="Deploy application">
