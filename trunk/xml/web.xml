@@ -6,10 +6,11 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
 
-  <welcome-file-list>
-    <welcome-file>
-      index.html
-    </welcome-file>
-  </welcome-file-list>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <display-name>SWE642 Project 4398</display-name>
+    <description>SWE642 Project 4398</description>
 
 </web-app>
