@@ -47,6 +47,12 @@
         <echo message="start       --> Start Tomcat application"/>
         <echo message="stop        --> Stop Tomcat application"/>
         <echo message="list        --> List Tomcat applications"/>
+        <echo message="startDB     --> Start up HSQL Database Server"/>
+        <echo message="loadDB      --> Load up all the data to DB"/>
+        <echo message="dropDB      --> Drop all the data from DB"/>
+        <echo message="printDB     --> Show all the data on DB"/>
+        <echo message="deleteDB    --> Delete all the data from DB"/>
+        <echo message="shutdownDB  --> Shoutdown DB"/>
         <echo message=""/>
     </target>
 
@@ -134,6 +140,7 @@
         <copy todir="${deploy.path}/${name}/WEB-INF" preservelastmodified="true">
             <fileset dir="${xml.dir}">
                 <include name="*.xml"/>
+                <exclude name="tomcat-users.xml"/>
             </fileset>
         </copy>
         <!--antcall target="reload"/-->
@@ -224,5 +231,99 @@
     </target>
 
 <!-- End Tomcat tasks -->
+
+<!-- Database tasks -->
+
+    <target name="startDB">
+        <echo message="Load up data using: ${db.driver} ${db.url}"/>
+        <java fork="true"
+          spawn="true"
+          classname="org.hsqldb.Server">
+          <arg line="-database.0 file:build/mydb -dbname.0 mydb " />
+          <classpath refid="master-classpath"/>
+        </java>
+    </target>
+
+    <target name="loadDB">
+        <echo message="Load up data using: ${db.driver} ${db.url}"/>
+        <sql driver="${db.driver}"
+             url="${db.url}"
+             userid="${db.user}"
+             password="${db.pw}"
+             onerror="continue"
+             src="sql/airline.sql">  
+            <classpath refid="master-classpath"/>
+        </sql> 
+        <sql driver="${db.driver}"
+             url="${db.url}"
+             userid="${db.user}"
+             password="${db.pw}"
+             onerror="continue"
+             src="sql/airport.sql">  
+            <classpath refid="master-classpath"/>
+        </sql> 
+    </target>
+
+    <target name="dropDB">
+        <echo message="Drop data using: ${db.driver} ${db.url}"/>
+        <sql driver="${db.driver}"
+             url="${db.url}"
+             userid="${db.user}"
+             password="${db.pw}"
+             onerror="continue">  
+            <classpath refid="master-classpath"/>
+
+        DROP TABLE airline;
+        DROP TABLE airport;
+
+        </sql> 
+    </target>
+
+    <target name="printDB">
+        <echo message="Print data using: ${db.driver} ${db.url}"/>
+        <sql driver="${db.driver}"
+             url="${db.url}"
+             userid="${db.user}"
+             password="${db.pw}"
+             onerror="continue"
+             print="true">  
+            <classpath refid="master-classpath"/>
+
+        SELECT * FROM airline;
+        SELECT * FROM airport;
+
+        </sql> 
+    </target>
+
+    <target name="deleteDB">
+        <echo message="Delete data using: ${db.driver} ${db.url}"/>
+        <sql driver="${db.driver}"
+             url="${db.url}"
+             userid="${db.user}"
+             password="${db.pw}"
+             onerror="continue">  
+            <classpath refid="master-classpath"/>
+
+        DELETE FROM airline;
+        DELETE FROM airport;
+
+        </sql> 
+    </target>
+
+    <target name="shutdownDB">
+        <echo message="Shut down database using: ${db.driver} ${db.url}"/>
+        <sql driver="${db.driver}"
+             url="${db.url}"
+             userid="${db.user}"
+             password="${db.pw}"
+             onerror="continue">  
+            <classpath refid="master-classpath"/>
+
+        SHUTDOWN;
+
+        </sql> 
+    </target>
+
+<!-- End Database tasks -->
 
 </project>
