@@ -1,12 +1,11 @@
 /*************************************************************************/
-/**		SWE 642 - Software Engineering for the WWW		**/
-/**				Fall 2008				**/
-/**									**/
-/**			Airline Reservation Project			**/
-/**									**/
-/**				Airline table				**/
+/**             SWE 642 - Software Engineering for the WWW              **/
+/**                             Fall 2008                               **/
+/**                                                                     **/
+/**                     Airline Reservation Project                     **/
+/**                                                                     **/
+/**                             Airline table                           **/
 /*************************************************************************/
-
 
 DROP TABLE airline;
 
