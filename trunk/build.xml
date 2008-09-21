@@ -7,6 +7,7 @@
     <property name="src.dir" value="src"/>
     <property name="xml.dir" value="xml"/>
     <property name="lib.dir" value="lib"/>
+    <property name="tld.dir" value="tld"/>
     <property name="jsp.dir" value="jsp"/>
     <property name="html.dir" value="html"/>
     <property name="dist.dir" value="dist"/>
@@ -117,6 +118,11 @@
         </copy>
         <copy todir="${deploy.path}/${name}/WEB-INF/lib" preservelastmodified="true">
             <fileset dir="${lib.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy todir="${deploy.path}/${name}/WEB-INF/tld" preservelastmodified="true">
+            <fileset dir="${tld.dir}">
                 <include name="**/*.*"/>
             </fileset>
         </copy>
