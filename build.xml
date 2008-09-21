@@ -40,6 +40,7 @@
         <echo message="tests       --> Test all the tests"/>
         <echo message="deploy      --> Deploy application as directory"/>
         <echo message="deploywar   --> Deploy application as a WAR file"/>
+        <echo message="undeploy    --> Delete deploied application"/>
         <echo message="install     --> Install application in Tomcat"/>
         <echo message="reload      --> Reload application in Tomcat"/>
         <echo message="start       --> Start Tomcat application"/>
@@ -129,6 +130,7 @@
                 <include name="*.xml"/>
             </fileset>
         </copy>
+        <!--antcall target="reload"/-->
     </target>
 
     <target name="deploywar" depends="deploy" description="Deploy application as a WAR file">
@@ -144,6 +146,12 @@
                 <include name="*.war"/>
             </fileset>
         </copy>
+    </target>
+
+    <target name="undeploy" description="Un-Deploy application">
+      <delete dir="${deploy.path}/${name}"/>
+      <delete file="${deploy.path}/${name}.war"/>
+      <!--antcall target="reload"/-->
     </target>
 
 <!-- ============================================================== -->
