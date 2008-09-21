@@ -239,7 +239,7 @@
         <java fork="true"
           spawn="true"
           classname="org.hsqldb.Server">
-          <arg line="-database.0 file:build/mydb -dbname.0 mydb " />
+          <arg line="-database.0 ${db.location} -dbname.0 ${db.alias} " />
           <classpath refid="master-classpath"/>
         </java>
     </target>
