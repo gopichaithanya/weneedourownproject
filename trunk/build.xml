@@ -3,7 +3,7 @@
 <project name="proj4398" basedir="." default="usage">
     <property file="build.properties"/>
 
-    <property name="bin.dir" value="bin"/>
+    <!--property name="bin.dir" value="bin"/-->
     <property name="src.dir" value="src"/>
     <property name="xml.dir" value="xml"/>
     <property name="lib.dir" value="lib"/>
@@ -12,7 +12,8 @@
     <property name="html.dir" value="html"/>
     <property name="dist.dir" value="dist"/>
     <property name="test.dir" value="test"/>
-    <property name="build.dir" value="build/classes"/>
+    <property name="build.classes.dir" value="build/classes"/>
+    <property name="build.war.dir" value="build/war"/>
     <property name="name" value="proj4398"/>
 
     <path id="master-classpath">
@@ -25,7 +26,7 @@
         <fileset dir="${appserver.lib}">
             <include name="servlet*.jar"/>
         </fileset>
-        <pathelement path="${build.dir}"/>
+        <pathelement path="${build.classes.dir}"/>
     </path>
 
     <target name="usage">
@@ -40,15 +41,17 @@
         <echo message="buildtests  --> Build the tests"/>
         <echo message="tests       --> Test all the tests"/>
         <echo message="deploy      --> Deploy application as directory"/>
-        <echo message="deploywar   --> Deploy application as a WAR file"/>
         <echo message="undeploy    --> Delete deploied application"/>
+
         <echo message="install     --> Install application in Tomcat"/>
         <echo message="reload      --> Reload application in Tomcat"/>
         <echo message="start       --> Start Tomcat application"/>
         <echo message="stop        --> Stop Tomcat application"/>
         <echo message="list        --> List Tomcat applications"/>
+
         <echo message="startDB     --> Start up HSQL Database Server"/>
-        <echo message="loadDB      --> Load up all the data to DB"/>
+        <echo message="manageDB    --> Manage HSQL Database"/>
+        <echo message="loadDB      --> Populate all the data onto DB"/>
         <echo message="dropDB      --> Drop all the data from DB"/>
         <echo message="printDB     --> Show all the data on DB"/>
         <echo message="deleteDB    --> Delete all the data from DB"/>
@@ -57,26 +60,66 @@
     </target>
 
     <target name="build" description="Compile main source tree java files">
-        <mkdir dir="${build.dir}"/>
-        <javac destdir="${build.dir}" source="1.5" target="1.5" debug="true"
+        <mkdir dir="${build.classes.dir}"/>
+        <javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true"
                deprecation="false" optimize="false" failonerror="true">
             <src path="${src.dir}"/>
             <classpath refid="master-classpath"/>
         </javac>
+
+        <mkdir dir="${build.war.dir}"/>
+        <copy todir="${build.war.dir}" preservelastmodified="true">
+            <fileset dir="${html.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.war.dir}/WEB-INF" preservelastmodified="true">
+            <fileset dir="${xml.dir}">
+                <include name="*.xml"/>
+                <exclude name="tomcat-users.xml"/>
+                <exclude name="web.xml"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.war.dir}/WEB-INF/jsp" preservelastmodified="true">
+            <fileset dir="${jsp.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.war.dir}/WEB-INF/lib" preservelastmodified="true">
+            <fileset dir="${lib.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.war.dir}/WEB-INF/tld" preservelastmodified="true">
+            <fileset dir="${tld.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.war.dir}/WEB-INF/classes" preservelastmodified="true">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+
+        <war destfile="${dist.dir}/${name}.war"
+             webxml="${xml.dir}/web.xml">
+             <fileset dir="${build.war.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </war>
     </target>
     
     <target name="clean" description="Clean compiled files and WAR files">
+        <delete dir="${build.war.dir}"/>
         <delete>
-          <fileset dir="${build.dir}" includes="**/*.class" />
-        </delete>
-        <delete>
+          <fileset dir="${build.classes.dir}" includes="**/*.class" />
           <fileset dir="${dist.dir}" includes="**/*.war" />
         </delete>
     </target>
 
     <target name="buildtests" description="Compile test tree java files">
-          <mkdir dir="${build.dir}"/>
-          <javac destdir="${build.dir}" source="1.5" target="1.5" debug="true"
+          <mkdir dir="${build.classes.dir}"/>
+          <javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true"
               deprecation="false" optimize="false" failonerror="true">
               <src path="${test.dir}"/>
               <classpath refid="master-classpath"/>
@@ -94,7 +137,7 @@
               <formatter type="brief" usefile="false"/>
 
               <batchtest>
-                    <fileset dir="${build.dir}">
+                    <fileset dir="${build.classes.dir}">
                           <include name="**/*Tests.*"/>
                     </fileset>
               </batchtest>
@@ -113,52 +156,16 @@
 
     <target name="deploy" depends="build" description="Deploy application">
         <copy todir="${deploy.path}/${name}" preservelastmodified="true">
-            <fileset dir="${html.dir}">
-                <include name="**/*.*"/>
-            </fileset>
+          <fileset dir="${build.war.dir}">
+              <include name="**/*"/>
+          </fileset>
         </copy>
-        <copy todir="${deploy.path}/${name}/WEB-INF/jsp" preservelastmodified="true">
-            <fileset dir="${jsp.dir}">
-                <include name="**/*.*"/>
-            </fileset>
-        </copy>
-        <copy todir="${deploy.path}/${name}/WEB-INF/lib" preservelastmodified="true">
-            <fileset dir="${lib.dir}">
-                <include name="**/*.*"/>
-            </fileset>
-        </copy>
-        <copy todir="${deploy.path}/${name}/WEB-INF/tld" preservelastmodified="true">
-            <fileset dir="${tld.dir}">
-                <include name="**/*.*"/>
-            </fileset>
-        </copy>
-        <copy todir="${deploy.path}/${name}/WEB-INF/classes" preservelastmodified="true">
-            <fileset dir="${build.dir}">
-                <include name="**/*.*"/>
-            </fileset>
-        </copy>
-        <copy todir="${deploy.path}/${name}/WEB-INF" preservelastmodified="true">
-            <fileset dir="${xml.dir}">
-                <include name="*.xml"/>
-                <exclude name="tomcat-users.xml"/>
-            </fileset>
-        </copy>
-        <!--antcall target="reload"/-->
-    </target>
-
-    <target name="deploywar" depends="deploy" description="Deploy application as a WAR file">
-        <mkdir dir="${dist.dir}"/>
-        <war destfile="${dist.dir}/${name}.war"
-             webxml="${xml.dir}/web.xml">
-             <fileset dir="${deploy.path}/${name}">
-                <include name="**/*.*"/>
-            </fileset>
-        </war>
         <copy todir="${deploy.path}" preservelastmodified="true">
             <fileset dir="${dist.dir}">
                 <include name="*.war"/>
             </fileset>
         </copy>
+        <!--antcall target="reload"/-->
     </target>
 
     <target name="undeploy" description="Un-Deploy application">
@@ -235,12 +242,29 @@
 <!-- Database tasks -->
 
     <target name="startDB">
-        <echo message="Load up data using: ${db.driver} ${db.url}"/>
+        <echo message="Start up database server using: ${db.location} ${db.urlid}"/>
         <java fork="true"
           spawn="true"
           classname="org.hsqldb.Server">
-          <arg line="-database.0 ${db.location} -dbname.0 ${db.alias} " />
+          <arg line="-database.0 ${db.location} -dbname.0 ${db.urlid} " />
           <classpath refid="master-classpath"/>
+        </java>
+    </target>
+
+    <target name="manageDB">
+        <echo message="Manage database:"/>
+        <java fork="true"
+            spawn="true"
+            classname="org.hsqldb.util.DatabaseManager">
+            <classpath refid="master-classpath"/>
+            <arg value="-driver"/>
+            <arg value="${db.driver}"/>
+            <arg value="-url"/>
+            <arg value="${db.url}"/>
+            <arg value="-user"/>
+            <arg value="${db.user}"/>
+            <arg value="-password"/>
+            <arg value="${db.pw}"/>
         </java>
     </target>
 
