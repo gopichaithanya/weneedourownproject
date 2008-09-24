@@ -36,26 +36,26 @@
         <echo message=""/>
         <echo message="Available targets are:"/>
         <echo message=""/>
-        <echo message="build       --> Build the application"/>
-        <echo message="clean       --> Clean compiled files and WAR file"/>
-        <echo message="buildtests  --> Build the tests"/>
-        <echo message="tests       --> Test all the tests"/>
-        <echo message="deploy      --> Deploy application as directory"/>
-        <echo message="undeploy    --> Delete deploied application"/>
-
-        <echo message="install     --> Install application in Tomcat"/>
-        <echo message="reload      --> Reload application in Tomcat"/>
-        <echo message="start       --> Start Tomcat application"/>
-        <echo message="stop        --> Stop Tomcat application"/>
-        <echo message="list        --> List Tomcat applications"/>
-
-        <echo message="startDB     --> Start up HSQL Database Server"/>
-        <echo message="manageDB    --> Manage HSQL Database"/>
-        <echo message="loadDB      --> Populate all the data onto DB"/>
-        <echo message="dropDB      --> Drop all the data from DB"/>
-        <echo message="printDB     --> Show all the data on DB"/>
-        <echo message="deleteDB    --> Delete all the data from DB"/>
-        <echo message="shutdownDB  --> Shoutdown DB"/>
+        <echo message="build       ==> Build the application"/>
+        <echo message="clean       ==> Clean compiled files and WAR file"/>
+        <echo message="buildtests  ==> Build the tests"/>
+        <echo message="tests       ==> Test all the tests"/>
+        <echo/>
+        <echo message="deploy      ==> Deploy application as directory"/>
+        <echo message="undeploy    ==> Delete deploied application"/>
+        <!--echo message="install     ==> Install application in Tomcat"/-->
+        <echo message="reload      ==> Reload application in Tomcat"/>
+        <echo message="start       ==> Start Tomcat application"/>
+        <echo message="stop        ==> Stop Tomcat application"/>
+        <echo message="list        ==> List Tomcat applications"/>
+        <echo/>
+        <echo message="startDB     ==> Start up HSQL Database Server"/>
+        <echo message="manageDB    ==> Manage HSQL Database"/>
+        <echo message="loadDB      ==> Populate all the data onto DB"/>
+        <echo message="dropDB      ==> Drop all the data from DB"/>
+        <echo message="printDB     ==> Show all the data on DB"/>
+        <echo message="deleteDB    ==> Delete all the data from DB"/>
+        <echo message="shutdownDB  ==> Shoutdown DB"/>
         <echo message=""/>
     </target>
 
@@ -75,9 +75,34 @@
         </copy>
         <copy todir="${build.war.dir}/WEB-INF" preservelastmodified="true">
             <fileset dir="${xml.dir}">
-                <include name="*.xml"/>
-                <exclude name="tomcat-users.xml"/>
-                <exclude name="web.xml"/>
+                <include name="springapp-servlet.xml"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${build.war.dir}/WEB-INF/classes/META-INF" preservelastmodified="true">
+            <fileset dir="${xml.dir}">
+                <include name="persistence.xml"/>
+            </fileset>
+        </copy>
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml"
+              match="%NAME%"
+              replace="${db.urlid}"/>
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml"
+              match="%DRIVER%"
+              replace="${db.driver}"/>
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml"
+              match="%USER%"
+              replace="${db.user}"/>
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml"
+              match="%PASSWORD%"
+              replace="${db.pw}"/>
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml"
+              match="%URL%"
+              replace="${db.url}"/>
+
+        <copy todir="${build.war.dir}/WEB-INF/classes" preservelastmodified="true">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/*.*"/>
             </fileset>
         </copy>
         <copy todir="${build.war.dir}/WEB-INF/jsp" preservelastmodified="true">
@@ -92,11 +117,6 @@
         </copy>
         <copy todir="${build.war.dir}/WEB-INF/tld" preservelastmodified="true">
             <fileset dir="${tld.dir}">
-                <include name="**/*.*"/>
-            </fileset>
-        </copy>
-        <copy todir="${build.war.dir}/WEB-INF/classes" preservelastmodified="true">
-            <fileset dir="${build.classes.dir}">
                 <include name="**/*.*"/>
             </fileset>
         </copy>
@@ -186,9 +206,9 @@
         </fileset>
     </path>
 
-    <taskdef name="install" classname="org.apache.catalina.ant.InstallTask">
+    <!--taskdef name="install" classname="org.apache.catalina.ant.InstallTask">
         <classpath refid="catalina-ant-classpath"/>
-    </taskdef>
+    </taskdef-->
     <taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask">
         <classpath refid="catalina-ant-classpath"/>
     </taskdef>
