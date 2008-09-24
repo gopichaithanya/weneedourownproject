@@ -83,11 +83,11 @@
 				<include name="persistence.xml" />
 			</fileset>
 		</copy>
-		<replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="%NAME%" replace="${db.urlid}" />
-		<replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="%DRIVER%" replace="${db.driver}" />
-		<replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="%USER%" replace="${db.user}" />
-		<replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="%PASSWORD%" replace="${db.pw}" />
-		<replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="%URL%" replace="${db.url}" />
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.urlid\}" replace="${db.urlid}" />
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.driver\}" replace="${db.driver}" />
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.user\}" replace="${db.user}" />
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.pw\}" replace="${db.pw}" />
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.url\}" replace="${db.url}" />
 
 		<copy todir="${build.war.dir}/WEB-INF/classes" preservelastmodified="true">
 			<fileset dir="${build.classes.dir}">
@@ -163,6 +163,8 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
+        <copy todir="${deploy.path}/${name}/WEB-INF" preservelastmodified="true"
+            file="${xml.dir}/web.xml"/>
 		<copy todir="${deploy.path}" preservelastmodified="true">
 			<fileset dir="${dist.dir}">
 				<include name="*.war" />
