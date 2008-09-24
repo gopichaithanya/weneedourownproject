@@ -78,7 +78,7 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${build.war.dir}/WEB-INF/classes/META-INF" preservelastmodified="true">
+		<!--copy todir="${build.war.dir}/WEB-INF/classes/META-INF" preservelastmodified="true">
 			<fileset dir="${xml.dir}">
 				<include name="persistence.xml" />
 			</fileset>
@@ -87,7 +87,7 @@
         <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.driver\}" replace="${db.driver}" />
         <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.user\}" replace="${db.user}" />
         <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.pw\}" replace="${db.pw}" />
-        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.url\}" replace="${db.url}" />
+        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.url\}" replace="${db.url}" /-->
 
 		<copy todir="${build.war.dir}/WEB-INF/classes" preservelastmodified="true">
 			<fileset dir="${build.classes.dir}">
