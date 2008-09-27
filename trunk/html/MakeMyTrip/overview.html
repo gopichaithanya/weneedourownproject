@@ -152,7 +152,18 @@ You want to go to San Francisco. Maybe Chicago or Atlanta? What about New York? 
 <div id="shape2" style="position:absolute; overflow:hidden; left:700px; top:66px; width:79px; height:18px; z-index:16"><img border=0 width="100%" height="100%" alt="" src="images/shape97076671.gif"></div>
 
 <div id="image3" style="position:absolute; overflow:hidden; left:104px; top:533px; width:443px; height:560px; z-index:17"><img src="images/web-arch-trad.png" alt="" border=0 width=443 height=360>
-<p>Start here. </p></div>
+<p> The application architecture will be designed around several different constraints.
+The project requirements specify to use JAVA Servlets and JSP pages along with AJAX and Google Maps.
+There are many different patterns that can be followed to implement the application using these technologies.
+It is important to consider the different parts of the application.  The application will be designed in the Model View Controller pattern.
+The data model will consist of the business logic objects that will be used in the application.
+The View will be the part of the application that the users will see and interact with and will be implement with the JSP pages.
+The controller will be responsible for handling incoming requests and sending back the appropriate view
+for the users.  Based on this type of architecture, an application framework can possibly be utilized to help reduce the amount of 
+software code that would be written and improve efficiency. There are two candidate application frameworks that can help better integrate the MVC pattern.  Currently, 
+Spring and Struts are being explored.  Another part of the application architecture is addressing the data persistence.  The application will be drawing data
+from a relational database.  Pulling data from the database, and performing data persistence will be done by utilizing Hibernate,
+a thrid party object relational mapping tool.</p></div>
 
 <div id="hr1" style="position:absolute; overflow:hidden; left:99px; top:457px; width:700px; height:28px; z-index:18">
 <hr size=3 width=700 color="#82B40C">
