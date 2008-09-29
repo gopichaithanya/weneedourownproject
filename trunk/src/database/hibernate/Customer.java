@@ -1,7 +1,7 @@
 package database.hibernate;
 import java.util.Date;
 
-public class User {
+public class Customer {
 	
 	/**
 	 * The user's first name
@@ -55,7 +55,7 @@ public class User {
 	/**
 	 * Default constructor
 	 */
-	public User() {}
+	public Customer() {}
 	
 	/**
 	 * Sets the user's first name

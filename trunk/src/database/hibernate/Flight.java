@@ -1,5 +1,7 @@
 package database.hibernate;
 
+import java.sql.Timestamp;
+
 public class Flight {
 	
 	/**
@@ -13,9 +15,24 @@ public class Flight {
 	private String airlineCode;
 	
 	/**
-	 * The schedule ID
+	 * The departure location
 	 */
-	private String scheduleID;
+	private String departureLocation;
+	
+	/**
+	 * The day and time of departure
+	 */
+	private Timestamp departureTime;
+	
+	/**
+	 * The day and time of arrival
+	 */
+	private Timestamp arrivalTime;
+	
+	/**
+	 * The arrival location
+	 */
+	private String arrivalLocation;
 	
 	/**
 	 * The number of available seats in economy
@@ -75,19 +92,67 @@ public class Flight {
 	}
 
 	/**
-	 * Returns the schedule ID
-	 * @return scheduleID - the schedule ID
+	 * Returns the departure location
+	 * @return departureLocation - the departure location
 	 */
-	public String getScheduleID() {
-		return scheduleID;
+	public String getDepartureLocation() {
+		return departureLocation;
 	}
 
 	/**
-	 * Sets the schedule ID
-	 * @param scheduleID - the schedule ID
+	 * Sets the departure location
+	 * @param departureLocation - the departure location
 	 */
-	public void setScheduleID(String scheduleID) {
-		this.scheduleID = scheduleID;
+	public void setDepartureLocation(String departureLocation) {
+		this.departureLocation = departureLocation;
+	}
+	
+	/**
+	 * Sets the day and time of departure
+	 * @param departureTime - the day and time of departure
+	 */
+	public void setDepartureTime(Timestamp departureTime) {
+		this.departureTime = departureTime;
+	}
+	
+	/**
+	 * Returns the day and time of departure
+	 * @return departureTime - the day and time of departure
+	 */
+	public Timestamp getDepartureTime() {
+		return departureTime;
+	}
+	
+	/**
+	 * Returns the arrival location
+	 * @return arrivalLocation - the arrival location
+	 */
+	public String getArrivalLocation() {
+		return arrivalLocation;
+	}
+
+	/**
+	 * Sets the arrival location
+	 * @param arrivalLocation - the arrival location
+	 */
+	public void setArrivalLocation(String arrivalLocation) {
+		this.arrivalLocation = arrivalLocation;
+	}
+	
+	/**
+	 * Sets the day and time of arrival
+	 * @param arrivalTime - the day and time of arrival
+	 */
+	public void setArrivalTime(Timestamp arrivalTime) {
+		this.arrivalTime = arrivalTime;
+	}
+	
+	/**
+	 * Returns the day and time of arrival
+	 * @return arrivalTime - the day and time of arrival
+	 */
+	public Timestamp getArrivalTime() {
+		return arrivalTime;
 	}
 
 	/**
