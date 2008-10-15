@@ -13,6 +13,7 @@
 	<property name="dist.dir" value="dist" />
 	<property name="test.dir" value="test" />
 	<property name="build.classes.dir" value="build/classes" />
+	<property name="build.hbm.dir" value="build/hbm" />
 	<property name="build.war.dir" value="build/war" />
 	<property name="name" value="proj4398" />
 
@@ -27,6 +28,9 @@
 			<include name="servlet*.jar" />
 		</fileset>
 		<pathelement path="${build.classes.dir}" />
+        <path location="{$lib.dir}/hibernate-tools.jar" />
+        <path location="{$lib.dir}/hibernate3.jar" />
+        <path location="{$lib.dir}/freemarker.jar" />
 	</path>
 
 	<target name="usage">
@@ -56,6 +60,7 @@
 		<echo message="printDB     ==> Show all the tables on DB" />
 		<echo message="deleteDB    ==> Delete all the tables from DB" />
 		<echo message="shutdownDB  ==> Shoutdown DB" />
+		<echo message="makeHBM     ==> Make *.hbm files" />
 		<echo message="" />
 	</target>
 
@@ -206,6 +211,9 @@
 	<taskdef name="stop" classname="org.apache.catalina.ant.StopTask">
 		<classpath refid="catalina-ant-classpath" />
 	</taskdef>
+    <taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask">
+        <classpath refid="master-classpath" />
+    </taskdef>
 
 	<target name="install" description="Install application in Tomcat">
 		<install url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" war="${name}" />
@@ -307,6 +315,16 @@
         </sql>
 	</target>
 
+    <target name="makeHBM" depends="startDB, loadDB" description="Make *.hbm files">
+		<mkdir dir="${build.hbm.dir}" />
+        <hibernatetool destdir="${build.hbm.dir}">
+            <jdbcconfiguration configurationfile="${xml.dir}/hibernate.cfg.xml">
+            </jdbcconfiguration>
+			<classpath refid="master-classpath" />
+            <hbm2hbmxml destdir="${build.hbm.dir}" /> 
+            <hbm2java jdk5="true"/>
+        </hibernatetool>
+    </target>
 	<!-- End Database tasks -->
 
 </project>
