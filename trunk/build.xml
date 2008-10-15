@@ -262,12 +262,21 @@
 		</java>
 	</target>
 
-	<target name="loadDB" description="Populate all the data onto DB">
+	<target name="loadDB" depends="dropDB" description="Populate all the data onto DB">
 		<echo message="Load up data using: ${db.driver} ${db.url}" />
 		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/airline.sql">
 			<classpath refid="master-classpath" />
 		</sql>
 		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/airport.sql">
+			<classpath refid="master-classpath" />
+		</sql>
+		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/customer.sql">
+			<classpath refid="master-classpath" />
+		</sql>
+		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/flight.sql">
+			<classpath refid="master-classpath" />
+		</sql>
+		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/itinerary.sql">
 			<classpath refid="master-classpath" />
 		</sql>
 	</target>
@@ -277,6 +286,9 @@
 		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue">
 			<classpath refid="master-classpath" />
 
+        DROP TABLE itinerary;
+        DROP TABLE flight;
+        DROP TABLE customer;
         DROP TABLE airline;
         DROP TABLE airport;
 
@@ -290,6 +302,9 @@
 
         SELECT * FROM airline;
         SELECT * FROM airport;
+        SELECT * FROM customer;
+        SELECT * FROM flight;
+        SELECT * FROM itinerary;
 
         </sql>
 	</target>
@@ -301,6 +316,9 @@
 
         DELETE FROM airline;
         DELETE FROM airport;
+        DELETE FROM customer;
+        DELETE FROM flight;
+        DELETE FROM itinerary;
 
         </sql>
 	</target>
