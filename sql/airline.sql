@@ -7,8 +7,6 @@
 /**                             Airline table                           **/
 /*************************************************************************/;
 
-DROP TABLE airline;
-
 CREATE TABLE airline  ( code CHAR(2), name CHAR(20), PRIMARY KEY(code));
 
 INSERT INTO airline VALUES ('AS', 'Alaska Airlines');

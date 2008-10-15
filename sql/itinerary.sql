@@ -7,14 +7,12 @@
 /**                           Itinerary table                           **/
 /*************************************************************************/;
 
-DROP TABLE itinerary;
-
 CREATE TABLE itinerary(	flight_no INTEGER,
 			username CHAR(20),
 			status CHAR(20),
-			PRIMARY KEY(flight, username),
-			FOREIGN KEY flight_no REFERENCES flight,
-			FOREIGN KEY username REFERENCES customer);
+			PRIMARY KEY(flight_no, username),
+			FOREIGN KEY(flight_no) REFERENCES flight,
+			FOREIGN KEY(username) REFERENCES customer);
 
 INSERT INTO itinerary VALUES (1069, 'jjohnson', 'booked');
 INSERT INTO itinerary VALUES (54, 'jjohnson', 'booked');

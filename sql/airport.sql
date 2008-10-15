@@ -7,8 +7,6 @@
 /**                             Airport table                           **/
 /*************************************************************************/;
 
-DROP TABLE airport;
-
 CREATE TABLE airport  (	code CHAR(3), name CHAR(20),
 			city CHAR(50), county CHAR(50), state CHAR(2),
 			latitude1 CHAR(30), latitude2 CHAR(30),
