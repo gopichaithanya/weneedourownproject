@@ -9,6 +9,16 @@
 
   <bean name="/hello.spring" class="springapp.web.HelloController"/>
   <bean name="/flightList.spring" class="springapp.web.FlightController"/>
+  
+  <bean name="/register.spring" class="springapp.web.CustomerController">
+    <property name="formView" value="register"/>
+    <property name="successView" value="registered"/>
+    <property name="commandName" value="customer"/>
+    <property name="commandClass" value="database.hibernate.Customer"/>
+  </bean>
+
+	
+
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
