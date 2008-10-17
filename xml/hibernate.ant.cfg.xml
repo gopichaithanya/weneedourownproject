@@ -7,12 +7,21 @@
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
         <property name="hibernate.connection.password"></property>
-        <property name="hibernate.connection.url">jdbc:hsqldb:file:${catalina.base}/webapps/proj4398/WEB-INF/data/mydb</property>
+        <property name="hibernate.connection.url">jdbc:hsqldb:file:build/mydb</property>
         <property name="hibernate.connection.username">sa</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
+      
+        <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
+    
+        <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
+  
+        <!-- Disable the second-level cache  -->
         <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+  
         <mapping resource="database/hibernate/Airport.hbm.xml" />
         <mapping resource="database/hibernate/Airline.hbm.xml" />
         <mapping resource="database/hibernate/Itinerary.hbm.xml" />
