@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 15, 2008 10:13:29 PM by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="database.hibernate.Flight" table="FLIGHT" schema="PUBLIC">
+        <id name="flightNo" type="int">
+            <column name="FLIGHT_NO" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="airline" class="database.hibernate.Airline" fetch="select">
+            <column name="AIRLINE_CODE" length="2" />
+        </many-to-one>
+        <many-to-one name="airportByArrivalLocation" class="database.hibernate.Airport" fetch="select">
+            <column name="ARRIVAL_LOCATION" length="3" />
+        </many-to-one>
+        <many-to-one name="airportByDepartureLocation" class="database.hibernate.Airport" fetch="select">
+            <column name="DEPARTURE_LOCATION" length="3" />
+        </many-to-one>
+        <property name="departureTime" type="timestamp">
+            <column name="DEPARTURE_TIME" length="6" />
+        </property>
+        <property name="arrivalTime" type="timestamp">
+            <column name="ARRIVAL_TIME" length="6" />
+        </property>
+        <property name="economySeats" type="java.lang.Integer">
+            <column name="ECONOMY_SEATS" />
+        </property>
+        <property name="economyPrice" type="java.lang.Float">
+            <column name="ECONOMY_PRICE" precision="0" scale="0" />
+        </property>
+        <property name="businessSeats" type="java.lang.Integer">
+            <column name="BUSINESS_SEATS" />
+        </property>
+        <property name="businessPrice" type="java.lang.Float">
+            <column name="BUSINESS_PRICE" precision="0" scale="0" />
+        </property>
+        <set name="itineraries" inverse="true">
+            <key>
+                <column name="FLIGHT_NO" not-null="true" />
+            </key>
+            <one-to-many class="database.hibernate.Itinerary" />
+        </set>
+    </class>
+</hibernate-mapping>

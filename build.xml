@@ -11,7 +11,7 @@
 	<property name="jsp.dir" value="jsp" />
 	<property name="html.dir" value="html" />
 	<property name="dist.dir" value="dist" />
-	<property name="test.dir" value="test" />
+	<!--property name="test.dir" value="test" /-->
 	<property name="build.classes.dir" value="build/classes" />
 	<property name="build.hbm.dir" value="build/hbm" />
 	<property name="build.war.dir" value="build/war" />
@@ -42,7 +42,7 @@
 		<echo message="" />
 		<echo message="build       ==> Build the application" />
 		<echo message="clean       ==> Clean compiled files and WAR file" />
-		<echo message="buildtests  ==> Build the tests" />
+		<!--echo message="buildtests  ==> Build the tests" /-->
 		<echo message="tests       ==> Test all the tests" />
 		<echo />
 		<echo message="deploy      ==> Deploy application as directory" />
@@ -60,7 +60,7 @@
 		<echo message="printDB     ==> Show all the tables on DB" />
 		<echo message="deleteDB    ==> Delete all the tables from DB" />
 		<echo message="shutdownDB  ==> Shoutdown DB" />
-		<echo message="makeHBM     ==> Make *.hbm files" />
+		<echo message="makeHBM     ==> Make *.hbm files, which are Hibernate files" />
 		<echo message="" />
 	</target>
 
@@ -71,12 +71,25 @@
 			<classpath refid="master-classpath" />
 		</javac>
 
+		<copy todir="${build.classes.dir}" preservelastmodified="true">
+			<fileset dir="${xml.dir}">
+				<include name="hibernate.cfg.xml" />
+			</fileset>
+		</copy>
+		<copy todir="${build.classes.dir}" preservelastmodified="true">
+			<fileset dir="${src.dir}">
+                <include name="**/*.hbm.xml" />
+			</fileset>
+		</copy>
+
 		<mkdir dir="${build.war.dir}" />
 		<copy todir="${build.war.dir}" preservelastmodified="true">
 			<fileset dir="${html.dir}">
 				<include name="**/*.*" />
 			</fileset>
 		</copy>
+        <mkdir dir="${build.war.dir}/WEB-INF" />
+        <mkdir dir="${build.war.dir}/WEB-INF/data" />
 		<copy todir="${build.war.dir}/WEB-INF" preservelastmodified="true">
 			<fileset dir="${xml.dir}">
 				<include name="springapp-servlet.xml" />
@@ -124,21 +137,23 @@
 
 	<target name="clean" description="Clean compiled files and WAR files">
 		<delete dir="${build.war.dir}" />
-		<delete>
-			<fileset dir="${build.classes.dir}" includes="**/*.class" />
+		<delete dir="${build.classes.dir}" />
+        <delete dir="${build.hbm.dir}" />
+        <delete>
 			<fileset dir="${dist.dir}" includes="**/*.war" />
 		</delete>
 	</target>
 
-	<target name="buildtests" description="Compile test tree java files">
+	<!--target name="buildtests" description="Compile test tree java files">
 		<mkdir dir="${build.classes.dir}" />
 		<javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
 			<src path="${test.dir}" />
 			<classpath refid="master-classpath" />
 		</javac>
-	</target>
+	</target-->
 
-	<target name="tests" depends="build, buildtests" description="Run tests">
+	<!--target name="tests" depends="build, buildtests" description="Run tests"-->
+	<target name="tests" depends="build" description="Run tests">
 		<junit printsummary="on" fork="false" haltonfailure="false" failureproperty="tests.failed" showoutput="true">
 
 			<classpath refid="master-classpath" />
@@ -333,14 +348,17 @@
         </sql>
 	</target>
 
-    <target name="makeHBM" depends="startDB, loadDB" description="Make *.hbm files">
+    <target name="makeHBM" depends="loadDB" description="Make *.hbm files">
 		<mkdir dir="${build.hbm.dir}" />
         <hibernatetool destdir="${build.hbm.dir}">
-            <jdbcconfiguration configurationfile="${xml.dir}/hibernate.cfg.xml">
+            <jdbcconfiguration
+                configurationfile="${xml.dir}/hibernate.cfg.xml"
+                packagename="database.hibernate">
             </jdbcconfiguration>
 			<classpath refid="master-classpath" />
             <hbm2hbmxml destdir="${build.hbm.dir}" /> 
             <hbm2java jdk5="true"/>
+            <hbm2cfgxml/>
         </hibernatetool>
     </target>
 	<!-- End Database tasks -->

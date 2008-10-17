@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 15, 2008 10:13:29 PM by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="database.hibernate.Airport" table="AIRPORT" schema="PUBLIC">
+        <id name="code" type="string">
+            <column name="CODE" length="3" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="20" />
+        </property>
+        <property name="city" type="string">
+            <column name="CITY" length="50" />
+        </property>
+        <property name="county" type="string">
+            <column name="COUNTY" length="50" />
+        </property>
+        <property name="state" type="string">
+            <column name="STATE" length="2" />
+        </property>
+        <property name="latitude1" type="string">
+            <column name="LATITUDE1" length="30" />
+        </property>
+        <property name="latitude2" type="string">
+            <column name="LATITUDE2" length="30" />
+        </property>
+        <property name="longitude1" type="string">
+            <column name="LONGITUDE1" length="30" />
+        </property>
+        <property name="longitude2" type="string">
+            <column name="LONGITUDE2" length="50" />
+        </property>
+        <property name="elevation" type="string">
+            <column name="ELEVATION" length="10" />
+        </property>
+        <property name="telephone" type="string">
+            <column name="TELEPHONE" length="20" />
+        </property>
+        <set name="flightsForDepartureLocation" inverse="true">
+            <key>
+                <column name="DEPARTURE_LOCATION" length="3" />
+            </key>
+            <one-to-many class="database.hibernate.Flight" />
+        </set>
+        <set name="flightsForArrivalLocation" inverse="true">
+            <key>
+                <column name="ARRIVAL_LOCATION" length="3" />
+            </key>
+            <one-to-many class="database.hibernate.Flight" />
+        </set>
+    </class>
+</hibernate-mapping>
