@@ -8,6 +8,7 @@
   <!-- the application context definition for the springapp DispatcherServlet -->
 
   <bean name="/hello.spring" class="springapp.web.HelloController"/>
+  <bean name="/flightList.spring" class="springapp.web.FlightController"/>
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
