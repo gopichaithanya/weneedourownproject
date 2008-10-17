@@ -13,15 +13,18 @@
  
  
          <!-- note second way of displaying error messages – by field -->  
-        <form:form commandName="register" method="POST" action="register.htm">  
+        <form:form commandName="customer" method="POST" action="register.spring">  
             <table border="1">
-			    <tr><td>* Name</td><td><input path="userName"></td></tr>
-			    <tr><td>* Address</td><td><input path="address"></td></tr>
-			    <tr><td>* Login name</td><td><form:input path="loginName"/></td></tr>
-			    <tr><td>* Login password</td><td><input path="loginPassword"/></td></tr>
-			    <tr><td>* E-mail address</td><td><input path="emailAddress"/></td></tr>
-			    <tr><td>Credit card number (16 digits)</td><td><input path="creditCardNumber"/></td></tr>
-			    <tr><td>Credit card expiration date (mmdd)</td><td><input path="creditCardExpirationDate"/></td></tr>
+			    <tr><td>* Name</td><td><input path="username"></td></tr>
+			    <tr><td>* First name</td><td><form:input path="firstName"/></td></tr>
+				<tr><td>* Last name</td><td><form:input path="lastName"/></td></tr>
+			    <tr><td>* Login password</td><td><input path="password"/></td></tr>
+			    <tr><td>* Street</td><td><input path="street"/></td></tr>
+				<tr><td>* City</td><td><form:input path="city"/></td></tr>
+			    <tr><td>* State</td><td><input path="state"/></td></tr>
+			    <tr><td>* Zip Code</td><td><input path="zip"/></td></tr>
+			    <tr><td>Credit card number (16 digits)</td><td><input path="ccNo"/></td></tr>
+			    <tr><td>Credit card expiration date (mmdd)</td><td><input path="expiration"/></td></tr>
 			  	<tr><td><input type="submit" align="center" value="Enter"></td></tr>
 
 				</table>
