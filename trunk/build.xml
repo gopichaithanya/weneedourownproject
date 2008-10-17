@@ -12,25 +12,23 @@
 	<property name="html.dir" value="html" />
 	<property name="dist.dir" value="dist" />
 	<!--property name="test.dir" value="test" /-->
+	<property name="build.dir" value="build" />
 	<property name="build.classes.dir" value="build/classes" />
 	<property name="build.hbm.dir" value="build/hbm" />
 	<property name="build.war.dir" value="build/war" />
 	<property name="name" value="proj4398" />
 
 	<path id="master-classpath">
-		<fileset dir="${lib.dir}">
-			<include name="*.jar" />
-		</fileset>
 		<!-- We need the servlet API classes: -->
 		<!--  * for Tomcat 5/6 use servlet-api.jar -->
 		<!--  * for other app servers - check the docs -->
 		<fileset dir="${appserver.lib}">
 			<include name="servlet*.jar" />
 		</fileset>
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
 		<pathelement path="${build.classes.dir}" />
-        <path location="{$lib.dir}/hibernate-tools.jar" />
-        <path location="{$lib.dir}/hibernate3.jar" />
-        <path location="{$lib.dir}/freemarker.jar" />
 	</path>
 
 	<target name="usage">
@@ -53,13 +51,13 @@
 		<echo message="stop        ==> Stop Tomcat application" />
 		<echo message="list        ==> List Tomcat applications" />
 		<echo />
-		<echo message="startDB     ==> Start up HSQL Database Server" />
+		<!--echo message="startDB     ==> Start up HSQL Database Server" /-->
+		<!--echo message="shutdownDB  ==> Shoutdown DB" /-->
 		<echo message="manageDB    ==> Manage HSQL Database" />
 		<echo message="loadDB      ==> Populate all the data onto DB" />
 		<echo message="dropDB      ==> Drop all the tables from DB" />
 		<echo message="printDB     ==> Show all the tables on DB" />
 		<echo message="deleteDB    ==> Delete all the tables from DB" />
-		<echo message="shutdownDB  ==> Shoutdown DB" />
 		<echo message="makeHBM     ==> Make *.hbm files, which are Hibernate files" />
 		<echo message="" />
 	</target>
@@ -89,7 +87,6 @@
 			</fileset>
 		</copy>
         <mkdir dir="${build.war.dir}/WEB-INF" />
-        <mkdir dir="${build.war.dir}/WEB-INF/data" />
 		<copy todir="${build.war.dir}/WEB-INF" preservelastmodified="true">
 			<fileset dir="${xml.dir}">
 				<include name="springapp-servlet.xml" />
@@ -128,20 +125,29 @@
 			</fileset>
 		</copy>
 
+        <mkdir dir="${build.war.dir}/WEB-INF/data" />
+        <!--antcall target="startDB"/-->
+        <antcall target="loadDB"/>
+        <copy todir="${build.war.dir}/WEB-INF/data" preservelastmodified="true">
+			<fileset dir="${build.dir}">
+				<include name="*.properties" />
+				<include name="*.script" />
+			</fileset>
+		</copy>
+
 		<war destfile="${dist.dir}/${name}.war" webxml="${xml.dir}/web.xml">
 			<fileset dir="${build.war.dir}">
-				<include name="**/*.*" />
+				<include name="**/*" />
 			</fileset>
 		</war>
 	</target>
 
 	<target name="clean" description="Clean compiled files and WAR files">
-		<delete dir="${build.war.dir}" />
-		<delete dir="${build.classes.dir}" />
-        <delete dir="${build.hbm.dir}" />
         <delete>
-			<fileset dir="${dist.dir}" includes="**/*.war" />
-		</delete>
+          <fileset dir="${build.dir}">
+            <include name="**/*"/>
+          </fileset>
+        </delete>
 	</target>
 
 	<!--target name="buildtests" description="Compile test tree java files">
@@ -162,6 +168,7 @@
 			<batchtest>
 				<fileset dir="${build.classes.dir}">
 					<include name="**/*Tests.*" />
+					<include name="**/*Test.*" />
 				</fileset>
 			</batchtest>
 
@@ -254,13 +261,14 @@
 
 	<!-- Database tasks -->
 
-	<target name="startDB" description="Start up HSQL Database Server">
+	<!--target name="startDB" description="Start up HSQL Database Server">
 		<echo message="Start up database server using: ${db.location} ${db.urlid}" />
 		<java fork="true" spawn="true" classname="org.hsqldb.Server">
 			<arg line="-database.0 ${db.location} -dbname.0 ${db.urlid} " />
 			<classpath refid="master-classpath" />
 		</java>
-	</target>
+        <sleep seconds="5"/>
+	</target-->
 
 	<target name="manageDB" description="Manage HSQL Database">
 		<echo message="Manage database:" />
@@ -279,20 +287,14 @@
 
 	<target name="loadDB" depends="dropDB" description="Populate all the data onto DB">
 		<echo message="Load up data using: ${db.driver} ${db.url}" />
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/airline.sql">
+		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" autocommit="true" caching="true">
 			<classpath refid="master-classpath" />
-		</sql>
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/airport.sql">
-			<classpath refid="master-classpath" />
-		</sql>
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/customer.sql">
-			<classpath refid="master-classpath" />
-		</sql>
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/flight.sql">
-			<classpath refid="master-classpath" />
-		</sql>
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="sql/itinerary.sql">
-			<classpath refid="master-classpath" />
+            <transaction  src="sql/airline.sql" />
+            <transaction  src="sql/airport.sql" />
+            <transaction  src="sql/customer.sql" />
+            <transaction  src="sql/flight.sql" />
+            <transaction  src="sql/itinerary.sql" />
+            SHUTDOWN;
 		</sql>
 	</target>
 
@@ -301,18 +303,34 @@
 		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue">
 			<classpath refid="master-classpath" />
 
-        DROP TABLE itinerary;
-        DROP TABLE flight;
-        DROP TABLE customer;
-        DROP TABLE airline;
-        DROP TABLE airport;
+            DROP TABLE itinerary;
+            DROP TABLE flight;
+            DROP TABLE customer;
+            DROP TABLE airline;
+            DROP TABLE airport;
+            SHUTDOWN;
+
+        </sql>
+	</target>
+
+	<target name="deleteDB" description="Delete all the tables from DB">
+		<echo message="Delete data using: ${db.driver} ${db.url}" />
+		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" autocommit="true" onerror="continue">
+			<classpath refid="master-classpath" />
+
+            DELETE FROM itinerary;
+            DELETE FROM flight;
+            DELETE FROM customer;
+            DELETE FROM airport;
+            DELETE FROM airline;
+            SHUTDOWN;
 
         </sql>
 	</target>
 
 	<target name="printDB" description="Show all the tables on DB">
 		<echo message="Print data using: ${db.driver} ${db.url}" />
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" print="true">
+		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" print="true">
 			<classpath refid="master-classpath" />
 
         SELECT * FROM airline;
@@ -324,21 +342,7 @@
         </sql>
 	</target>
 
-	<target name="deleteDB" description="Delete all the tables from DB">
-		<echo message="Delete data using: ${db.driver} ${db.url}" />
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue">
-			<classpath refid="master-classpath" />
-
-        DELETE FROM airline;
-        DELETE FROM airport;
-        DELETE FROM customer;
-        DELETE FROM flight;
-        DELETE FROM itinerary;
-
-        </sql>
-	</target>
-
-	<target name="shutdownDB" description="Shoutdown DB">
+	<!--target name="shutdownDB" description="Shoutdown DB">
 		<echo message="Shut down database using: ${db.driver} ${db.url}" />
 		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue">
 			<classpath refid="master-classpath" />
@@ -346,19 +350,19 @@
         SHUTDOWN;
 
         </sql>
-	</target>
+	</target-->
 
     <target name="makeHBM" depends="loadDB" description="Make *.hbm files">
 		<mkdir dir="${build.hbm.dir}" />
         <hibernatetool destdir="${build.hbm.dir}">
             <jdbcconfiguration
-                configurationfile="${xml.dir}/hibernate.cfg.xml"
+                configurationfile="${xml.dir}/hibernate.ant.cfg.xml"
                 packagename="database.hibernate">
             </jdbcconfiguration>
 			<classpath refid="master-classpath" />
-            <hbm2hbmxml destdir="${build.hbm.dir}" /> 
-            <hbm2java jdk5="true"/>
             <hbm2cfgxml/>
+            <hbm2java jdk5="true"/>
+            <hbm2hbmxml destdir="${build.hbm.dir}" /> 
         </hibernatetool>
     </target>
 	<!-- End Database tasks -->
