@@ -13,10 +13,10 @@
         <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
         <property name="current_session_context_class">thread</property>
         <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
-        <mapping resource="database/hibernate/Airport.hbm.xml" />
-        <mapping resource="database/hibernate/Airline.hbm.xml" />
-        <mapping resource="database/hibernate/Itinerary.hbm.xml" />
-        <mapping resource="database/hibernate/Flight.hbm.xml" />
-        <mapping resource="database/hibernate/Customer.hbm.xml" />
+        <mapping resource="hibernate/xml/Airport.hbm.xml" />
+        <mapping resource="hibernate/xml/Airline.hbm.xml" />
+        <mapping resource="hibernate/xml/Itinerary.hbm.xml" />
+        <mapping resource="hibernate/xml/Flight.hbm.xml" />
+        <mapping resource="hibernate/xml/Customer.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

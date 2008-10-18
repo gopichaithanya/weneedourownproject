@@ -2,7 +2,7 @@ package springapp.manager;
 
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
-import database.hibernate.Flight;
+import hibernate.Flight;
 
 public class AddFlightController  extends SimpleFormController 
 {
