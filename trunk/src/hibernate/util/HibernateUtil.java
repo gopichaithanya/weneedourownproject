@@ -1,4 +1,4 @@
-package util;
+package hibernate.util;
 
 import org.hibernate.*;
 import org.hibernate.cfg.*;

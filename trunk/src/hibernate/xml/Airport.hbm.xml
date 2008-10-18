@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Oct 15, 2008 10:13:29 PM by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
-    <class name="database.hibernate.Airport" table="AIRPORT" schema="PUBLIC">
+    <class name="hibernate.Airport" table="AIRPORT" schema="PUBLIC">
         <id name="code" type="string">
             <column name="CODE" length="3" />
             <generator class="assigned" />
@@ -48,7 +48,7 @@
             <key>
                 <column name="ARRIVAL_LOCATION" length="3" />
             </key>
-            <one-to-many class="database.hibernate.Flight" />
+            <one-to-many class="hibernate.Flight" />
         </set>
     </class>
 </hibernate-mapping>
