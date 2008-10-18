@@ -4,7 +4,7 @@
 <!-- Generated Oct 15, 2008 10:13:29 PM by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="hibernate.Itinerary" table="ITINERARY" schema="PUBLIC">
-        <composite-id name="id" class="database.hibernate.ItineraryId">
+        <composite-id name="id" class="hibernate.ItineraryId">
             <key-property name="flightNo" type="int">
                 <column name="FLIGHT_NO" />
             </key-property>
@@ -12,7 +12,7 @@
                 <column name="USERNAME" length="20" />
             </key-property>
         </composite-id>
-        <many-to-one name="customer" class="database.hibernate.Customer" update="false" insert="false" fetch="select">
+        <many-to-one name="customer" class="hibernate.Customer" update="false" insert="false" fetch="select">
             <column name="USERNAME" length="20" not-null="true" />
         </many-to-one>
         <many-to-one name="flight" class="hibernate.Flight" update="false" insert="false" fetch="select">

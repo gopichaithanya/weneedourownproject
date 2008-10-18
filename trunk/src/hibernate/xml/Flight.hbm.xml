@@ -8,13 +8,13 @@
             <column name="FLIGHT_NO" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="airline" class="database.hibernate.Airline" fetch="select">
+        <many-to-one name="airline" class="hibernate.Airline" fetch="select">
             <column name="AIRLINE_CODE" length="2" />
         </many-to-one>
-        <many-to-one name="airportByArrivalLocation" class="database.hibernate.Airport" fetch="select">
+        <many-to-one name="airportByArrivalLocation" class="hibernate.Airport" fetch="select">
             <column name="ARRIVAL_LOCATION" length="3" />
         </many-to-one>
-        <many-to-one name="airportByDepartureLocation" class="database.hibernate.Airport" fetch="select">
+        <many-to-one name="airportByDepartureLocation" class="hibernate.Airport" fetch="select">
             <column name="DEPARTURE_LOCATION" length="3" />
         </many-to-one>
         <property name="departureTime" type="timestamp">
