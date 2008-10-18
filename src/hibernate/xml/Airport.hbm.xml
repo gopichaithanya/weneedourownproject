@@ -42,7 +42,7 @@
             <key>
                 <column name="DEPARTURE_LOCATION" length="3" />
             </key>
-            <one-to-many class="database.hibernate.Flight" />
+            <one-to-many class="hibernate.Flight" />
         </set>
         <set name="flightsForArrivalLocation" inverse="true">
             <key>
