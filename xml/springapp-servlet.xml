@@ -17,7 +17,11 @@
     <property name="commandClass" value="database.hibernate.Customer"/>
   </bean>
 
-	
+  <bean name="/addflight.spring" class="springapp.manager.AddFlightController">
+    <property name="formView" value="addflight"/>
+    <property name="commandName" value="flight"/>
+    <property name="commandClass" value="database.hibernate.Flight"/>
+  </bean>	
 
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
