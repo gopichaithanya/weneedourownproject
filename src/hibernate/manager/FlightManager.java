@@ -5,81 +5,87 @@ import java.util.List;
 import hibernate.*;
 import hibernate.util.*;
 import org.hibernate.Session;
+import org.hibernate.HibernateException;
 
+/**
+ * Hibernate class that implements the functions dealing with flight information used
+ * by Spring
+ * 
+ * @author Israa Taha
+ * @version 
+ */
 public class FlightManager {
 	
-	public void createAndStoreFlight(int flightNo, String code) {
+	/**
+	 * Default Constructor
+	 */
+	public FlightManager() {}
+	
+	/**
+	 * Adds a flight to the database
+	 * @param flight - the flight to be added
+	 */
+	public void addFlight(Flight flight) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		
-		Flight flight = new Flight();
-		flight.setFlightNo(flightNo);
-		
-		// to retrieve an airline object
-		/*Airline airline = new Airline();
-		session.load(airline, new String(code));
-		
-		flight.setAirline(airline);*/
-		
-		session.save(flight);
+		try {
+			session.save(flight);
+		}
+		catch(HibernateException e) {
+			e.printStackTrace();
+		}
 		session.getTransaction().commit();
 	}
 	
 	/**
-	 * Search for a flight by flight number
-	 * @param flightNumber flight number
-	 * @return flight
+	 * Removes a flight from the database
+	 * @param flight - the flight to be removed
 	 */
-	public Flight searchFlight(int flightNumber) {
+	public void removeFlight(Flight flight) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
-		Flight flight = (Flight) session.get(Flight.class, flightNumber);
+		try {
+			session.delete(flight);
+		}
+		catch(HibernateException e) {
+			e.printStackTrace();
+		}
 		
-		if (flight == null)
-			;//flight does not exist
-			
 		session.getTransaction().commit();
-		
-		return flight;
 	}
 	
-	public List listFlights() {
+	/**
+	 * Search for flight(s)
+	 * @param flight
+	 * @return list of flights that match the specified criteria
+	 */
+	public List<?> searchFlight(Flight flight) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		List result = session.createQuery("from Flight").list();
+		
+		// search database for flights that match the values in the flight object
+		List<?> result = session.createQuery("").list();
+		
+		session.getTransaction().commit();
+		
+		// return list of flights
+		return result;
+	}
+	
+	public List<?> listFlights() {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		List<?> result = session.createQuery("from Flight").list();
 		session.getTransaction().commit();
 
 	    return result;
 	}
 	
-	public void login(String username, String password) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		// retrieve customer record from the databse
-		Customer customer = (Customer) session.get(Customer.class, new String(username));
-		
-		if (customer == null) {
-			// customer record does not exist in the database
-		} 
-		else {
-			//compare entered password to stored password
-			if (password.compareTo(customer.getPassword()) == 0) {
-				// login successful
-			}
-			else {
-				// login error: incorrect password
-			}
-		}
-		session.getTransaction().commit();
-	}
-	
 	public static void main (String[] args){
 		FlightManager mgr = new FlightManager();
-		mgr.createAndStoreFlight(924, "FL");
 		
-		List flights = mgr.listFlights();
+		List<?> flights = mgr.listFlights();
 	    for (int i = 0; i < flights.size(); i++) {
 	    	Flight flight = (Flight) flights.get(i);
 	        System.out.println("Flight: " + flight.getFlightNo());
