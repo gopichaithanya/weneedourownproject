@@ -17,18 +17,20 @@ import hibernate.*;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.ServletContext;
 
 public class CustomerController extends SimpleFormController {
-	protected void doSubmitAction(Object o) throws Exception
+	protected void doSubmitAction(Object o) throws ServletException, IOException
 	{
 		Customer customer = (Customer)o;
-		//final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-
-		//session.beginTransaction();
-
-		//session.save(customer);
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		
+		session.beginTransaction();
+		session.save(customer);
+		session.getTransaction().commit();
 		
 		
+
 	}
 	
 	
