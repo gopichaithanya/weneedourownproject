@@ -2,6 +2,8 @@ package springapp.web;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.springframework.web.servlet.ModelAndView;
 
 import springapp.web.HelloController;
@@ -16,7 +18,7 @@ public class FlightControllerTest {
 		ModelAndView modelAndView = controller.handleRequest(null, null);
 		assertEquals("flightList", modelAndView.getViewName());
 		assertNotNull(modelAndView.getModel());
-		String nowValue = (String) modelAndView.getModel().get("flights");
-		assertNotNull(nowValue);
+		final List flights = (List) modelAndView.getModel().get("flights");
+		assertNotNull(flights);
 	}
 }

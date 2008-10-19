@@ -9,6 +9,7 @@
 	<property name="lib.dir" value="lib" />
 	<property name="tld.dir" value="tld" />
 	<property name="jsp.dir" value="jsp" />
+	<property name="sql.dir" value="sql" />
 	<property name="html.dir" value="html" />
 	<property name="dist.dir" value="dist" />
 	<!--property name="test.dir" value="test" /-->
@@ -17,6 +18,10 @@
 	<property name="build.hbm.dir" value="build/hbm" />
 	<property name="build.war.dir" value="build/war" />
 	<property name="name" value="proj4398" />
+
+    <uptodate property="loadDB.uptodate" targetfile="${build.dir}/${db.urlid}.properties" >
+        <srcfiles dir= "${sql.dir}" includes="*.sql"/>
+    </uptodate>
 
 	<path id="master-classpath">
 		<!-- We need the servlet API classes: -->
@@ -67,8 +72,9 @@
 		<javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
 			<src path="${src.dir}" />
 			<classpath refid="master-classpath" />
+            <exclude name="**/*Test.java"/>
+            <exclude name="**/*Tests.java"/>
 		</javac>
-
 		<copy todir="${build.classes.dir}" preservelastmodified="true">
 			<fileset dir="${xml.dir}">
 				<include name="hibernate.cfg.xml" />
@@ -79,7 +85,9 @@
                 <include name="**/*.hbm.xml" />
 			</fileset>
 		</copy>
+	<!--/target>
 
+    <target name="buildWar" depends="build" description="Build WAR file."-->
 		<mkdir dir="${build.war.dir}" />
 		<copy todir="${build.war.dir}" preservelastmodified="true">
 			<fileset dir="${html.dir}">
@@ -92,17 +100,6 @@
 				<include name="springapp-servlet.xml" />
 			</fileset>
 		</copy>
-
-		<!--copy todir="${build.war.dir}/WEB-INF/classes/META-INF" preservelastmodified="true">
-			<fileset dir="${xml.dir}">
-				<include name="persistence.xml" />
-			</fileset>
-		</copy>
-        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.urlid\}" replace="${db.urlid}" />
-        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.driver\}" replace="${db.driver}" />
-        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.user\}" replace="${db.user}" />
-        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.pw\}" replace="${db.pw}" />
-        <replaceregexp file="${build.war.dir}/WEB-INF/classes/META-INF/persistence.xml" match="\$\{db.url\}" replace="${db.url}" /-->
 
 		<copy todir="${build.war.dir}/WEB-INF/classes" preservelastmodified="true">
 			<fileset dir="${build.classes.dir}">
@@ -127,7 +124,7 @@
 
         <mkdir dir="${build.war.dir}/WEB-INF/data" />
         <!--antcall target="startDB"/-->
-        <antcall target="loadDB"/>
+        <antcall target="loadDBOnlyWhenSQLFilesAreChanged"/>
         <copy todir="${build.war.dir}/WEB-INF/data" preservelastmodified="true">
 			<fileset dir="${build.dir}">
 				<include name="*.properties" />
@@ -140,26 +137,28 @@
 				<include name="**/*" />
 			</fileset>
 		</war>
-	</target>
+    </target>
 
 	<target name="clean" description="Clean compiled files and WAR files">
         <delete>
-          <fileset dir="${build.dir}">
-            <include name="**/*"/>
-          </fileset>
+            <fileset dir="${build.dir}">
+                <include name="**/*"/>
+            </fileset>
         </delete>
+        <delete file="${dist.dir}/${name}.war"/>
 	</target>
 
-	<!--target name="buildtests" description="Compile test tree java files">
+	<target name="buildtests" description="Compile test tree java files">
 		<mkdir dir="${build.classes.dir}" />
 		<javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
-			<src path="${test.dir}" />
 			<classpath refid="master-classpath" />
+            <src path="${src.dir}" />
+            <include name="**/*Test.java" />
+            <include name="**/*Tests.java" />
 		</javac>
-	</target-->
+	</target>
 
-	<!--target name="tests" depends="build, buildtests" description="Run tests"-->
-	<target name="tests" depends="build" description="Run tests">
+	<target name="tests" depends="build, buildtests" description="Run tests">
 		<junit printsummary="on" fork="false" haltonfailure="false" failureproperty="tests.failed" showoutput="true">
 
 			<classpath refid="master-classpath" />
@@ -184,14 +183,15 @@
         </fail>
 	</target>
 
+	<!--target name="deploy" depends="buildWar" description="Deploy application"-->
 	<target name="deploy" depends="build" description="Deploy application">
-		<copy todir="${deploy.path}/${name}" preservelastmodified="true">
+		<!--copy todir="${deploy.path}/${name}" preservelastmodified="true">
 			<fileset dir="${build.war.dir}">
 				<include name="**/*" />
 			</fileset>
-		</copy>
-        <copy todir="${deploy.path}/${name}/WEB-INF" preservelastmodified="true"
-            file="${xml.dir}/web.xml"/>
+		</copy-->
+        <!--copy todir="${deploy.path}/${name}/WEB-INF" preservelastmodified="true"
+            file="${xml.dir}/web.xml"/-->
 		<copy todir="${deploy.path}" preservelastmodified="true">
 			<fileset dir="${dist.dir}">
 				<include name="*.war" />
@@ -285,15 +285,19 @@
 		</java>
 	</target>
 
-	<target name="loadDB" depends="dropDB" description="Populate all the data onto DB">
+    <target name="loadDBOnlyWhenSQLFilesAreChanged" unless="loadDB.uptodate">
+        <antcall target="loadDB"/>
+    </target>
+
+	<target name="loadDB" description="Populate all the data onto DB">
 		<echo message="Load up data using: ${db.driver} ${db.url}" />
 		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" autocommit="true" caching="true">
 			<classpath refid="master-classpath" />
-            <transaction  src="sql/airline.sql" />
-            <transaction  src="sql/airport.sql" />
-            <transaction  src="sql/customer.sql" />
-            <transaction  src="sql/flight.sql" />
-            <transaction  src="sql/itinerary.sql" />
+            <transaction  src="${sql.dir}/airline.sql" />
+            <transaction  src="${sql.dir}/airport.sql" />
+            <transaction  src="${sql.dir}/customer.sql" />
+            <transaction  src="${sql.dir}/flight.sql" />
+            <transaction  src="${sql.dir}/itinerary.sql" />
             SHUTDOWN;
 		</sql>
 	</target>

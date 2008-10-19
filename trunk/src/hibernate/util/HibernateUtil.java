@@ -1,5 +1,7 @@
 package hibernate.util;
 
+import java.io.File;
+
 import org.hibernate.*;
 import org.hibernate.cfg.*;
 
@@ -7,25 +9,24 @@ public class HibernateUtil {
 
 	private static final SessionFactory sessionFactory;
 
+	final static String attrHibernateURL = "hibernate.connection.url";
+	final static String attrCatalinaBase = "catlina.base";
+	final static String configFilenameForTest = "xml/hibernate.ant.cfg.xml";
+
 	static {
-		final String attrHibernateURL = "hibernate.connection.url";
-		final String attrCatalinaBase = "catlina.base";
-		final String catalinaBase = System.getProperty(attrCatalinaBase);
+		// final String userDir = System.getProperty("user.dir");
+		// final String classDir = System.getProperty("java.class.path",".");
 
 		try {
 			// Create the SessionFactory from hibernate.cfg.xml
-			final Configuration cfg = new Configuration().configure();
+			final File cfgFile = new File(configFilenameForTest);
+			final Configuration cfgObj = new Configuration();
+			final Configuration cfg = (cfgFile.exists() ? cfgObj
+					.configure(cfgFile) : cfgObj.configure());
 
 			final String url = cfg.getProperty(attrHibernateURL);
-			final int idxCatalinaBase = url.indexOf("${" + attrCatalinaBase
-					+ "}");
-			if (idxCatalinaBase >= 0) {
-				final String newURL = url.substring(0, idxCatalinaBase)
-						+ catalinaBase
-						+ url.substring(idxCatalinaBase + 3
-								+ attrCatalinaBase.length());
-				cfg.setProperty(attrHibernateURL, newURL);
-			}
+			final String parsedUrl = getParsedUrl(url);
+			cfg.setProperty(attrHibernateURL, parsedUrl);
 
 			sessionFactory = cfg.buildSessionFactory();
 		} catch (Throwable ex) {
@@ -39,4 +40,16 @@ public class HibernateUtil {
 		return sessionFactory;
 	}
 
+	private static String getParsedUrl(String url) {
+		final String catalinaBase = System.getProperty(attrCatalinaBase);
+		final int idxCatalinaBase = url.indexOf("${" + attrCatalinaBase + "}");
+
+		if (idxCatalinaBase >= 0)
+			url = url.substring(0, idxCatalinaBase)
+					+ catalinaBase
+					+ url.substring(idxCatalinaBase + 3
+							+ attrCatalinaBase.length());
+
+		return url;
+	}
 }
