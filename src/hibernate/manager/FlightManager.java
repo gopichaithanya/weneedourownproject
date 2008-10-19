@@ -34,9 +34,11 @@ public class FlightManager {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
-		Flight flight = new Flight();
-		session.load(flight, flightNumber);
+		Flight flight = (Flight) session.get(Flight.class, flightNumber);
 		
+		if (flight == null)
+			;//flight does not exist
+			
 		session.getTransaction().commit();
 		
 		return flight;
@@ -56,8 +58,7 @@ public class FlightManager {
 		session.beginTransaction();
 		
 		// retrieve customer record from the databse
-		Customer customer = new Customer();
-		session.load(customer, new String(username));
+		Customer customer = (Customer) session.get(Customer.class, new String(username));
 		
 		if (customer == null) {
 			// customer record does not exist in the database
