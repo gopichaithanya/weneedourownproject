@@ -41,8 +41,8 @@
 		<echo message="" />
 		<echo message="build       ==> Build the application" />
 		<echo message="clean       ==> Clean compiled files and WAR file" />
-		<!--echo message="buildtests  ==> Build the tests" /-->
-		<echo message="tests       ==> Test all the tests" />
+		<echo message="buildtest  ==> Build the tests" />
+		<echo message="test       ==> Test all the tests" />
 		<echo />
 		<echo message="deploy      ==> Deploy application as directory" />
 		<echo message="undeploy    ==> Delete deploied application" />
@@ -144,7 +144,7 @@
         <delete file="${dist.dir}/${name}.war"/>
 	</target>
 
-	<target name="buildtests" description="Compile test tree java files">
+	<target name="buildtest" description="Compile test tree java files">
 		<mkdir dir="${build.classes.dir}" />
 		<javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
 			<classpath refid="master-classpath" />
@@ -154,7 +154,7 @@
 		</javac>
 	</target>
 
-	<target name="tests" depends="build, buildtests" description="Run tests">
+	<target name="test" depends="build, buildtest" description="Run tests">
 		<junit printsummary="on" fork="false" haltonfailure="false" failureproperty="tests.failed" showoutput="true">
 
 			<classpath refid="master-classpath" />
@@ -282,6 +282,7 @@
 	</target>
 
     <target name="loadDBOnlyWhenSQLFilesAreChanged" depends="checkSqlUpdates" unless="sqlBuild.notRequired">
+        <echo message="SQL data has been changed." />
         <antcall target="loadDB"/>
     </target>
 
