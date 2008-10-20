@@ -19,10 +19,6 @@
 	<property name="build.war.dir" value="build/war" />
 	<property name="name" value="proj4398" />
 
-    <uptodate property="loadDB.uptodate" targetfile="${build.dir}/${db.urlid}.properties" >
-        <srcfiles dir= "${sql.dir}" includes="*.sql"/>
-    </uptodate>
-
 	<path id="master-classpath">
 		<!-- We need the servlet API classes: -->
 		<!--  * for Tomcat 5/6 use servlet-api.jar -->
@@ -285,13 +281,19 @@
 		</java>
 	</target>
 
-    <target name="loadDBOnlyWhenSQLFilesAreChanged" unless="loadDB.uptodate">
+    <target name="loadDBOnlyWhenSQLFilesAreChanged" depends="checkSqlUpdates" unless="sqlBuild.notRequired">
         <antcall target="loadDB"/>
+    </target>
+
+    <target name="checkSqlUpdates">
+        <uptodate property="sqlBuild.notRequired" targetfile="${build.dir}/${db.urlid}.properties" >
+            <srcfiles dir= "${sql.dir}" includes="*.sql"/>
+        </uptodate>
     </target>
 
 	<target name="loadDB" description="Populate all the data onto DB">
 		<echo message="Load up data using: ${db.driver} ${db.url}" />
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" autocommit="true" caching="true">
+		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" autocommit="true" caching="true" onerror="continue">
 			<classpath refid="master-classpath" />
             <transaction  src="${sql.dir}/airline.sql" />
             <transaction  src="${sql.dir}/airport.sql" />
@@ -337,11 +339,12 @@
 		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" print="true">
 			<classpath refid="master-classpath" />
 
-        SELECT * FROM airline;
-        SELECT * FROM airport;
-        SELECT * FROM customer;
-        SELECT * FROM flight;
-        SELECT * FROM itinerary;
+            SELECT * FROM airline;
+            SELECT * FROM airport;
+            SELECT * FROM customer;
+            SELECT * FROM flight;
+            SELECT * FROM itinerary;
+            SHUTDOWN;
 
         </sql>
 	</target>
@@ -361,7 +364,7 @@
         <hibernatetool destdir="${build.hbm.dir}">
             <jdbcconfiguration
                 configurationfile="${xml.dir}/hibernate.ant.cfg.xml"
-                packagename="database.hibernate">
+                packagename="hibernate">
             </jdbcconfiguration>
 			<classpath refid="master-classpath" />
             <hbm2cfgxml/>
