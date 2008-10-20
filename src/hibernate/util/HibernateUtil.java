@@ -14,15 +14,16 @@ public class HibernateUtil {
 	final static String configFilenameForTest = "xml/hibernate.ant.cfg.xml";
 
 	static {
-		// final String userDir = System.getProperty("user.dir");
-		// final String classDir = System.getProperty("java.class.path",".");
+		System.out.println(System.getProperty("user.dir"));
+		//		System.out.println(System.getProperty("java.class.path", "."));
 
 		try {
 			// Create the SessionFactory from hibernate.cfg.xml
 			final File cfgFile = new File(configFilenameForTest);
+			final boolean bFile = cfgFile.exists();
 			final Configuration cfgObj = new Configuration();
-			final Configuration cfg = (cfgFile.exists() ? cfgObj
-					.configure(cfgFile) : cfgObj.configure());
+			final Configuration cfg = (bFile ? cfgObj.configure(cfgFile)
+					: cfgObj.configure());
 
 			final String url = cfg.getProperty(attrHibernateURL);
 			final String parsedUrl = getParsedUrl(url);
@@ -41,7 +42,7 @@ public class HibernateUtil {
 	}
 
 	private static String getParsedUrl(String url) {
-		final String catalinaBase = System.getProperty(attrCatalinaBase);
+		final String catalinaBase = System.getProperty(attrCatalinaBase, ".");
 		final int idxCatalinaBase = url.indexOf("${" + attrCatalinaBase + "}");
 
 		if (idxCatalinaBase >= 0)
