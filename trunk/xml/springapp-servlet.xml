@@ -10,19 +10,18 @@
   <bean name="/hello.spring" class="springapp.web.HelloController"/>
   <bean name="/flightList.spring" class="springapp.web.FlightController"/>
   
-  <!--bean name="/register.spring" class="springapp.web.CustomerController">
+  <bean name="/register.spring" class="springapp.web.CustomerController">
     <property name="formView" value="register"/>
     <property name="successView" value="registered"/>
     <property name="commandName" value="customer"/>
-    <property name="commandClass" value="database.hibernate.Customer"/>
-  </bean-->
+    <property name="commandClass" value="hibernate.Customer"/>
+  </bean>
 
-  <!--bean name="/addflight.spring" class="springapp.manager.AddFlightController">
+  <bean name="/addflight.spring" class="springapp.manager.AddFlightController"> 
     <property name="formView" value="addflight"/>
     <property name="commandName" value="flight"/>
-    <property name="commandClass" value="database.hibernate.Flight"/>
-  </bean-->	
-
+    <property name="commandClass" value="hibernate.Flight"/>	
+  </bean>
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
