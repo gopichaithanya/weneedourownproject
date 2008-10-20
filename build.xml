@@ -71,11 +71,7 @@
             <exclude name="**/*Test.java"/>
             <exclude name="**/*Tests.java"/>
 		</javac>
-		<copy todir="${build.classes.dir}" preservelastmodified="true">
-			<fileset dir="${xml.dir}">
-				<include name="hibernate.cfg.xml" />
-			</fileset>
-		</copy>
+        <copy file="${xml.dir}/hibernate.ant.cfg.xml" tofile="${build.classes.dir}/hibernate.cfg.xml" preservelastmodified="true"/>
 		<copy todir="${build.classes.dir}" preservelastmodified="true">
 			<fileset dir="${src.dir}">
                 <include name="**/*.hbm.xml" />
@@ -99,9 +95,16 @@
 
 		<copy todir="${build.war.dir}/WEB-INF/classes" preservelastmodified="true">
 			<fileset dir="${build.classes.dir}">
-				<include name="**/*.*" />
+				<include name="**/*.class" />
+                <exclude name="**/*Test.class"/>
+                <exclude name="**/*Tests.class"/>
 			</fileset>
+			<fileset dir="${build.classes.dir}">
+				<include name="**/*.hbm.xml" />
+			</fileset>
+			<fileset file="${xml.dir}/hibernate.cfg.xml"/>
 		</copy>
+
 		<copy todir="${build.war.dir}/WEB-INF/jsp" preservelastmodified="true">
 			<fileset dir="${jsp.dir}">
 				<include name="**/*.*" />
@@ -136,11 +139,8 @@
     </target>
 
 	<target name="clean" description="Clean compiled files and WAR files">
-        <delete>
-            <fileset dir="${build.dir}">
-                <include name="**/*"/>
-            </fileset>
-        </delete>
+        <delete dir="${build.war.dir}"/>
+        <delete dir="${build.classes.dir}"/>
         <delete file="${dist.dir}/${name}.war"/>
 	</target>
 
