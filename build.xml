@@ -40,9 +40,10 @@
 		<echo message="Available targets are:" />
 		<echo message="" />
 		<echo message="build       ==> Build the application" />
+		<echo message="buildWar    ==> Build WAR file" />
 		<echo message="clean       ==> Clean compiled files and WAR file" />
-		<echo message="buildtest  ==> Build the tests" />
-		<echo message="test       ==> Test all the tests" />
+		<echo message="buildtest   ==> Build the tests" />
+		<echo message="test        ==> Test all the tests" />
 		<echo />
 		<echo message="deploy      ==> Deploy application as directory" />
 		<echo message="undeploy    ==> Delete deploied application" />
@@ -77,9 +78,10 @@
                 <include name="**/*.hbm.xml" />
 			</fileset>
 		</copy>
-	<!--/target>
+        <antcall target="loadDBOnlyWhenSQLFilesAreChanged"/>
+	</target>
 
-    <target name="buildWar" depends="build" description="Build WAR file."-->
+    <target name="buildWar" depends="build" description="Build WAR file.">
 		<mkdir dir="${build.war.dir}" />
 		<copy todir="${build.war.dir}" preservelastmodified="true">
 			<fileset dir="${html.dir}">
@@ -113,6 +115,7 @@
 		<copy todir="${build.war.dir}/WEB-INF/lib" preservelastmodified="true">
 			<fileset dir="${lib.dir}">
 				<include name="**/*.*" />
+                <exclude name="servlet-api.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${build.war.dir}/WEB-INF/tld" preservelastmodified="true">
@@ -122,8 +125,6 @@
 		</copy>
 
         <mkdir dir="${build.war.dir}/WEB-INF/data" />
-        <!--antcall target="startDB"/-->
-        <antcall target="loadDBOnlyWhenSQLFilesAreChanged"/>
         <copy todir="${build.war.dir}/WEB-INF/data" preservelastmodified="true">
 			<fileset dir="${build.dir}">
 				<include name="*.properties" />
@@ -139,12 +140,12 @@
     </target>
 
 	<target name="clean" description="Clean compiled files and WAR files">
+        <delete file="${dist.dir}/${name}.war"/>
         <delete dir="${build.war.dir}"/>
         <delete dir="${build.classes.dir}"/>
-        <delete file="${dist.dir}/${name}.war"/>
 	</target>
 
-	<target name="buildtest" description="Compile test tree java files">
+	<target name="buildtest" depends="build" description="Compile test tree java files">
 		<mkdir dir="${build.classes.dir}" />
 		<javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
 			<classpath refid="master-classpath" />
@@ -154,7 +155,7 @@
 		</javac>
 	</target>
 
-	<target name="test" depends="build, buildtest" description="Run tests">
+	<target name="test" depends="buildtest" description="Run tests">
 		<junit printsummary="on" fork="false" haltonfailure="false" failureproperty="tests.failed" showoutput="true">
 
 			<classpath refid="master-classpath" />
@@ -179,8 +180,7 @@
         </fail>
 	</target>
 
-	<!--target name="deploy" depends="buildWar" description="Deploy application"-->
-	<target name="deploy" depends="build" description="Deploy application">
+	<target name="deploy" depends="buildWar" description="Deploy application">
 		<!--copy todir="${deploy.path}/${name}" preservelastmodified="true">
 			<fileset dir="${build.war.dir}">
 				<include name="**/*" />

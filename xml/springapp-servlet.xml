@@ -8,7 +8,6 @@
   <!-- the application context definition for the springapp DispatcherServlet -->
 
   <bean name="/hello.spring" class="springapp.web.HelloController"/>
-  <bean name="/flightList.spring" class="springapp.web.FlightController"/>
   
   <bean name="/register.spring" class="springapp.web.CustomerController">
     <property name="formView" value="register"/>
@@ -22,11 +21,24 @@
     <property name="commandName" value="flight"/>
     <property name="commandClass" value="hibernate.Flight"/>	
   </bean>
-
+  
+  <bean name="/flightSearchForCustomerForm.spring" class="springapp.web.FlightSearchForCustomerFormController">
+  	<property name="sessionForm" value="true"/>
+  	<property name="commandName" value="flightSearchForCustomerCMD"/>
+  	<property name="commandClass" value="springapp.web.FlightSearchForCustomer"/>
+  	<property name="validator">
+  		<bean class="springapp.web.FlightSearchForCustomerValidator"/>
+  	</property>
+  	<property name="formView" value="flightSearchForCustomerForm"/>
+  	<property name="successView" value="flightListForCustomer.spring"/>
+  </bean>
+  <bean name="/flightListForCustomer.spring" class="springapp.web.FlightListForCustomerController"/>
+  
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
     <property name="prefix" value="/WEB-INF/jsp/"></property>
     <property name="suffix" value=".jsp"></property>        
   </bean>
+  
 
 </beans>
