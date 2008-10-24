@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@page import="java.util.List"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -53,7 +54,7 @@
       <td>Location</td>
       <td><form:select path="departLocation">
         <c:forEach items="${airports}" var="airport">
-          <form:option value="${airport[0]}" label="${airport[1]}" />
+          <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
       </form:select></td>
     </tr>
@@ -100,24 +101,68 @@
       <td>Location</td>
       <td><form:select path="arrivalLocation">
         <c:forEach items="${airports}" var="airport">
-          <form:option value="${airport[0]}" label="${airport[1]}" />
+          <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
       </form:select></td>
     </tr>
     <tr>
       <td>The number of passengers</td>
-      <td colspan="2"><input type="Radio" name="nPassengers" value="1" checked>1<br>
-      <input type="Radio" name="nPassengers" value="2">2<br>
-      <input type="Radio" name="nPassengers" value="3">3<br>
-      <input type="Radio" name="nPassengers" value="4">4<br>
-      <input type="Radio" name="nPassengers" value="5">5<br>
-      <input type="Radio" name="nPassengers" value="6">6<br>
-      <input type="Radio" name="nPassengers" value="7">7</td>
+      <td colspan="2">
+      <table border="1">
+        <tr>
+          <c:forEach var="nPerson" begin="1" end="7" step="1">
+            <td><form:radiobutton path="numPassengers" value="${nPerson}"
+              id="passenger${nPerson}" /> <label for="passenger${nPerson}"><c:out
+              value="${nPerson}" /></label></td>
+          </c:forEach>
+        </tr>
+      </table>
+      </td>
     </tr>
   </table>
 
   <input type="submit" value="Search">
-  <a href="">Inventory report</a>
 </form:form>
+
+<c:if test="${searchedFlights != null}">
+  <table border="1">
+    <thead>
+      <tr>
+        <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline code/name</a></th>
+        <th>Flight number (3 digits)</th>
+        <th><a href="http://www.orbitz.com/App/global/airportCodes.jsp">Departure location</a></th>
+        <th>Departure day of the week/time</th>
+        <th><a href="http://www.orbitz.com/App/global/airportCodes.jsp">Arrival location</a></th>
+        <th>Arrival day of the week/time</th>
+        <th>cost of business class</th>
+        <th>cost of economy class</th>
+        <th>Seats for business class</th>
+        <th>Seats for economy class</th>
+        <th><b>Reserve</b></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <c:forEach items="${searchedFlights}" var="flight">
+        <tr>
+          <td><c:out value="${flight.airline_code}" /></td>
+          <td><c:out value="${flight.flightNo}" /></td>
+          <td><a href="http://maps.google.com"><c:out
+            value="${flight.airportByDepartureLocation_code}" /></a></td>
+          <td><c:out value="${flight.departureTime}" /></td>
+          <td><a href="http://maps.google.com"><c:out
+            value="${flight.airportByArrivalLocation_code}" /></a></td>
+          <td><c:out value="${flight.arrivalTime}" /></td>
+          <td><c:out value="${flight.businessPrice}" /></td>
+          <td><c:out value="${flight.economyPrice}" /></td>
+          <td><c:out value="${flight.businessSeats}" /></td>
+          <td><c:out value="${flight.economySeats}" /></td>
+          <td><a href="">Reserve</a></td>
+        </tr>
+      </c:forEach>
+    </tbody>
+  </table>
+</c:if>
+
 </body>
 </html>
