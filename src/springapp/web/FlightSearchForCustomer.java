@@ -7,17 +7,19 @@ public class FlightSearchForCustomer {
    // TODO change from String to Ineger
    private String departMonth = "1";
    private String departDay = "1";
-   private String departYear = "2008";
-   private String departHour = "1";
-   private String departMin = "0";
+   private String departYear;
+   private String departHour;
+   private String departMin;
    private String departLocation;
    
-   private String arrivalMonth;
-   private String arrivalDay;
+   private String arrivalMonth = "1";
+   private String arrivalDay = "1";
    private String arrivalYear;
    private String arrivalHour;
    private String arrivalMin;
    private String arrivalLocation;
+   
+   private String numPassengers = "1";
    
    public void setDepartMonth(String departMonth) {
       this.departMonth = departMonth;
@@ -90,5 +92,11 @@ public class FlightSearchForCustomer {
    }
    public String getArrivalLocation() {
       return arrivalLocation;
+   }
+   public void setNumPassengers(String nPassengers) {
+      this.numPassengers = nPassengers;
+   }
+   public String getNumPassengers() {
+      return numPassengers;
    }
 }

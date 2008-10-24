@@ -30,9 +30,8 @@
   		<bean class="springapp.web.FlightSearchForCustomerValidator"/>
   	</property>
   	<property name="formView" value="flightSearchForCustomerForm"/>
-  	<property name="successView" value="flightListForCustomer.spring"/>
+  	<!--property name="successView" value="flightSearchForCustomerForm.spring"/-->
   </bean>
-  <bean name="/flightListForCustomer.spring" class="springapp.web.FlightListForCustomerController"/>
   
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
