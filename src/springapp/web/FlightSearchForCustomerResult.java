@@ -2,15 +2,19 @@ package springapp.web;
 
 public class FlightSearchForCustomerResult {
    private String airline_code;
+   private String airline_name;
    private String flightNo;
    private String airportByDepartureLocation_code;
+   private String airportByDepartureLocation_name;
    private String departureTime;
    private String airportByArrivalLocation_code;
+   private String airportByArrivalLocation_name;
    private String arrivalTime;
    private String businessPrice;
    private String economyPrice;
    private String businessSeats;
    private String economySeats;
+   private String durationHours;
 
    public void setAirline_code(String airline_code) {
       this.airline_code = airline_code;
@@ -90,5 +94,37 @@ public class FlightSearchForCustomerResult {
 
    public String getEconomySeats() {
       return economySeats;
+   }
+
+   public void setAirline_name(String airline_name) {
+      this.airline_name = airline_name;
+   }
+
+   public String getAirline_name() {
+      return airline_name;
+   }
+
+   public void setAirportByDepartureLocation_name(String airportByDepartureLocation_name) {
+      this.airportByDepartureLocation_name = airportByDepartureLocation_name;
+   }
+
+   public String getAirportByDepartureLocation_name() {
+      return airportByDepartureLocation_name;
+   }
+
+   public void setAirportByArrivalLocation_name(String airportByArrivalLocation_name) {
+      this.airportByArrivalLocation_name = airportByArrivalLocation_name;
+   }
+
+   public String getAirportByArrivalLocation_name() {
+      return airportByArrivalLocation_name;
+   }
+
+   public void setDurationHours(String durationTime) {
+      this.durationHours = durationTime;
+   }
+
+   public String getDurationHours() {
+      return durationHours;
    }
 }

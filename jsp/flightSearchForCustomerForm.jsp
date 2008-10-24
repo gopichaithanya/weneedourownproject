@@ -18,7 +18,7 @@
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
-      </form:select> <input type="button" value="Search" /></td>
+      </form:select> <input type="button" value="Search Airport" /></td>
     </tr>
     <tr>
       <th>Going to</th>
@@ -26,7 +26,7 @@
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
-      </form:select> <input type="button" value="Search" /></td>
+      </form:select> <input type="button" value="Search Airport" /></td>
     </tr>
 
     <tr>
@@ -44,11 +44,11 @@
         <form:option value="10" label="Oct" />
         <form:option value="11" label="Nov" />
         <form:option value="12" label="Dec" />
-      </form:select><form:select path="departDay">
+      </form:select> / <form:select path="departDay">
         <c:forEach var="day" begin="1" end="31" step="1">
           <form:option value="${day}" />
         </c:forEach>
-      </form:select><form:select path="departYear">
+      </form:select> / <form:select path="departYear">
         <c:forEach var="year" begin="2008" end="2011" step="1">
           <form:option value="${year}" />
         </c:forEach>
@@ -57,18 +57,14 @@
     <tr>
       <th>Departing Time</th>
       <td><form:select path="departHour">
-        <form:option value="any" label="Anytime" />
+        <form:option value="anytime" label="Anytime" />
         <c:forEach var="hour" begin="0" end="11" step="1">
           <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
         </c:forEach>
         <c:forEach var="hour" begin="12" end="23" step="1">
           <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
         </c:forEach>
-      </form:select><!-- : <form:select path="departMin">
-            <c:forEach var="min" begin="00" end="60" step="10">
-              <form:option value="${min}" />
-            </c:forEach>
-          </form:select>--></td>
+      </form:select></td>
     </tr>
 
     <tr>
@@ -87,7 +83,7 @@
 
     <tr>
       <th>Returning Date</th>
-      <td><form:select path="arrivalMonth">
+      <td><form:select path="returningMonth">
         <form:option value="1" label="Jan" />
         <form:option value="2" label="Feb" />
         <form:option value="3" label="Mar" />
@@ -100,11 +96,11 @@
         <form:option value="10" label="Oct" />
         <form:option value="11" label="Nov" />
         <form:option value="12" label="Dec" />
-      </form:select><form:select path="arrivalDay">
+      </form:select> / <form:select path="returningDay">
         <c:forEach var="day" begin="1" end="31" step="1">
           <form:option value="${day}" />
         </c:forEach>
-      </form:select><form:select path="arrivalYear">
+      </form:select> / <form:select path="returningYear">
         <c:forEach var="year" begin="2008" end="2011" step="1">
           <form:option value="${year}" />
         </c:forEach>
@@ -112,19 +108,15 @@
     </tr>
     <tr>
       <th>Returning Time</th>
-      <td><form:select path="arrivalHour">
-        <form:option value="any" label="Anytime" />
+      <td><form:select path="returningHour">
+        <form:option value="anytime" label="Anytime" />
         <c:forEach var="hour" begin="0" end="11" step="1">
           <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
         </c:forEach>
         <c:forEach var="hour" begin="12" end="23" step="1">
           <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
         </c:forEach>
-      </form:select><!-- : <form:select path="arrivalMin">
-            <c:forEach var="min" begin="00" end="60" step="10">
-              <form:option value="${min}" />
-            </c:forEach>
-          </form:select>--></td>
+      </form:select></td>
     </tr>
 
     <tr>
@@ -132,38 +124,39 @@
       <td>
       <table border="1">
         <tr>
-          <c:forEach var="nPerson" begin="1" end="5" step="1">
+          <c:forEach var="nPerson" begin="1" end="8" step="1">
             <td><form:radiobutton path="numPassengers" value="${nPerson}"
               id="passenger${nPerson}" /> <label for="passenger${nPerson}"><c:out
               value="${nPerson}" /></label></td>
           </c:forEach>
-          <c:if test="${numPassengers > 5}">
-            <td><form:radiobutton path="numPassengers" value="${numPassengers}" /></td>
-          </c:if>
-          <td><input type="button" value="More" /></td>
+          <td>
+          <div id="passengerMore"></div>
+          <input type="button" value="More" /></td>
         </tr>
       </table>
       </td>
     </tr>
+
+    <tr>
+      <td colspan="2" align="right"><input type="reset" /> <input type="submit"
+        value="====Search Flight====" /></td>
+    </tr>
   </table>
 
-  <input type="submit" value="Search">
 </form:form>
-
 <c:if test="${searchedFlights != null}">
+  <p>
   <table border="1">
+    <caption>Choose a departing flight (1 / 2 steps)</caption>
     <thead>
       <tr>
-        <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline code/name</a></th>
-        <th>Flight number (3 digits)</th>
-        <th><a href="http://www.orbitz.com/App/global/airportCodes.jsp">Departure location</a></th>
-        <th>Departure day of the week/time</th>
-        <th><a href="http://www.orbitz.com/App/global/airportCodes.jsp">Arrival location</a></th>
-        <th>Arrival day of the week/time</th>
-        <th>cost of business class</th>
-        <th>cost of economy class</th>
-        <th>Seats for business class</th>
-        <th>Seats for economy class</th>
+        <th>Departure location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+        and time</th>
+        <td></td>
+        <th>Arrival location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+        and time</th>
+        <th>cost of economy class (business class)</th>
+        <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a></th>
         <th><b>Reserve</b></th>
       </tr>
     </thead>
@@ -171,23 +164,34 @@
     <tbody>
       <c:forEach items="${searchedFlights}" var="flight">
         <tr>
-          <td><c:out value="${flight.airline_code}" /></td>
-          <td><c:out value="${flight.flightNo}" /></td>
           <td><a href="http://maps.google.com"><c:out
-            value="${flight.airportByDepartureLocation_code}" /></a></td>
-          <td><c:out value="${flight.departureTime}" /></td>
+            value="${flight.airportByDepartureLocation_name}" /> (<c:out
+            value="${flight.airportByDepartureLocation_code}" />)</a><br />
+          <c:out value="${flight.departureTime}" /></td>
+          <td>to</td>
           <td><a href="http://maps.google.com"><c:out
-            value="${flight.airportByArrivalLocation_code}" /></a></td>
-          <td><c:out value="${flight.arrivalTime}" /></td>
-          <td><c:out value="${flight.businessPrice}" /></td>
-          <td><c:out value="${flight.economyPrice}" /></td>
-          <td><c:out value="${flight.businessSeats}" /></td>
-          <td><c:out value="${flight.economySeats}" /></td>
+            value="${flight.airportByArrivalLocation_name}" /> (<c:out
+            value="${flight.airportByArrivalLocation_code}" />)</a><br />
+          <c:out value="${flight.arrivalTime}" /> (<c:out value="${flight.durationHours}" />
+          hours)</td>
+          <td>$<c:out value="${flight.economyPrice}" /> ($<c:out
+            value="${flight.businessPrice}" />)</td>
+          <td>
+          <table border="0">
+            <tr>
+              <td><img
+                src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline_code}.gif"
+                alt="${flight.airline_code}" /></td>
+              <td><c:out value="${flight.airline_name}" /></td>
+            </tr>
+          </table>
+          </td>
           <td><a href="">Reserve</a></td>
         </tr>
       </c:forEach>
     </tbody>
   </table>
+  </p>
 </c:if>
 </body>
 </html>

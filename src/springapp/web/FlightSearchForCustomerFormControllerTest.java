@@ -25,8 +25,40 @@ public class FlightSearchForCustomerFormControllerTest {
    }
 
    @Test
-   public void testListFlights() {
-      final List flightList = FlightSearchForCustomerFormController.getFlightList();
+   public void testListFlightsNull() {
+      final List flightList = FlightSearchForCustomerFormController.getFlightList(null);
+      assertNotNull(flightList);
+      assertTrue(flightList.size() > 0);
+   }
+
+   @Test
+   public void testListFlightsAnytime() {
+      final FlightSearchForCustomer dummy = new FlightSearchForCustomer();
+      dummy.setDepartLocation("DEN");
+      dummy.setArrivalLocation("BWI");
+      dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
+      dummy.setDepartMonth("1");
+      dummy.setDepartDay("4");
+      dummy.setDepartHour(FlightSearchForCustomerFormController.KEYWORD_searchingAnytime);
+
+      final List flightList = FlightSearchForCustomerFormController.getFlightList(dummy);
+      assertNotNull(flightList);
+      assertTrue(flightList.size() > 0);
+   }
+
+   @Test
+   public void testListFlightsCertainTime() {
+      final FlightSearchForCustomer dummy = new FlightSearchForCustomer();
+      dummy.setDepartLocation("DEN");
+      dummy.setArrivalLocation("BWI");
+      dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
+      dummy.setDepartMonth("1");
+      dummy.setDepartDay("4");
+      dummy.setDepartHour("10");
+      dummy.setSearchingHourRange("2");
+
+      final List flightList = FlightSearchForCustomerFormController.getFlightList(dummy);
+      assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }
 
