@@ -20,6 +20,7 @@ public class FlightSearchForCustomer {
    private String arrivalLocation;
    
    private String numPassengers = "1";
+   private String tripType = "roundTrip";
    
    public void setDepartMonth(String departMonth) {
       this.departMonth = departMonth;
@@ -98,5 +99,11 @@ public class FlightSearchForCustomer {
    }
    public String getNumPassengers() {
       return numPassengers;
+   }
+   public void setTripType(String tripType) {
+      this.tripType = tripType;
+   }
+   public String getTripType() {
+      return tripType;
    }
 }
