@@ -18,7 +18,7 @@
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
-      </form:select></td>
+      </form:select> <input type="button" value="Search" /></td>
     </tr>
     <tr>
       <th>Going to</th>
@@ -26,7 +26,7 @@
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
-      </form:select></td>
+      </form:select> <input type="button" value="Search" /></td>
     </tr>
 
     <tr>
@@ -52,11 +52,12 @@
         <c:forEach var="year" begin="2008" end="2011" step="1">
           <form:option value="${year}" />
         </c:forEach>
-      </form:select></td>
+      </form:select> <input type="button" value="Calendar" /></td>
     </tr>
     <tr>
       <th>Departing Time</th>
       <td><form:select path="departHour">
+        <form:option value="any" label="Anytime" />
         <c:forEach var="hour" begin="0" end="11" step="1">
           <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
         </c:forEach>
@@ -107,11 +108,12 @@
         <c:forEach var="year" begin="2008" end="2011" step="1">
           <form:option value="${year}" />
         </c:forEach>
-      </form:select></td>
+      </form:select> <input type="button" value="Calendar" /></td>
     </tr>
     <tr>
       <th>Returning Time</th>
       <td><form:select path="arrivalHour">
+        <form:option value="any" label="Anytime" />
         <c:forEach var="hour" begin="0" end="11" step="1">
           <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
         </c:forEach>
@@ -130,11 +132,15 @@
       <td>
       <table border="1">
         <tr>
-          <c:forEach var="nPerson" begin="1" end="10" step="1">
+          <c:forEach var="nPerson" begin="1" end="5" step="1">
             <td><form:radiobutton path="numPassengers" value="${nPerson}"
               id="passenger${nPerson}" /> <label for="passenger${nPerson}"><c:out
               value="${nPerson}" /></label></td>
           </c:forEach>
+          <c:if test="${numPassengers > 5}">
+            <td><form:radiobutton path="numPassengers" value="${numPassengers}" /></td>
+          </c:if>
+          <td><input type="button" value="More" /></td>
         </tr>
       </table>
       </td>
