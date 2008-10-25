@@ -70,9 +70,11 @@ public class FlightSearchForCustomerValidator implements Validator {
                      + o.getArrivalLocation() + ", does not exist.");
 
       // Checking: tripType
-      if ((!o.getTripType().equalsIgnoreCase(
-            FlightSearchForCustomerFormController.KEYWORD_oneWayTrip) && !o.getTripType()
-            .equalsIgnoreCase(FlightSearchForCustomerFormController.KEYWORD_roundTrip)))
+      final boolean bOneWayTrip = o.getTripType().equalsIgnoreCase(
+            FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      final boolean bRoundTrip = o.getTripType().equalsIgnoreCase(
+            FlightSearchForCustomerFormController.KEYWORD_roundTrip);
+      if (!bOneWayTrip && !bRoundTrip)
          errors.rejectValue("tripType", "error.FlightSearchForCustomer.tripType.outOfBound",
                "Trip type must be either "
                      + FlightSearchForCustomerFormController.KEYWORD_roundTrip + " or "
@@ -144,7 +146,7 @@ public class FlightSearchForCustomerValidator implements Validator {
       {
          final boolean bSameDepartMonth = (dMonth == curMonth);
          final Calendar c = Calendar.getInstance();
-         c.set(dYear, dMonth, 1);
+         c.set(dYear, dMonth - 1, 1);
          final int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
          if (dDay < 1)
             errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.tooLess",
@@ -156,6 +158,9 @@ public class FlightSearchForCustomerValidator implements Validator {
             errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.pastDay",
                   "Already past day.");
       }
+
+      if (false == bRoundTrip)
+         return;
 
       // Checking: returnYear
       int rYear;
@@ -207,7 +212,7 @@ public class FlightSearchForCustomerValidator implements Validator {
       {
          final boolean bSameReturnMonth = (rMonth == dMonth);
          final Calendar c = Calendar.getInstance();
-         c.set(rYear, rMonth, 1);
+         c.set(rYear, rMonth - 1, 1);
          final int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
          if (rDay < 1)
             errors.rejectValue("returnDay", "error.FlightSearchForCustomer.returnDay.tooLess",
