@@ -2,6 +2,8 @@ package springapp.web;
 
 import static org.junit.Assert.*;
 
+import hibernate.manager.AirportManager;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -10,13 +12,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerFormControllerTest {
-
-   @Test
-   public void testGetAirportList() {
-      final List<String[]> airports = FlightSearchForCustomerFormController.getAirportList();
-      assertNotNull(airports);
-      assertEquals(567, airports.size());
-   }
 
    @Test(expected = NullPointerException.class)
    public void testHandleRequestView() throws Exception {

@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Flight Searching</title>
+<link rel="stylesheet" type="text/css" href="css/proj4398.css" />
 </head>
 <body>
 <form:form method="post" commandName="flightSearchForCustomerCMD">
@@ -18,7 +19,8 @@
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
-      </form:select> <input type="button" value="Search Airport" /></td>
+      </form:select> <form:errors path="departLocation" cssClass="error" /> <input type="button"
+        value="Search Airport" /></td>
     </tr>
     <tr>
       <th>Going to</th>
@@ -26,7 +28,8 @@
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
-      </form:select> <input type="button" value="Search Airport" /></td>
+      </form:select> <form:errors path="arrivalLocation" cssClass="error" /> <input type="button"
+        value="Search Airport" /></td>
     </tr>
 
     <tr>
