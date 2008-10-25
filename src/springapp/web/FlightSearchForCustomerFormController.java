@@ -23,7 +23,8 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerFormController extends SimpleFormController {
 
-   public final static String KEYWORD_searchingAnytime = "anytime";
+   public final static String KEYWORD_oneWayTrip = "oneWayTrip";
+   public final static String KEYWORD_roundTrip = "roundTrip";
 
    private final static SimpleDateFormat df_ = new SimpleDateFormat("EEE dd-MMM yyyy HH:mm aaa");
 
@@ -112,19 +113,30 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final int y = Integer.valueOf(year);
       final int m = Integer.valueOf(month) - 1; // Month is 0-based in Calendar class
       final int d = Integer.valueOf(day);
-      final boolean bAnytime = hour.equalsIgnoreCase(KEYWORD_searchingAnytime);
+
+      boolean bAnytime = false;
+      int h = 0;
+      int searchHour = 0;
+      try {
+         h = Integer.valueOf(hour);
+         searchHour = Integer.valueOf(searchingHourRange);
+         if (h < 0 || h > 23)
+            bAnytime = true;
+         if (searchHour < 0)
+            bAnytime = true;
+      } catch (NumberFormatException e) {
+         bAnytime = true;
+      }
 
       final Calendar startCalendar = Calendar.getInstance();
       final Calendar endCalendar = Calendar.getInstance();
       if (bAnytime) {
-         startCalendar.set(y, m, d, 0, 0);
-         endCalendar.set(y, m, d, 23, 59);
+         startCalendar.set(y, m, d, 0, 0, 0);
+         endCalendar.set(y, m, d, 23, 59, 0);
       } else {
-         final int h = Integer.valueOf(hour);
-         final int searchHour = Integer.valueOf(searchingHourRange);
-         startCalendar.set(y, m, d, h, 0);
+         startCalendar.set(y, m, d, h, 0, 0);
          startCalendar.add(Calendar.HOUR, -searchHour);
-         endCalendar.set(y, m, d, h, 0);
+         endCalendar.set(y, m, d, h, 0, 0);
          endCalendar.add(Calendar.HOUR, searchHour);
       }
 

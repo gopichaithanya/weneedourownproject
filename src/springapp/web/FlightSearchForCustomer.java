@@ -16,10 +16,10 @@ public class FlightSearchForCustomer {
    private String numPassengers = "1";
    private String tripType = "roundTrip";
 
-   private String returningMonth = "1";
-   private String returningDay = "1";
-   private String returningYear;
-   private String returningHour;
+   private String returnMonth = "1";
+   private String returnDay = "1";
+   private String returnYear;
+   private String returnHour;
 
    public void setDepartMonth(String departMonth) {
       this.departMonth = departMonth;
@@ -61,36 +61,36 @@ public class FlightSearchForCustomer {
       return departLocation;
    }
 
-   public void setReturningMonth(String arrivalMonth) {
-      this.returningMonth = arrivalMonth;
+   public void setReturnMonth(String arrivalMonth) {
+      this.returnMonth = arrivalMonth;
    }
 
-   public String getReturningMonth() {
-      return returningMonth;
+   public String getReturnMonth() {
+      return returnMonth;
    }
 
-   public void setReturningDay(String arrivalDay) {
-      this.returningDay = arrivalDay;
+   public void setReturnDay(String arrivalDay) {
+      this.returnDay = arrivalDay;
    }
 
-   public String getReturningDay() {
-      return returningDay;
+   public String getReturnDay() {
+      return returnDay;
    }
 
-   public void setReturningYear(String arrivalYear) {
-      this.returningYear = arrivalYear;
+   public void setReturnYear(String arrivalYear) {
+      this.returnYear = arrivalYear;
    }
 
-   public String getReturningYear() {
-      return returningYear;
+   public String getReturnYear() {
+      return returnYear;
    }
 
-   public void setReturningHour(String arrivalHour) {
-      this.returningHour = arrivalHour;
+   public void setReturnHour(String arrivalHour) {
+      this.returnHour = arrivalHour;
    }
 
-   public String getReturningHour() {
-      return returningHour;
+   public String getReturnHour() {
+      return returnHour;
    }
 
    public void setArrivalLocation(String arrivalLocation) {
