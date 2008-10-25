@@ -1,6 +1,7 @@
 package springapp.web;
 
 import hibernate.Flight;
+import hibernate.manager.AirportManager;
 import hibernate.util.HibernateUtil;
 
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
 
       final ModelAndView mv = super.handleRequest(req, resp);
 
-      final List<String[]> airports = getAirportList();
+      final List<String[]> airports = AirportManager.getAirportCodeAndName();
       mv.addObject("airports", airports);
 
       return mv;
@@ -94,8 +95,9 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
          final Calendar arrivalTime = Calendar.getInstance();
          departTime.setTime(f.getDepartureTime());
          arrivalTime.setTime(f.getArrivalTime());
-         final int durationHours = (int) ((arrivalTime.getTimeInMillis() - departTime
-               .getTimeInMillis()) / (1000 * 60 * 60));
+         final long durationHours = Math.round(Math
+               .ceil((arrivalTime.getTimeInMillis() - departTime.getTimeInMillis())
+                     / (1000 * 60 * 60)));
          flight.setDurationHours(String.valueOf(durationHours));
 
          result.add(flight);
@@ -130,23 +132,6 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final Date endDate = endCalendar.getTime();
       final Date[] range = new Date[] { startDate, endDate };
       return range;
-   }
-
-   public static List<String[]> getAirportList() {
-      final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-      session.beginTransaction();
-
-      final List<String[]> airports = new ArrayList<String[]>();
-      final Iterator iterAirport = session.createQuery("SELECT code, name FROM Airport as airport")
-            .list().iterator();
-      while (iterAirport.hasNext()) {
-         final Object[] rsts = (Object[]) iterAirport.next();
-         final String code = (String) rsts[0];
-         final String name = (String) rsts[1];
-         airports.add(new String[] { code, name });
-      }
-      session.close();
-      return airports;
    }
 
 }
