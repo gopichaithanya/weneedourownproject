@@ -11,7 +11,7 @@
 <body>
 <form:form method="post" commandName="flightSearchForCustomerCMD">
   <table border="1">
-    <caption>Search Flight</caption>
+    <caption>Search Flight (1 / 3 steps)</caption>
 
     <tr>
       <th>Leaving from</th>
@@ -19,8 +19,8 @@
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
-      </form:select> <form:errors path="departLocation" cssClass="error" /> <input type="button"
-        value="Search Airport" /></td>
+      </form:select> <input type="button" value="Search Airport" /> <form:errors path="departLocation"
+        cssClass="error" /></td>
     </tr>
     <tr>
       <th>Going to</th>
@@ -28,8 +28,8 @@
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
-      </form:select> <form:errors path="arrivalLocation" cssClass="error" /> <input type="button"
-        value="Search Airport" /></td>
+      </form:select> <input type="button" value="Search Airport" /> <form:errors path="arrivalLocation"
+        cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -55,7 +55,9 @@
         <c:forEach var="year" begin="2008" end="2011" step="1">
           <form:option value="${year}" />
         </c:forEach>
-      </form:select> <input type="button" value="Calendar" /></td>
+      </form:select> <input type="button" value="Calendar" /> <form:errors path="departMonth" cssClass="error" />
+      <form:errors path="departDay" cssClass="error" /> <form:errors path="departYear"
+        cssClass="error" /></td>
     </tr>
     <tr>
       <th>Departing Time</th>
@@ -78,7 +80,8 @@
           <td><form:radiobutton path="tripType" value="roundTrip" id="roundTrip" /><label
             for="roundTrip">Round trip</label></td>
           <td><form:radiobutton path="tripType" value="oneWayTrip" id="oneWayTrip" /><label
-            for="oneWayTrip">One way trip</label></td>
+            for="oneWayTrip">One way trip</label> <form:errors path="tripType" cssClass="error" />
+          </td>
         </tr>
       </table>
       </td>
@@ -86,7 +89,7 @@
 
     <tr>
       <th>Returning Date</th>
-      <td><form:select path="returningMonth">
+      <td><form:select path="returnMonth">
         <form:option value="1" label="Jan" />
         <form:option value="2" label="Feb" />
         <form:option value="3" label="Mar" />
@@ -99,19 +102,21 @@
         <form:option value="10" label="Oct" />
         <form:option value="11" label="Nov" />
         <form:option value="12" label="Dec" />
-      </form:select> / <form:select path="returningDay">
+      </form:select> / <form:select path="returnDay">
         <c:forEach var="day" begin="1" end="31" step="1">
           <form:option value="${day}" />
         </c:forEach>
-      </form:select> / <form:select path="returningYear">
+      </form:select> / <form:select path="returnYear">
         <c:forEach var="year" begin="2008" end="2011" step="1">
           <form:option value="${year}" />
         </c:forEach>
-      </form:select> <input type="button" value="Calendar" /></td>
+      </form:select> <input type="button" value="Calendar" /> <form:errors path="returnMonth" cssClass="error" />
+      <form:errors path="returnDay" cssClass="error" /> <form:errors path="returnYear"
+        cssClass="error" /></td>
     </tr>
     <tr>
       <th>Returning Time</th>
-      <td><form:select path="returningHour">
+      <td><form:select path="returnHour">
         <form:option value="anytime" label="Anytime" />
         <c:forEach var="hour" begin="0" end="11" step="1">
           <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
@@ -134,7 +139,8 @@
           </c:forEach>
           <td>
           <div id="passengerMore"></div>
-          <input type="button" value="More" /></td>
+          <input type="button" value="More" /> <form:errors path="numPassengers" cssClass="error" />
+          </td>
         </tr>
       </table>
       </td>
@@ -150,12 +156,11 @@
 <c:if test="${searchedFlights != null}">
   <p>
   <table border="1">
-    <caption>Choose a departing flight (1 / 2 steps)</caption>
+    <caption>Choose a departing flight (2 / 3 steps)</caption>
     <thead>
       <tr>
         <th>Departure location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
         and time</th>
-        <td></td>
         <th>Arrival location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
         and time</th>
         <th>cost of economy class (business class)</th>
@@ -171,7 +176,6 @@
             value="${flight.airportByDepartureLocation_name}" /> (<c:out
             value="${flight.airportByDepartureLocation_code}" />)</a><br />
           <c:out value="${flight.departureTime}" /></td>
-          <td>to</td>
           <td><a href="http://maps.google.com"><c:out
             value="${flight.airportByArrivalLocation_name}" /> (<c:out
             value="${flight.airportByArrivalLocation_code}" />)</a><br />

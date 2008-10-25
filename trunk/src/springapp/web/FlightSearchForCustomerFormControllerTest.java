@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import hibernate.manager.AirportManager;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -34,7 +36,7 @@ public class FlightSearchForCustomerFormControllerTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setDepartHour(FlightSearchForCustomerFormController.KEYWORD_searchingAnytime);
+      dummy.setDepartHour("BUG"); // this means "anytime"
 
       final List flightList = FlightSearchForCustomerFormController.getFlightList(dummy);
       assertNotNull(flightList);
@@ -58,9 +60,35 @@ public class FlightSearchForCustomerFormControllerTest {
    }
 
    @Test
-   public void testOnSubmit() {
-//      final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
-//      final ModelAndView view = submit.onSubmit(new FlightSearchForCustomer());
-//      assertTrue(view.getView() instanceof RedirectView);
+   public void testGetTimeRange() {
+      final Calendar calendar = Calendar.getInstance();
+
+      final Date[] dates1 = FlightSearchForCustomerFormController.getTimeRange("2008", "1", "1",
+            "XXX", "XXX");
+      calendar.set(2008, 0, 1, 0, 0, 0);
+      assertEquals(calendar.getTime().toString(), dates1[0].toString());
+      calendar.set(2008, 0, 1, 23, 59, 0);
+      assertEquals(calendar.getTime().toString(), dates1[1].toString());
+
+      final Date[] dates2 = FlightSearchForCustomerFormController.getTimeRange("2008", "1", "1",
+            "1", "2");
+      calendar.set(2007, 11, 31, 23, 0, 0);
+      assertEquals(calendar.getTime().toString(), dates2[0].toString());
+      calendar.set(2008, 0, 1, 3, 0, 0);
+      assertEquals(calendar.getTime().toString(), dates2[1].toString());
+
+      final Date[] dates3 = FlightSearchForCustomerFormController.getTimeRange("2008", "1", "1",
+            "1", "XXX");
+      calendar.set(2008, 0, 1, 0, 0, 0);
+      assertEquals(calendar.getTime().toString(), dates1[0].toString());
+      calendar.set(2008, 0, 1, 23, 59, 0);
+      assertEquals(calendar.getTime().toString(), dates1[1].toString());
+   }
+
+   @Test
+   public void testOnSubmit() throws Exception {
+      final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
+      final ModelAndView view = submit.onSubmit(null, null, null, null);
+      assertTrue(((List) view.getModel().get("searchedFlights")).size() > 0);
    }
 }
