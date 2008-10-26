@@ -2,7 +2,7 @@ package springapp.web;
 
 import org.hibernate.Session;
 import hibernate.util.HibernateUtil;
-
+import hibernate.manager.*;
 
 import org.springframework.web.servlet.mvc.SimpleFormController;
 import javax.servlet.ServletException;
@@ -23,14 +23,9 @@ public class CustomerController extends SimpleFormController {
 	protected void doSubmitAction(Object o) throws ServletException, IOException
 	{
 		Customer customer = (Customer)o;
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		
-		session.beginTransaction();
-		session.save(customer);
-		session.getTransaction().commit();
-		
-		
+		CustomerManager.register(customer);
 
+		
 	}
 	
 	
