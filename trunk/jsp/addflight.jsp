@@ -19,7 +19,7 @@
   		<td>
   		<form:select path="airline">
         <c:forEach items="${airlines}" var="airline">
-          <form:option value="${airlines[0]}" label="${airlines[0]}: ${airlines[1]}" />
+          <form:option value="${airline[0]}" label="${airline[0]}: ${airline[1]}" />
         </c:forEach>
       </form:select>
       </td></tr>
