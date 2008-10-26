@@ -2,10 +2,8 @@ package springapp.web;
 
 import hibernate.Flight;
 import hibernate.manager.AirportManager;
-import hibernate.manager.FlightManager;
 import hibernate.util.HibernateUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,7 +27,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
     * If this is false, all of flights will be shown; this is for debugging.
     * If this is true, flight searching will work.
     */
-   public static boolean bFlagSearch = false;
+   static boolean bFlagSearch = false;
 
    public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse resp)
          throws Exception {

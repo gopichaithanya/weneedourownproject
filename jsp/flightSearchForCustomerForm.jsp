@@ -39,9 +39,17 @@ function submitWithReturnFlightNo(no) {
 </script>
 </head>
 <body>
+<c:choose>
+  <c:when test="${isOneWayTrip}">
+    <c:set var="totalSteps" value="2" />
+  </c:when>
+  <c:otherwise>
+    <c:set var="totalSteps" value="3" />
+  </c:otherwise>
+</c:choose>
 <form:form method="post" commandName="flightSearchForCustomerCMD" name="flightSearchForCustomerForm">
   <table border="1">
-    <caption>Search Flight (1 / 3 steps)</caption>
+    <caption>Search Flight (1 / <c:out value="${totalSteps}" /> steps)</caption>
 
     <tr>
       <th>Leaving from</th>
@@ -185,6 +193,8 @@ function submitWithReturnFlightNo(no) {
 
   <form:hidden path="departFlightNo" id="departFlightNo" />
   <form:hidden path="returnFlightNo" id="returnFlightNo" />
+  <form:errors path="departFlightNo" cssClass="error" />
+  <form:errors path="returnFlightNo" cssClass="error" />
 
   <c:set var="step1"
     value="${(searchedDepartFlights == null) && (empty flightSearchForCustomerCMD.departFlightNo)}" />
@@ -196,8 +206,8 @@ function submitWithReturnFlightNo(no) {
   <c:choose>
     <%-- step 1/3 --%>
     <c:when test="${step1}">
-      <div>Selecting Departing Flight (2 / 3 steps)</div>
-      <div>Selecting Returning Flight (3 / 3 steps)</div>
+      <div>Selecting Departing Flight (2 / <c:out value="${totalSteps}" /> steps)</div>
+      <div>Selecting Returning Flight (3 / <c:out value="${totalSteps}" /> steps)</div>
     </c:when>
 
     <%-- step 2/3 --%>
@@ -212,14 +222,7 @@ function submitWithReturnFlightNo(no) {
       </c:choose>
       <p>
       <table border="1">
-        <c:choose>
-          <c:when test="${isOneWayTrip}">
-            <caption>Choose a departing flight (2 / 2 steps)</caption>
-          </c:when>
-          <c:when test="${isRoundTrip}">
-            <caption>Choose a departing flight (2 / 3 steps)</caption>
-          </c:when>
-        </c:choose>
+        <caption>Choose a departing flight (2 / <c:out value="${totalSteps}" /> steps)</caption>
         <thead>
           <tr>
             <th>Departure location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
@@ -266,7 +269,7 @@ function submitWithReturnFlightNo(no) {
         <c:when test="${isOneWayTrip}">
         </c:when>
         <c:when test="${isRoundTrip}">
-          <div>Selecting Returning Flight (3 / 3 steps)</div>
+          <div>Selecting Returning Flight (3 / <c:out value="${totalSteps}" /> steps)</div>
         </c:when>
       </c:choose>
       </p>
@@ -275,7 +278,7 @@ function submitWithReturnFlightNo(no) {
     <%-- step 3/3 --%>
     <c:when test="${step3}">
       <table border="1">
-        <caption>Selected Departing Flight (2 / 3 steps)</caption>
+        <caption>Selected Departing Flight (2 / <c:out value="${totalSteps}" /> steps)</caption>
         <thead>
           <tr>
             <th>Departure location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
@@ -317,7 +320,7 @@ function submitWithReturnFlightNo(no) {
       </table>
 
       <table border="1">
-        <caption>Choose Returning Flight (3 / 3 steps)</caption>
+        <caption>Choose Returning Flight (3 / <c:out value="${totalSteps}" /> steps)</caption>
         <thead>
           <tr>
             <th>Departure location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
