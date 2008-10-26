@@ -184,7 +184,7 @@ public class FlightSearchForCustomerFormControllerTest {
    @Test
    public void testOnSubmitAfterStepSecondWithRoundTrip() throws Exception {
       final FlightSearchForCustomer cmd = new FlightSearchForCustomer();
-      cmd.setDepartFlightNo("54");
+      cmd.setDepartFlightNo("157");
       cmd.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
       final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
       final ModelAndView mv = submit.onSubmit(null, null, cmd, null);
@@ -197,7 +197,7 @@ public class FlightSearchForCustomerFormControllerTest {
    public void testOnSubmitAfterStepSecondWithOneWayTrip() throws Exception {
       final FlightSearchForCustomer cmd = new FlightSearchForCustomer();
       cmd.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
-      cmd.setDepartFlightNo("54");
+      cmd.setDepartFlightNo("157");
       final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
       try {
          final ModelAndView mv = submit.onSubmit(null, null, cmd, null);
@@ -212,8 +212,8 @@ public class FlightSearchForCustomerFormControllerTest {
    public void testOnSubmitAfterStepThird() throws Exception {
       final FlightSearchForCustomer cmd = new FlightSearchForCustomer();
       cmd.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
-      cmd.setDepartFlightNo("54");
-      cmd.setReturnFlightNo("54");
+      cmd.setDepartFlightNo("157");
+      cmd.setReturnFlightNo("157");
       final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
       try {
          final ModelAndView mv = submit.onSubmit(null, null, cmd, null);
