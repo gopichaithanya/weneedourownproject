@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 
+@SuppressWarnings("unchecked")
 public class AirportManager {
 
    public static List<String[]> getAirportCode() {

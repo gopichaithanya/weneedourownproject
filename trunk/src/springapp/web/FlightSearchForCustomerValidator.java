@@ -47,8 +47,8 @@ public class FlightSearchForCustomerValidator implements Validator {
 
          errors.rejectValue("tripType", "error.FlightSearchForCustomer.tripType.not-specified",
                "Trip type is not specified. It can be either "
-                     + FlightSearchForCustomerFormController.KEYWORD_oneWayTrip + " or "
-                     + FlightSearchForCustomerFormController.KEYWORD_roundTrip + ".");
+                     + FlightSearchForCustomer.KEYWORD_oneWayTrip + " or "
+                     + FlightSearchForCustomer.KEYWORD_roundTrip + ".");
          errors.rejectValue("numPassengers",
                "error.FlightSearchForCustomer.numPassengers.not-specified",
                "The number of passengers is not specified.");
@@ -71,14 +71,14 @@ public class FlightSearchForCustomerValidator implements Validator {
 
       // Checking: tripType
       final boolean bOneWayTrip = o.getTripType().equalsIgnoreCase(
-            FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+            FlightSearchForCustomer.KEYWORD_oneWayTrip);
       final boolean bRoundTrip = o.getTripType().equalsIgnoreCase(
-            FlightSearchForCustomerFormController.KEYWORD_roundTrip);
+            FlightSearchForCustomer.KEYWORD_roundTrip);
       if (!bOneWayTrip && !bRoundTrip)
          errors.rejectValue("tripType", "error.FlightSearchForCustomer.tripType.outOfBound",
                "Trip type must be either "
-                     + FlightSearchForCustomerFormController.KEYWORD_roundTrip + " or "
-                     + FlightSearchForCustomerFormController.KEYWORD_oneWayTrip + ".");
+                     + FlightSearchForCustomer.KEYWORD_roundTrip + " or "
+                     + FlightSearchForCustomer.KEYWORD_oneWayTrip + ".");
 
       // Checking: numPassengers
       try {
