@@ -1,5 +1,10 @@
 package springapp.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import hibernate.Flight;
+
 public class FlightSearchForCustomerResult {
    private String airline_code;
    private String airline_name;
@@ -15,6 +20,36 @@ public class FlightSearchForCustomerResult {
    private String businessSeats;
    private String economySeats;
    private String durationHours;
+
+   private final static SimpleDateFormat df_ = new SimpleDateFormat("EEE dd-MMM yyyy HH:mm aaa");
+
+   public FlightSearchForCustomerResult() {
+   }
+
+   public FlightSearchForCustomerResult(Flight f) {
+      setFlightNo(String.valueOf(f.getFlightNo()));
+      setAirline_code(f.getAirline().getCode());
+      setAirline_name(f.getAirline().getName());
+      setAirportByArrivalLocation_code(f.getAirportByArrivalLocation().getCode());
+      setAirportByArrivalLocation_name(f.getAirportByArrivalLocation().getName());
+      setAirportByDepartureLocation_code(f.getAirportByDepartureLocation().getCode());
+      setAirportByDepartureLocation_name(f.getAirportByDepartureLocation().getName());
+      setBusinessPrice(f.getBusinessPrice().toString());
+      setEconomyPrice(f.getEconomyPrice().toString());
+      setBusinessSeats(f.getBusinessSeats().toString());
+      setEconomySeats(f.getEconomySeats().toString());
+      setArrivalTime(df_.format(f.getArrivalTime()));
+      setDepartureTime(df_.format(f.getDepartureTime()));
+
+      final Calendar departTime = Calendar.getInstance();
+      final Calendar arrivalTime = Calendar.getInstance();
+      departTime.setTime(f.getDepartureTime());
+      arrivalTime.setTime(f.getArrivalTime());
+      final long durationHours = Math.round(Math.ceil((arrivalTime.getTimeInMillis() - departTime
+            .getTimeInMillis())
+            / (1000 * 60 * 60)));
+      setDurationHours(String.valueOf(durationHours));
+   }
 
    public void setAirline_code(String airline_code) {
       this.airline_code = airline_code;

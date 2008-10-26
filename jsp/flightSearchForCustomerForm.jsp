@@ -7,9 +7,39 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Flight Searching</title>
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
+<script language="JavaScript">
+<!--//
+function returnObjById( id )
+{
+    if (document.getElementById)
+        var returnVar = document.getElementById(id);
+    else if (document.all)
+        var returnVar = document.all[id];
+    else if (document.layers)
+        var returnVar = document.layers[id];
+    return returnVar;
+}
+
+function submitSearch() {
+  returnObjById("departFlightNo").value = "";
+  returnObjById("returnFlightNo").value = "";
+	document.flightSearchForCustomerForm.submit();
+}
+
+function submitWithDepartFlightNo(no) {
+	returnObjById("departFlightNo").value = no;
+	document.flightSearchForCustomerForm.submit();
+}
+
+function submitWithReturnFlightNo(no) {
+  returnObjById("returnFlightNo").value = no;
+  document.flightSearchForCustomerForm.submit();
+}
+// -->
+</script>
 </head>
 <body>
-<form:form method="post" commandName="flightSearchForCustomerCMD">
+<form:form method="post" commandName="flightSearchForCustomerCMD" name="flightSearchForCustomerForm">
   <table border="1">
     <caption>Search Flight (1 / 3 steps)</caption>
 
@@ -147,58 +177,194 @@
     </tr>
 
     <tr>
-      <td colspan="2" align="right"><input type="reset" /> <input type="submit"
-        value="====Search Flight====" /></td>
+      <td colspan="2" align="right"><input type="reset" /> <input type="button"
+        value="====Search Flight====" onClick="submitSearch();" /></td>
     </tr>
   </table>
 
-</form:form>
-<c:if test="${searchedFlights != null}">
-  <p>
-  <table border="1">
-    <caption>Choose a departing flight (2 / 3 steps)</caption>
-    <thead>
-      <tr>
-        <th>Departure location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
-        and time</th>
-        <th>Arrival location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
-        and time</th>
-        <th>cost of economy class (business class)</th>
-        <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a></th>
-        <th><b>Reserve</b></th>
-      </tr>
-    </thead>
 
-    <tbody>
-      <c:forEach items="${searchedFlights}" var="flight">
-        <tr>
-          <td><a href="http://maps.google.com"><c:out
-            value="${flight.airportByDepartureLocation_name}" /> (<c:out
-            value="${flight.airportByDepartureLocation_code}" />)</a><br />
-          <c:out value="${flight.departureTime}" /></td>
-          <td><a href="http://maps.google.com"><c:out
-            value="${flight.airportByArrivalLocation_name}" /> (<c:out
-            value="${flight.airportByArrivalLocation_code}" />)</a><br />
-          <c:out value="${flight.arrivalTime}" /> (<c:out value="${flight.durationHours}" />
-          hours)</td>
-          <td>$<c:out value="${flight.economyPrice}" /> ($<c:out
-            value="${flight.businessPrice}" />)</td>
-          <td>
-          <table border="0">
+  <form:hidden path="departFlightNo" id="departFlightNo" />
+  <form:hidden path="returnFlightNo" id="returnFlightNo" />
+
+  <c:set var="step1"
+    value="${(searchedDepartFlights == null) && (empty flightSearchForCustomerCMD.departFlightNo)}" />
+  <c:set var="step2"
+    value="${(searchedDepartFlights != null) && (empty flightSearchForCustomerCMD.departFlightNo)}" />
+  <c:set var="step3"
+    value="${(searchedReturnFlights != null) && (!empty flightSearchForCustomerCMD.departFlightNo)}" />
+
+  <c:choose>
+    <%-- step 1/3 --%>
+    <c:when test="${step1}">
+      <div>Selecting Departing Flight (2 / 3 steps)</div>
+      <div>Selecting Returning Flight (3 / 3 steps)</div>
+    </c:when>
+
+    <%-- step 2/3 --%>
+    <c:when test="${step2}">
+      <c:choose>
+        <c:when test="${isOneWayTrip}">
+          <c:set var="msgSelectOrReserve" value="Reserve" />
+        </c:when>
+        <c:when test="${isRoundTrip}">
+          <c:set var="msgSelectOrReserve" value="Select" />
+        </c:when>
+      </c:choose>
+      <p>
+      <table border="1">
+        <c:choose>
+          <c:when test="${isOneWayTrip}">
+            <caption>Choose a departing flight (2 / 2 steps)</caption>
+          </c:when>
+          <c:when test="${isRoundTrip}">
+            <caption>Choose a departing flight (2 / 3 steps)</caption>
+          </c:when>
+        </c:choose>
+        <thead>
+          <tr>
+            <th>Departure location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+            and time</th>
+            <th>Arrival location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+            and time</th>
+            <th>cost of economy class (business class)</th>
+            <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a></th>
+            <th><b><c:out value="${msgSelectOrReserve}" /></b></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <c:forEach items="${searchedDepartFlights}" var="flight">
             <tr>
-              <td><img
-                src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline_code}.gif"
-                alt="${flight.airline_code}" /></td>
-              <td><c:out value="${flight.airline_name}" /></td>
+              <td><a href="http://maps.google.com"><c:out
+                value="${flight.airportByDepartureLocation_name}" /> (<c:out
+                value="${flight.airportByDepartureLocation_code}" />)</a><br />
+              <c:out value="${flight.departureTime}" /></td>
+              <td><a href="http://maps.google.com"><c:out
+                value="${flight.airportByArrivalLocation_name}" /> (<c:out
+                value="${flight.airportByArrivalLocation_code}" />)</a><br />
+              <c:out value="${flight.arrivalTime}" /> (<c:out value="${flight.durationHours}" />
+              hours)</td>
+              <td>$<c:out value="${flight.economyPrice}" /> ($<c:out
+                value="${flight.businessPrice}" />)</td>
+              <td>
+              <table border="0">
+                <tr>
+                  <td><img
+                    src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline_code}.gif"
+                    alt="${flight.airline_code}" /></td>
+                  <td><c:out value="${flight.airline_name}" /></td>
+                </tr>
+              </table>
+              </td>
+              <td><input type="button" value="<c:out value="${msgSelectOrReserve}"/>"
+                onClick="submitWithDepartFlightNo(<c:out value="${flight.flightNo}"/>);" /></td>
             </tr>
-          </table>
-          </td>
-          <td><a href="">Reserve</a></td>
-        </tr>
-      </c:forEach>
-    </tbody>
-  </table>
-  </p>
-</c:if>
+          </c:forEach>
+        </tbody>
+      </table>
+      <c:choose>
+        <c:when test="${isOneWayTrip}">
+        </c:when>
+        <c:when test="${isRoundTrip}">
+          <div>Selecting Returning Flight (3 / 3 steps)</div>
+        </c:when>
+      </c:choose>
+      </p>
+    </c:when>
+
+    <%-- step 3/3 --%>
+    <c:when test="${step3}">
+      <table border="1">
+        <caption>Selected Departing Flight (2 / 3 steps)</caption>
+        <thead>
+          <tr>
+            <th>Departure location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+            and time</th>
+            <th>Arrival location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+            and time</th>
+            <th>cost of economy class (business class)</th>
+            <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a></th>
+            <th><b>Cancel</b></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><a href="http://maps.google.com"><c:out
+              value="${selectedDepartFlight.airportByDepartureLocation_name}" /> (<c:out
+              value="${selectedDepartFlight.airportByDepartureLocation_code}" />)</a><br />
+            <c:out value="${selectedDepartFlight.departureTime}" /></td>
+            <td><a href="http://maps.google.com"><c:out
+              value="${selectedDepartFlight.airportByArrivalLocation_name}" /> (<c:out
+              value="${selectedDepartFlight.airportByArrivalLocation_code}" />)</a><br />
+            <c:out value="${selectedDepartFlight.arrivalTime}" /> (<c:out
+              value="${selectedDepartFlight.durationHours}" /> hours)</td>
+            <td>$<c:out value="${selectedDepartFlight.economyPrice}" /> ($<c:out
+              value="${selectedDepartFlight.businessPrice}" />)</td>
+            <td>
+            <table border="0">
+              <tr>
+                <td><img
+                  src="http://www.expedia.com/pubspec/images/airlines/sm${selectedDepartFlight.airline_code}.gif"
+                  alt="${selectedDepartFlight.airline_code}" /></td>
+                <td><c:out value="${selectedDepartFlight.airline_name}" /></td>
+              </tr>
+            </table>
+            </td>
+            <td><input type="button" value="Cancel" onClick="submitSearch();" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table border="1">
+        <caption>Choose Returning Flight (3 / 3 steps)</caption>
+        <thead>
+          <tr>
+            <th>Departure location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+            and time</th>
+            <th>Arrival location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+            and time</th>
+            <th>cost of economy class (business class)</th>
+            <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a></th>
+            <th><b>Reserve</b></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <c:forEach items="${searchedReturnFlights}" var="flight">
+            <tr>
+              <td><a href="http://maps.google.com"><c:out
+                value="${flight.airportByDepartureLocation_name}" /> (<c:out
+                value="${flight.airportByDepartureLocation_code}" />)</a><br />
+              <c:out value="${flight.departureTime}" /></td>
+              <td><a href="http://maps.google.com"><c:out
+                value="${flight.airportByArrivalLocation_name}" /> (<c:out
+                value="${flight.airportByArrivalLocation_code}" />)</a><br />
+              <c:out value="${flight.arrivalTime}" /> (<c:out value="${flight.durationHours}" />
+              hours)</td>
+              <td>$<c:out value="${flight.economyPrice}" /> ($<c:out
+                value="${flight.businessPrice}" />)</td>
+              <td>
+              <table border="0">
+                <tr>
+                  <td><img
+                    src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline_code}.gif"
+                    alt="${flight.airline_code}" /></td>
+                  <td><c:out value="${flight.airline_name}" /></td>
+                </tr>
+              </table>
+              </td>
+              <td><input type="button" value="Reserve"
+                onClick="submitWithReturnFlightNo(<c:out value="${flight.flightNo}"/>);" /></td>
+            </tr>
+          </c:forEach>
+        </tbody>
+      </table>
+      </p>
+    </c:when>
+
+  </c:choose>
+
+</form:form>
 </body>
 </html>

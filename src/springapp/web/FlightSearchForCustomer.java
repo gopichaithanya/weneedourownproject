@@ -1,7 +1,5 @@
 package springapp.web;
 
-import java.util.Date;
-
 public class FlightSearchForCustomer {
 
    private String departLocation;
@@ -20,6 +18,11 @@ public class FlightSearchForCustomer {
    private String returnDay = "1";
    private String returnYear;
    private String returnHour;
+   
+   private String departFlightNo = "";
+   private String returnFlightNo = "";
+   public final static String KEYWORD_roundTrip = "roundTrip";
+   public final static String KEYWORD_oneWayTrip = "oneWayTrip";
 
    public void setDepartMonth(String departMonth) {
       this.departMonth = departMonth;
@@ -123,5 +126,21 @@ public class FlightSearchForCustomer {
 
    public String getSearchingHourRange() {
       return searchingHourRange;
+   }
+
+   public void setDepartFlightNo(String departFlightNo) {
+      this.departFlightNo = departFlightNo;
+   }
+
+   public String getDepartFlightNo() {
+      return departFlightNo;
+   }
+
+   public void setReturnFlightNo(String returnFlightNo) {
+      this.returnFlightNo = returnFlightNo;
+   }
+
+   public String getReturnFlightNo() {
+      return returnFlightNo;
    }
 }

@@ -1,7 +1,6 @@
 package springapp.web;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -34,7 +33,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertFalse(errors.hasErrors());
    }
@@ -49,7 +48,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_roundTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
       dummy.setReturnYear("2009");
       dummy.setReturnMonth("1");
       dummy.setReturnDay("5");
@@ -67,7 +66,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -82,7 +81,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -97,7 +96,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -112,7 +111,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -127,7 +126,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2007"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -142,7 +141,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("XX"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -157,7 +156,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("0");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -172,7 +171,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("A");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -187,7 +186,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("2");
       dummy.setDepartDay("29"); // No exist
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -202,7 +201,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("2");
       dummy.setDepartDay("A");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_oneWayTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -247,7 +246,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_roundTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
       dummy.setReturnYear("2008");
       dummy.setReturnMonth("1");
       dummy.setReturnDay("5");
@@ -265,7 +264,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_roundTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
       dummy.setReturnYear("AA");
       dummy.setReturnMonth("1");
       dummy.setReturnDay("5");
@@ -283,7 +282,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("2");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_roundTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
       dummy.setReturnYear("2009");
       dummy.setReturnMonth("1");
       dummy.setReturnDay("5");
@@ -301,7 +300,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("2");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_roundTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
       dummy.setReturnYear("2009");
       dummy.setReturnMonth("A");
       dummy.setReturnDay("5");
@@ -319,7 +318,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_roundTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
       dummy.setReturnYear("2009");
       dummy.setReturnMonth("1");
       dummy.setReturnDay("3");
@@ -337,7 +336,7 @@ public class FlightSearchForCustomerValidatorTest {
       dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
       dummy.setDepartMonth("1");
       dummy.setDepartDay("4");
-      dummy.setTripType(FlightSearchForCustomerFormController.KEYWORD_roundTrip);
+      dummy.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
       dummy.setReturnYear("2009");
       dummy.setReturnMonth("1");
       dummy.setReturnDay("A");
