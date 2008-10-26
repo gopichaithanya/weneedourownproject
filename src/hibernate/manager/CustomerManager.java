@@ -5,6 +5,7 @@ import hibernate.util.*;
 
 import org.hibernate.Session;
 import org.hibernate.HibernateException;
+import hibernate.Customer;
 
 public class CustomerManager {
 	
@@ -17,7 +18,7 @@ public class CustomerManager {
 	 * Adds a customer to the database
 	 * @param customer - the customer to register
 	 */
-	public void register(Customer customer) {
+	static public void register(Customer customer) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		
@@ -33,25 +34,26 @@ public class CustomerManager {
 	/**
 	 * Verifies username and password for login
 	 */
-	public void login(String username, String password) {
+	static public boolean login(String username, String password) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		
+		boolean truth = false;
 		// retrieve customer record from the databse
 		Customer customer = (Customer) session.get(Customer.class, new String(username));
 		
 		if (customer == null) {
-			// customer record does not exist in the database
+			truth =  false;
 		} 
 		else {
 			//compare entered password to stored password
 			if (password.compareTo(customer.getPassword()) == 0) {
-				// login successful
+				truth = true;
 			}
 			else {
-				// login error: incorrect password
+				truth = false;
 			}
 		}
 		session.getTransaction().commit();
+		return truth;
 	}
 }

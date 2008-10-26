@@ -14,12 +14,25 @@
     <property name="successView" value="registered"/>
     <property name="commandName" value="customer"/>
     <property name="commandClass" value="hibernate.Customer"/>
+    <!--  property name="validator">
+  		<bean class="springapp.web.CustomerValidator"/>
+  	</property-->
   </bean>
 
   <bean name="/addflight.spring" class="springapp.manager.AddFlightController"> 
     <property name="formView" value="addflight"/>
     <property name="commandName" value="flight"/>
     <property name="commandClass" value="hibernate.Flight"/>	
+  </bean>
+  
+    <bean name="/login.spring" class="springapp.web.LoginController">
+    <property name="formView" value="login"/>
+    <property name="successView" value="flightSearchForCustomerForm.spring"/>
+    <property name="commandName" value="customer"/>
+    <property name="commandClass" value="hibernate.Customer"/>
+   <property name="validator">
+  		<bean class="springapp.web.LoginValidator"/>
+  	</property>
   </bean>
   
   <bean name="/flightSearchForCustomerForm.spring" class="springapp.web.FlightSearchForCustomerFormController">
