@@ -16,5 +16,7 @@
 
     <br>
 
+	<a href="fli">Start searching your flight</a>
+
 </body>
 </html>
