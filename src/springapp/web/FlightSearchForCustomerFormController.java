@@ -93,7 +93,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
       List flights;
       if (bFlagSearch)
-         flights = getFlightList(cmd.getDepartLocation(), cmd.getArrivalLocation(), cmd
+         flights = getFlightList(cmd.getArrivalLocation(), cmd.getDepartLocation(), cmd
                .getReturnYear(), cmd.getReturnMonth(), cmd.getReturnDay(), cmd.getReturnHour(), cmd
                .getSearchingHourRange());
       else
