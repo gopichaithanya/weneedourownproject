@@ -12,6 +12,13 @@ import org.springframework.validation.Validator;
 public class FlightSearchForCustomerValidator implements Validator {
 
    public static final int MAX_YEAR = 10;
+   /**
+    * Currently flight number does not seems 3 digits.
+    * But the description our professor gave us said it should be 3 digits.
+    * If this value is false, then this validator does not check the number of digits of flightNo.
+    * If this value is true, then this validator checks the number of digits of flightNo. 
+    */
+   static boolean bFlagFlightNoIsForcedToBe3Digits = false;
 
    public boolean supports(Class clazz) {
       return springapp.web.FlightSearchForCustomer.class.equals(clazz);
@@ -70,14 +77,13 @@ public class FlightSearchForCustomerValidator implements Validator {
                      + o.getArrivalLocation() + ", does not exist.");
 
       // Checking: tripType
-      final boolean bOneWayTrip = o.getTripType().equalsIgnoreCase(
-            FlightSearchForCustomer.KEYWORD_oneWayTrip);
-      final boolean bRoundTrip = o.getTripType().equalsIgnoreCase(
-            FlightSearchForCustomer.KEYWORD_roundTrip);
+      final boolean bOneWayTrip = FlightSearchForCustomer.KEYWORD_oneWayTrip.equalsIgnoreCase(o
+            .getTripType());
+      final boolean bRoundTrip = FlightSearchForCustomer.KEYWORD_roundTrip.equalsIgnoreCase(o
+            .getTripType());
       if (!bOneWayTrip && !bRoundTrip)
          errors.rejectValue("tripType", "error.FlightSearchForCustomer.tripType.outOfBound",
-               "Trip type must be either "
-                     + FlightSearchForCustomer.KEYWORD_roundTrip + " or "
+               "Trip type must be either " + FlightSearchForCustomer.KEYWORD_roundTrip + " or "
                      + FlightSearchForCustomer.KEYWORD_oneWayTrip + ".");
 
       // Checking: numPassengers
@@ -159,6 +165,24 @@ public class FlightSearchForCustomerValidator implements Validator {
                   "Already past day.");
       }
 
+      // Checking: departFlightNo
+      {
+         final String departFlightNo = o.getDepartFlightNo();
+         try {
+            final int dFlightNo = Integer.valueOf(departFlightNo);
+            if (bFlagFlightNoIsForcedToBe3Digits && (dFlightNo < 100 || dFlightNo > 999))
+               errors.rejectValue("departFlightNo",
+                     "error.FlightSearchForCustomer.departFlightNo.not-specified",
+                     "Flight number of departing flight should be 3 digits.");
+         } catch (NumberFormatException e) {
+            if (null != departFlightNo && !departFlightNo.equals(""))
+               errors.rejectValue("departFlightNo",
+                     "error.FlightSearchForCustomer.departFlightNo.notInteger",
+                     "Flight number of departing flight should be 3 digits.");
+            // it might be before step 2, then just skip.
+         }
+      }
+
       if (false == bRoundTrip)
          return;
 
@@ -224,6 +248,24 @@ public class FlightSearchForCustomerValidator implements Validator {
             errors.rejectValue("returnDay",
                   "error.FlightSearchForCustomer.returnDay.earlierThanDepart",
                   "Returning day should be later than departing day.");
+      }
+
+      // Checking: returnFlightNo
+      {
+         final String returnFlightNo = o.getReturnFlightNo();
+         try {
+            final int rFlightNo = Integer.valueOf(returnFlightNo);
+            if (bFlagFlightNoIsForcedToBe3Digits && (rFlightNo < 100 || rFlightNo > 999))
+               errors.rejectValue("returnFlightNo",
+                     "error.FlightSearchForCustomer.returnFlightNo.not-specified",
+                     "Flight number of returning flight should be 3 digits.");
+         } catch (NumberFormatException e) {
+            if (null != returnFlightNo && !returnFlightNo.equals(""))
+               errors.rejectValue("returnFlightNo",
+                     "error.FlightSearchForCustomer.returnFlightNo.notInteger",
+                     "Flight number of returning flight should be 3 digits.");
+            // it might be before step 2, then just skip.
+         }
       }
    }
 }

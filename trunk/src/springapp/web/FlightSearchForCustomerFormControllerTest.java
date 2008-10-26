@@ -8,11 +8,17 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerFormControllerTest {
+
+   @Before
+   public void before() {
+      FlightSearchForCustomerFormController.bFlagSearch = true;
+   }
 
    @Test(expected = NullPointerException.class)
    public void testHandleRequestView() throws Exception {
