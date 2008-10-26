@@ -1,21 +1,25 @@
 package springapp.manager;
 
-import org.springframework.web.servlet.mvc.SimpleFormController;
+import hibernate.manager.AirlineManager;
 
-import hibernate.Flight;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
 
 public class AddFlightController  extends SimpleFormController 
 {
-	protected void doSubmitAction(Object o) throws Exception
-	{ 
-		Flight loFlight = (Flight)o;
+	public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse resp)
+    throws Exception 
+    {
+		final ModelAndView mv = super.handleRequest(req, resp);
 		
-		//final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-
-		//session.beginTransaction();
-
-		//session.save(loFlight);
+		final List<String[]> airlines = AirlineManager.getAirlineCodeAndName();
+		mv.addObject("airlines", airlines);
+	
+		return mv;
 	}
-
-
 }
