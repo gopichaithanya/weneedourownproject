@@ -14,9 +14,9 @@
     <property name="successView" value="registered"/>
     <property name="commandName" value="customer"/>
     <property name="commandClass" value="hibernate.Customer"/>
-    <!--  property name="validator">
+    <property name="validator">
   		<bean class="springapp.web.CustomerValidator"/>
-  	</property-->
+  	</property>
   </bean>
 
   <bean name="/addflight.spring" class="springapp.manager.AddFlightController"> 
