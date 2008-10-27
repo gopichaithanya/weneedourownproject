@@ -1,11 +1,12 @@
 package hibernate.manager;
 
-import hibernate.*;
+import java.util.List;
+
+import hibernate.Customer;
 import hibernate.util.*;
 
 import org.hibernate.Session;
 import org.hibernate.HibernateException;
-import hibernate.Customer;
 
 public class CustomerManager {
 	
@@ -19,16 +20,16 @@ public class CustomerManager {
 	 * @param customer - the customer to register
 	 */
 	static public void register(Customer customer) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
 		
 		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
 			session.save(customer);
+			session.getTransaction().commit();
 		}
 		catch (HibernateException e) {
 			e.printStackTrace();
 		}
-		session.getTransaction().commit();
 	}
 	
 	/**
@@ -55,5 +56,27 @@ public class CustomerManager {
 		}
 		session.getTransaction().commit();
 		return truth;
+	}
+	
+	public List<?> listCustomers() {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		List<?> result = session.createQuery("from Customer").list();
+		session.getTransaction().commit();
+
+	    return result;
+	}
+	
+	public static void main (String[] args){
+		CustomerManager mgr = new CustomerManager();
+		
+		List<?> customers = mgr.listCustomers();
+	    for (int i = 0; i < customers.size(); i++) {
+	    	Customer customer = (Customer) customers.get(i);
+	        System.out.println("Customer: " + customer.getUsername());
+	    }
+
+		HibernateUtil.getSessionFactory().close();
+		
 	}
 }
