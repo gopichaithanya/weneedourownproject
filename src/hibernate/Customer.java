@@ -20,7 +20,7 @@ public class Customer  implements java.io.Serializable {
     private String state;
     private Integer zip;
     private String password;
-    private Integer ccNo;
+    private Long ccNo;
     private String expiration;
     private Set<Itinerary> itineraries = new HashSet<Itinerary>(0);
 
@@ -31,7 +31,7 @@ public class Customer  implements java.io.Serializable {
     public Customer(String username) {
         this.username = username;
     }
-    public Customer(String username, String firstName, String lastName, String street, String city, String state, Integer zip, String password, Integer ccNo, String expiration, Set<Itinerary> itineraries) {
+    public Customer(String username, String firstName, String lastName, String street, String city, String state, Integer zip, String password, Long ccNo, String expiration, Set<Itinerary> itineraries) {
        this.username = username;
        this.firstName = firstName;
        this.lastName = lastName;
@@ -101,11 +101,11 @@ public class Customer  implements java.io.Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    public Integer getCcNo() {
+    public Long getCcNo() {
         return this.ccNo;
     }
     
-    public void setCcNo(Integer ccNo) {
+    public void setCcNo(Long ccNo) {
         this.ccNo = ccNo;
     }
     public String getExpiration() {
