@@ -6,13 +6,16 @@
 <body>
 <h1>Customer Registered</h1>
 	    
-* Name<c:out value="${customer.username}"/><br>
-			    * Address<c:out value="${customer.firstName}"/><br>
-			    * Login name<c:out value="${customer.lastName}"/><br>
-			    * Login password<c:out value="${customer.password}"/><br>
-			    * E-mail address<c:out value="${customer.city}"/><br>
-			    Credit card number (16 digits)<c:out value="${customer.ccNo}"/><br>
-			    Credit card expiration date (mmdd)<c:out value="${customer.expiration}"/><br>
+	* Name: <c:out value="${customer.firstName}"/><br>
+	* Street Address: <c:out value="${customer.street}"/><br>
+	* City:	<c:out value="${customer.city}"/><br>
+	* State: <c:out value="${customer.state}"/><br>
+	* Zip: <c:out value="${customer.zip}"/><br>
+	* Login name: <c:out value="${customer.username}"/><br>
+	* Login password: <c:out value="${customer.password}"/><br>
+	
+	Credit card number (16 digits): <c:out value="${customer.ccNo}"/><br>
+	Credit card expiration date (mmdd): <c:out value="${customer.expiration}"/><br>
 
     <br>
 
