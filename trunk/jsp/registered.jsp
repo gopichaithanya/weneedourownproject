@@ -19,7 +19,7 @@
 
     <br>
 
-	<a href="fli">Start searching your flight</a>
+	<a href="flightSearchForCustomerForm.spring">Start searching your flight</a>
 
 </body>
 </html>
