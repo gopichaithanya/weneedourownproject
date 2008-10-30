@@ -21,7 +21,7 @@ public class Customer  implements java.io.Serializable {
     private Integer zip;
     private String password;
     private Long ccNo;
-    private String expiration;
+    private Integer expiration;
     private Set<Itinerary> itineraries = new HashSet<Itinerary>(0);
 
     public Customer() {
@@ -31,7 +31,7 @@ public class Customer  implements java.io.Serializable {
     public Customer(String username) {
         this.username = username;
     }
-    public Customer(String username, String firstName, String lastName, String street, String city, String state, Integer zip, String password, Long ccNo, String expiration, Set<Itinerary> itineraries) {
+    public Customer(String username, String firstName, String lastName, String street, String city, String state, Integer zip, String password, Long ccNo, Integer expiration, Set<Itinerary> itineraries) {
        this.username = username;
        this.firstName = firstName;
        this.lastName = lastName;
@@ -108,11 +108,11 @@ public class Customer  implements java.io.Serializable {
     public void setCcNo(Long ccNo) {
         this.ccNo = ccNo;
     }
-    public String getExpiration() {
+    public Integer getExpiration() {
         return this.expiration;
     }
     
-    public void setExpiration(String expiration) {
+    public void setExpiration(Integer expiration) {
         this.expiration = expiration;
     }
     public Set<Itinerary> getItineraries() {
