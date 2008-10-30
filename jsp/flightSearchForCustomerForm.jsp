@@ -7,8 +7,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Flight Searching</title>
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAIQTJJux4wCMpPFMFJLPa7hSfYe32xyc8iPgGkKi4PlUHhtMrSRTWeQOoVYiS_PpdlIa8lKl6kZKMrA"
-      type="text/javascript"></script>
+<script
+  src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAIQTJJux4wCMpPFMFJLPa7hSfYe32xyc8iPgGkKi4PlUHhtMrSRTWeQOoVYiS_PpdlIa8lKl6kZKMrA"
+  type="text/javascript"></script>
 <script language="JavaScript"><!--
 //
 
@@ -111,10 +112,11 @@ function submitWithReturnFlightNo(no) {
 </head>
 <body onload="load()" onunload="GUnload()">
 
-<jsp:include page="/WEB-INF/jsp/header1.jsp">
+<jsp:include page="/WEB-INF/jsp/header2.jsp">
   <jsp:param name="title2" value="Flight Search" />
 </jsp:include>
-<div id="map" style="width: 600px; height: 400px"></div>
+
+<!-- div id="map" style="width: 600px; height: 400px"></div-->
 <c:choose>
   <c:when test="${isOneWayTrip}">
     <c:set var="totalSteps" value="2" />
@@ -274,11 +276,11 @@ function submitWithReturnFlightNo(no) {
 
   <form:hidden path="departFlightNo" id="departFlightNo" />
   <form:hidden path="returnFlightNo" id="returnFlightNo" />
-<!-- 
+  <!-- 
 <input type="hidden" id="airportlat" value="<c:out value="${flight.airportByDepartureLocation_latitude2}" />"/><br />
   				  <input type="hidden" id="airportlong" value="<c:out value="${flight.airportByDepartureLocation_longitude2}" />"/><br />
-             -->  
-<form:errors path="departFlightNo" cssClass="error" />
+             -->
+  <form:errors path="departFlightNo" cssClass="error" />
   <form:errors path="returnFlightNo" cssClass="error" />
 
   <c:set var="step1"
@@ -330,7 +332,7 @@ function submitWithReturnFlightNo(no) {
               <td><a href="http://maps.google.com"><c:out
                 value="${flight.airportByDepartureLocation_name}" /> (<c:out
                 value="${flight.airportByDepartureLocation_code}" />)</a><br />
-				  
+
               <c:out value="${flight.departureTime}" /></td>
               <td><a href="http://maps.google.com"><c:out
                 value="${flight.airportByArrivalLocation_name}" /> (<c:out
@@ -418,7 +420,7 @@ function submitWithReturnFlightNo(no) {
         </tbody>
       </table>
       </P>
-      
+
       <p>
       <table border="1" class="searchFlightForCustomer3step">
         <caption class="searchFlightForCustomer3StepTitle">Choose Returning Flight (3 / <c:out
