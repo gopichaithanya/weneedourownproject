@@ -32,8 +32,8 @@
         <property name="ccNo" type="java.lang.Long">
             <column name="CC_NO" />
         </property>
-        <property name="expiration" type="string">
-            <column name="EXPIRATION" length="5" />
+        <property name="expiration" type="java.lang.Integer">
+            <column name="EXPIRATION" />
         </property>
         <set name="itineraries" inverse="true">
             <key>
