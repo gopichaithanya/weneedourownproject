@@ -139,10 +139,16 @@
 		</war>
     </target>
 
-	<target name="clean" description="Clean compiled files and WAR files">
+	<target name="clean" depends="dropDB" description="Clean compiled files and WAR files">
         <delete file="${dist.dir}/${name}.war"/>
         <delete dir="${build.war.dir}"/>
         <delete dir="${build.classes.dir}"/>
+        <delete>
+			<fileset dir="${build.dir}">
+				<include name="*.properties" />
+				<include name="*.script" />
+			</fileset>
+        </delete>
 	</target>
 
 	<target name="buildtest" depends="build" description="Compile test tree java files">
