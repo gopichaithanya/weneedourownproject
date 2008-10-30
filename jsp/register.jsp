@@ -4,9 +4,12 @@
 <html>  
 <head>  
 <title>Register</title>  
-</head>  
-<body>  
-<center>  
+<link rel="stylesheet" type="text/css" href="css/proj4398.css" />
+</head>
+<body>
+<jsp:include page="/WEB-INF/jsp/header1.jsp">
+  <jsp:param name="title2" value="Home > Register" />
+</jsp:include>
     
 <h3>Register</h3>  
  
@@ -35,6 +38,6 @@
 
 				</table>
      </form:form>     
-</center>  
+<%@ include file="/WEB-INF/jsp/footer.jsp"%>
  </body>  
 </html>  

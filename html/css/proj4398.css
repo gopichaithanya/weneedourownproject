@@ -1,3 +1,48 @@
 @CHARSET "UTF-8";
 
-.error { color : red; }
+.error {
+	color: red;
+}
+
+.title1 {
+	color: red;
+	font-weight: bold;
+}
+
+.title2 {
+	color: blue;
+	font-weight: bold;
+}
+
+table,td,th {
+	border-width: 0px;
+}
+
+.searchFlightForCustomer1StepTitle,.searchFlightForCustomer2StepTitle,.searchFlightForCustomer3StepTitle
+	{
+	color: green;
+	font-weight: bold;
+}
+
+table.searchFlightForCustomer1step th {
+	color: #3366ff;
+	text-align: right;
+}
+
+table.searchFlightForCustomer2step>thead>tr>th,table.searchFlightForCustomer3step>thead>tr>th
+	{
+	text-align: center;
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+}
+
+table.searchFlightForCustomer2step>tbody>tr>td,table.searchFlightForCustomer3step>tbody>tr>td
+	{
+	text-align: left;
+	border-bottom: 1px solid black;
+}
+
+img {
+	border: 0px;
+}
