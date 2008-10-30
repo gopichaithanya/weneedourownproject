@@ -47,6 +47,13 @@
   </bean>
   <!--bean name="/flightReserveConfirm.spring" class="springapp.web.itineraryForCustomerController"/-->
   
+  <bean name="/enterCreditCardInfo.spring" class="springapp.web.CreditCardController">
+  	<property name="formView" value="enterCreditCardInfo"/>
+  	<property name="successView" value="ticket"/>
+  	<property name="commandName" value="customer"/>
+    <property name="commandClass" value="hibernate.Customer"/>
+  </bean>
+  
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
     <property name="prefix" value="/WEB-INF/jsp/"></property>
