@@ -7,8 +7,79 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Flight Searching</title>
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
-<script language="JavaScript">
-<!--//
+ <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAIQTJJux4wCMpPFMFJLPa7hSfYe32xyc8iPgGkKi4PlUHhtMrSRTWeQOoVYiS_PpdlIa8lKl6kZKMrA"
+      type="text/javascript"></script>
+<script language="JavaScript"><!--
+//
+
+var msIE = navigator.appName.indexOf("Microsoft");
+// Creates a marker at the given point with the given number label
+function createMarker(point, text) {
+  var marker = new GMarker(point);
+  GEvent.addListener(marker, "click", function() {
+   marker.openInfoWindowHtml(text);
+  });
+  return marker;
+}
+
+function getdegrees()
+{
+	var x=document.getElementById("airportlat");
+	if(x.length() > 0)
+		alert(x);
+}
+function load() {
+  if (GBrowserIsCompatible()) {
+    var map = new GMap2(document.getElementById("map"));
+map.addControl(new GSmallMapControl());
+map.addControl(new GMapTypeControl());
+    map.setCenter(new GLatLng(39.17536111111111, -75.33166666666666), 6);
+    directions = new GDirections(map);
+
+//	var x=document.getElementById("airportlat");
+//	if(x.length() > 0)
+//		alert(x);
+
+    // Download the data in data.xml and load it on the map. The format we
+    // expect is:
+    // <markers>
+    //   <marker lat="37.441" lng="-122.141"/>
+    //   <marker lat="37.322" lng="-121.213"/>
+    // </markers>
+    GDownloadUrl("phase1/airport.xml", function(data) {
+      var xml = GXml.parse(data);
+  var title = "";
+  var description = "";
+  var lat = "";
+  var lng = "";
+      var items = xml.documentElement.getElementsByTagName("Airport");
+      for (var i = 0; i < items.length; i++) {
+        var childNodes = items[i].childNodes;
+        for(var k=0; k<childNodes.length; k++) {
+        if(childNodes[k].nodeName == "Name")
+        	    title = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
+    	if(childNodes[k].nodeName == "Location")
+    	    description = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
+    	if(childNodes[k].nodeName == "Latitude")
+    	    lat = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
+	    	// alert("lat: " + lat);
+    	if(childNodes[k].nodeName == "Longitude")
+    	    lng = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
+	    	// alert("lng: " + lng);
+    }
+	
+        var point = new GLatLng(parseFloat(lat), parseFloat(lng));
+    var note = title + "<br>" + description;
+        map.addOverlay(createMarker(point, note));
+      }
+    });
+
+    directions.load("from: Baltimore, MD to: Washington, DC");
+  }
+  
+}
+
+
 function returnObjById( id )
 {
     if (document.getElementById)
@@ -35,14 +106,15 @@ function submitWithReturnFlightNo(no) {
   returnObjById("returnFlightNo").value = no;
   document.flightSearchForCustomerForm.submit();
 }
-// -->
-</script>
+// 
+--></script>
 </head>
-<body>
+<body onload="load()" onunload="GUnload()">
+
 <jsp:include page="/WEB-INF/jsp/header1.jsp">
   <jsp:param name="title2" value="Flight Search" />
 </jsp:include>
-
+<div id="map" style="width: 600px; height: 400px"></div>
 <c:choose>
   <c:when test="${isOneWayTrip}">
     <c:set var="totalSteps" value="2" />
@@ -202,8 +274,13 @@ function submitWithReturnFlightNo(no) {
 
   <form:hidden path="departFlightNo" id="departFlightNo" />
   <form:hidden path="returnFlightNo" id="returnFlightNo" />
-  <form:errors path="departFlightNo" cssClass="error" />
+<!-- 
+<input type="hidden" id="airportlat" value="<c:out value="${flight.airportByDepartureLocation_latitude2}" />"/><br />
+  				  <input type="hidden" id="airportlong" value="<c:out value="${flight.airportByDepartureLocation_longitude2}" />"/><br />
+             -->  
+<form:errors path="departFlightNo" cssClass="error" />
   <form:errors path="returnFlightNo" cssClass="error" />
+
   <c:set var="step1"
     value="${(searchedDepartFlights == null) && (empty flightSearchForCustomerCMD.departFlightNo)}" />
   <c:set var="step2"
@@ -248,10 +325,12 @@ function submitWithReturnFlightNo(no) {
 
         <tbody>
           <c:forEach items="${searchedDepartFlights}" var="flight">
+
             <tr>
               <td><a href="http://maps.google.com"><c:out
                 value="${flight.airportByDepartureLocation_name}" /> (<c:out
                 value="${flight.airportByDepartureLocation_code}" />)</a><br />
+				  
               <c:out value="${flight.departureTime}" /></td>
               <td><a href="http://maps.google.com"><c:out
                 value="${flight.airportByArrivalLocation_name}" /> (<c:out
