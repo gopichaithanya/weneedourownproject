@@ -22,6 +22,7 @@ table,td,th {
 	{
 	color: green;
 	font-weight: bold;
+	text-align: left;
 }
 
 table.searchFlightForCustomer1step th {
