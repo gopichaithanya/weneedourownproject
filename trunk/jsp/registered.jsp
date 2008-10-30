@@ -4,6 +4,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html>
 <body>
+<jsp:include page="/WEB-INF/jsp/header1.jsp">
+  <jsp:param name="title2" value="Home > Register" />
+</jsp:include>
+
 <h1>Customer Registered</h1>
 	    
 	* Name: <c:out value="${customer.firstName}"/><br>
@@ -21,5 +25,6 @@
 
 	<a href="flightSearchForCustomerForm.spring">Start searching your flight</a>
 
+<%@ include file="/WEB-INF/jsp/footer.jsp"%>
 </body>
 </html>
