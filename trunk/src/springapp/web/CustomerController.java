@@ -8,6 +8,7 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +25,9 @@ public class CustomerController extends SimpleFormController {
 	{
 		Customer customer = (Customer)o;
 		CustomerManager.register(customer);
-
+		HttpSession session = request.getSession(true);
+		session.setAttribute("username", username);
+		
 		
 	}
 	

@@ -6,6 +6,7 @@ import hibernate.Customer;
 import hibernate.manager.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -24,7 +25,8 @@ public class LoginController extends SimpleFormController {
 	      final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
 	      final List<String[]> airports = AirportManager.getAirportCodeAndName();
 	      mv.addObject("airports", airports);
-
+	      HttpSession session = request.getSession(true);
+	      session.setAttribute("username", username);
 	      return mv;
 
 	   }
