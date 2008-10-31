@@ -43,9 +43,11 @@
   		<bean class="springapp.web.FlightSearchForCustomerValidator"/>
   	</property>
   	<property name="formView" value="flightSearchForCustomerForm"/>
-  	<property name="successView" value="itineraryForCustomer.spring"/>
+  	<property name="successView" value="reserveFlightForCustomer.spring"/>
   </bean>
-  <!--bean name="/flightReserveConfirm.spring" class="springapp.web.itineraryForCustomerController"/-->
+  
+  <bean name="/reserveFlightForCustomer.spring" class="springapp.web.ReserveFlightForCustomerController" />
+  <bean name="/itineraryForCustomer.spring" class="springapp.web.ItineraryForCustomerController" />
   
   <bean name="/enterCreditCardInfo.spring" class="springapp.web.CreditCardController">
   	<property name="formView" value="enterCreditCardInfo"/>

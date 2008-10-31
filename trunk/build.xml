@@ -66,12 +66,6 @@
 
 	<target name="build" description="Compile main source tree java files">
 		<mkdir dir="${build.classes.dir}" />
-		<javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
-			<src path="${src.dir}" />
-			<classpath refid="master-classpath" />
-            <exclude name="**/*Test.java"/>
-            <exclude name="**/*Tests.java"/>
-		</javac>
         <copy file="${xml.dir}/hibernate.ant.cfg.xml" tofile="${build.classes.dir}/hibernate.cfg.xml" preservelastmodified="true"/>
 		<copy todir="${build.classes.dir}" preservelastmodified="true">
 			<fileset dir="${src.dir}">
@@ -79,6 +73,12 @@
 			</fileset>
 		</copy>
         <antcall target="loadDBOnlyWhenSQLFilesAreChanged"/>
+		<javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
+			<src path="${src.dir}" />
+			<classpath refid="master-classpath" />
+            <exclude name="**/*Test.java"/>
+            <exclude name="**/*Tests.java"/>
+		</javac>
 	</target>
 
     <target name="buildWar" depends="build" description="Build WAR file.">

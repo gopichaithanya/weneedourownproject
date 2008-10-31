@@ -36,7 +36,18 @@ public class LoginController extends SimpleFormController {
 
       session.setAttribute(SessionConstants.USERNAME, customer.getUsername());
       return mv;
+   }
 
+   static public String getUserName(HttpSession session) {
+      final String userId = (String) session.getAttribute(SessionConstants.USERNAME);
+      if (null == userId || userId.length() <= 0)
+         return null;
+      return userId;
+   }
+
+   static public ModelAndView redirectToLogin(HttpSession session, String urlAfterLogin) {
+      session.setAttribute(SessionConstants.LOGIN_REDIRECT_AFTER_LOGIN, urlAfterLogin);
+      return new ModelAndView(new RedirectView(LoginController.URL));
    }
 
 }
