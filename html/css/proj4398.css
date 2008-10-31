@@ -18,6 +18,10 @@ table,td,th {
 	border-width: 0px;
 }
 
+img {
+	border: 0px;
+}
+
 .searchFlightForCustomer1StepTitle,.searchFlightForCustomer2StepTitle,.searchFlightForCustomer3StepTitle
 	{
 	color: green;
@@ -44,6 +48,24 @@ table.searchFlightForCustomer2step>tbody>tr>td,table.searchFlightForCustomer3ste
 	border-bottom: 1px solid black;
 }
 
-img {
-	border: 0px;
+.itineraryForCustomerReservedTitle,.itineraryForCustomerBookedTitle,.itineraryForCustomerCanceledTitle
+	{
+	color: black;
+	font-weight: bold;
+	font-size: 20px;
+	text-align: left;
+}
+
+table.itineraryForCustomerReserved>thead>tr>th,table.itineraryForCustomerBooked>thead>tr>th,table.itineraryForCustomerCanceled>thead>tr>th
+	{
+	text-align: center;
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+}
+
+table.itineraryForCustomerReserved>tbody>tr>td,table.itineraryForCustomerBooked>tbody>tr>td,table.itineraryForCustomerCanceled>tbody>tr>td
+	{
+	text-align: left;
+	border-bottom: 1px solid black;
 }

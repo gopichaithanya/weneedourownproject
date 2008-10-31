@@ -1,4 +1,4 @@
-package hibernate.util;
+package hibernate.manager;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import org.hibernate.*;
 import org.hibernate.cfg.*;
 
-public class HibernateUtil {
+class HibernateUtil {
 
    private static final SessionFactory sessionFactory;
 

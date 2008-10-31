@@ -3,7 +3,6 @@ package hibernate.manager;
 import java.util.List;
 
 import hibernate.Customer;
-import hibernate.util.*;
 
 import org.hibernate.Session;
 import org.hibernate.HibernateException;

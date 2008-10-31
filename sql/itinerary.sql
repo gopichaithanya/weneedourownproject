@@ -15,4 +15,6 @@ CREATE TABLE itinerary(	flight_no INTEGER,
 			FOREIGN KEY(username) REFERENCES customer);
 
 INSERT INTO itinerary VALUES (106, 'jjohnson', 'booked');
-INSERT INTO itinerary VALUES (154, 'jjohnson', 'booked');
+INSERT INTO itinerary VALUES (154, 'jjohnson', 'canceled');
+INSERT INTO itinerary VALUES (167, 'jjohnson', 'booked');
+INSERT INTO itinerary VALUES (292, 'jjohnson', 'reserved');

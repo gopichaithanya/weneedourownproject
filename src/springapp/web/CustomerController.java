@@ -1,8 +1,8 @@
 package springapp.web;
 
 import org.hibernate.Session;
-import hibernate.util.HibernateUtil;
 import hibernate.manager.*;
+
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;

@@ -2,20 +2,14 @@ package springapp.web;
 
 import hibernate.Flight;
 import hibernate.manager.AirportManager;
-import hibernate.util.HibernateUtil;
+import hibernate.manager.FlightManager;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
@@ -76,11 +70,11 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
       List flights;
       if (bFlagSearch)
-         flights = getFlightList(cmd.getDepartLocation(), cmd.getArrivalLocation(), cmd
-               .getDepartYear(), cmd.getDepartMonth(), cmd.getDepartDay(), cmd.getDepartHour(), cmd
-               .getSearchingHourRange());
+         flights = FlightManager.getFlightList(cmd.getDepartLocation(), cmd.getArrivalLocation(),
+               cmd.getDepartYear(), cmd.getDepartMonth(), cmd.getDepartDay(), cmd.getDepartHour(),
+               cmd.getSearchingHourRange());
       else
-         flights = getFlightList(null, null, 0, 0, 0, 0, 0);
+         flights = FlightManager.getFlightList(null, null, 0, 0, 0, 0, 0);
 
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedDepartFlights", flights);
@@ -95,15 +89,15 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
       List flights;
       if (bFlagSearch)
-         flights = getFlightList(cmd.getArrivalLocation(), cmd.getDepartLocation(), cmd
-               .getReturnYear(), cmd.getReturnMonth(), cmd.getReturnDay(), cmd.getReturnHour(), cmd
-               .getSearchingHourRange());
+         flights = FlightManager.getFlightList(cmd.getArrivalLocation(), cmd.getDepartLocation(),
+               cmd.getReturnYear(), cmd.getReturnMonth(), cmd.getReturnDay(), cmd.getReturnHour(),
+               cmd.getSearchingHourRange());
       else
-         flights = getFlightList(null, null, 0, 0, 0, 0, 0);
+         flights = FlightManager.getFlightList(null, null, 0, 0, 0, 0, 0);
 
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedReturnFlights", flights);
-      final FlightSearchForCustomerResult departFlight = getFlight(cmd.getDepartFlightNo());
+      final Flight departFlight = FlightManager.getFlight(cmd.getDepartFlightNo());
       mv.addObject("selectedDepartFlight", departFlight);
       return mv;
    }
@@ -124,91 +118,6 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
 
       final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
       return mv;
-   }
-
-   public static FlightSearchForCustomerResult getFlight(int flightNo) {
-      final int fno = Integer.valueOf(flightNo);
-      Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-      session.beginTransaction();
-      final Flight flight = (Flight) session.load(Flight.class, fno);
-      final FlightSearchForCustomerResult result = new FlightSearchForCustomerResult(flight);
-      session.close();
-      return result;
-   }
-
-   public static List<FlightSearchForCustomerResult> getFlightList(String departLocation,
-         String arrivalLocation, int year, int month, int day, int hour, int hourRange) {
-
-      final List<FlightSearchForCustomerResult> result = new ArrayList<FlightSearchForCustomerResult>();
-
-      final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-      session.beginTransaction();
-
-      Query q = null;
-      {
-         final Date[] departureTimeRange = getTimeRange(year, month, day, hour, hourRange);
-         if (null == departLocation || null == arrivalLocation || null == departureTimeRange) {
-            q = session.createQuery("FROM Flight");
-         } else {
-            q = session.createQuery(
-                  "FROM Flight " + "WHERE DEPARTURE_LOCATION = ? " + "AND ARRIVAL_LOCATION = ? "
-                        + "AND DEPARTURE_TIME > ? " + "AND DEPARTURE_TIME < ? ").setString(0,
-                  departLocation).setString(1, arrivalLocation).setTimestamp(2,
-                  departureTimeRange[0]).setTimestamp(3, departureTimeRange[1]);
-         }
-      }
-      final Iterator<Flight> iter = q.list().iterator();
-
-      while (iter.hasNext()) {
-         final Flight f = iter.next();
-         final FlightSearchForCustomerResult flight = new FlightSearchForCustomerResult(f);
-         result.add(flight);
-      }
-
-      session.close();
-      return result;
-   }
-
-   public static Date[] getTimeRange(int year, int month, int day, int hour, int searchingHourRange) {
-      if (month <= 0 || month > 12)
-         return null;
-      if (day <= 0 || day > 31)
-         return null;
-
-      final int y = Integer.valueOf(year);
-      final int m = Integer.valueOf(month) - 1; // Month is 0-based in Calendar class
-      final int d = Integer.valueOf(day);
-
-      boolean bAnytime = false;
-      int h = 0;
-      int searchHour = 0;
-      try {
-         h = Integer.valueOf(hour);
-         searchHour = Integer.valueOf(searchingHourRange);
-         if (h < 0 || h > 23)
-            bAnytime = true;
-         if (searchHour < 0)
-            bAnytime = true;
-      } catch (NumberFormatException e) {
-         bAnytime = true;
-      }
-
-      final Calendar startCalendar = Calendar.getInstance();
-      final Calendar endCalendar = Calendar.getInstance();
-      if (bAnytime) {
-         startCalendar.set(y, m, d, 0, 0, 0);
-         endCalendar.set(y, m, d, 23, 59, 0);
-      } else {
-         startCalendar.set(y, m, d, h, 0, 0);
-         startCalendar.add(Calendar.HOUR, -searchHour);
-         endCalendar.set(y, m, d, h, 0, 0);
-         endCalendar.add(Calendar.HOUR, searchHour);
-      }
-
-      final Date startDate = startCalendar.getTime();
-      final Date endDate = endCalendar.getTime();
-      final Date[] range = new Date[] { startDate, endDate };
-      return range;
    }
 
 }

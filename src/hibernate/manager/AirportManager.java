@@ -1,6 +1,5 @@
 package hibernate.manager;
 
-import hibernate.util.HibernateUtil;
 
 import java.util.List;
 

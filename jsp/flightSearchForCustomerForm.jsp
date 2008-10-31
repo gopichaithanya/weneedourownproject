@@ -329,13 +329,13 @@ function submitWithReturnFlightNo(no) {
 
             <tr>
               <td><a href="http://maps.google.com"><c:out
-                value="${flight.airportByDepartureLocation_name}" /> (<c:out
-                value="${flight.airportByDepartureLocation_code}" />)</a><br />
+                value="${flight.airportByDepartureLocation.name}" /> (<c:out
+                value="${flight.airportByDepartureLocation.code}" />)</a><br />
 
               <c:out value="${flight.departureTime}" /></td>
               <td><a href="http://maps.google.com"><c:out
-                value="${flight.airportByArrivalLocation_name}" /> (<c:out
-                value="${flight.airportByArrivalLocation_code}" />)</a><br />
+                value="${flight.airportByArrivalLocation.name}" /> (<c:out
+                value="${flight.airportByArrivalLocation.code}" />)</a><br />
               <c:out value="${flight.arrivalTime}" />
               <div>(<c:out value="${flight.durationHours}" /> hours)</div>
               </td>
@@ -347,9 +347,9 @@ function submitWithReturnFlightNo(no) {
               <table border="0">
                 <tr>
                   <td><img
-                    src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline_code}.gif"
-                    alt="${flight.airline_code}" /></td>
-                  <td><c:out value="${flight.airline_name}" /></td>
+                    src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline.code}.gif"
+                    alt="${flight.airline.code}" /></td>
+                  <td><c:out value="${flight.airline.name}" /></td>
                 </tr>
               </table>
               </td>
@@ -391,12 +391,12 @@ function submitWithReturnFlightNo(no) {
         <tbody>
           <tr>
             <td><a href="http://maps.google.com"><c:out
-              value="${selectedDepartFlight.airportByDepartureLocation_name}" /> (<c:out
-              value="${selectedDepartFlight.airportByDepartureLocation_code}" />)</a><br />
+              value="${selectedDepartFlight.airportByDepartureLocation.name}" /> (<c:out
+              value="${selectedDepartFlight.airportByDepartureLocation.code}" />)</a><br />
             <c:out value="${selectedDepartFlight.departureTime}" /></td>
             <td><a href="http://maps.google.com"><c:out
-              value="${selectedDepartFlight.airportByArrivalLocation_name}" /> (<c:out
-              value="${selectedDepartFlight.airportByArrivalLocation_code}" />)</a><br />
+              value="${selectedDepartFlight.airportByArrivalLocation.name}" /> (<c:out
+              value="${selectedDepartFlight.airportByArrivalLocation.code}" />)</a><br />
             <c:out value="${selectedDepartFlight.arrivalTime}" />
             <div>(<c:out value="${selectedDepartFlight.durationHours}" /> hours)</div>
             </td>
@@ -408,9 +408,9 @@ function submitWithReturnFlightNo(no) {
             <table border="0">
               <tr>
                 <td><img
-                  src="http://www.expedia.com/pubspec/images/airlines/sm${selectedDepartFlight.airline_code}.gif"
-                  alt="${selectedDepartFlight.airline_code}" /></td>
-                <td><c:out value="${selectedDepartFlight.airline_name}" /></td>
+                  src="http://www.expedia.com/pubspec/images/airlines/sm${selectedDepartFlight.airline.code}.gif"
+                  alt="${selectedDepartFlight.airline.code}" /></td>
+                <td><c:out value="${selectedDepartFlight.airline.name}" /></td>
               </tr>
             </table>
             </td>
@@ -440,12 +440,12 @@ function submitWithReturnFlightNo(no) {
           <c:forEach items="${searchedReturnFlights}" var="flight">
             <tr>
               <td><a href="http://maps.google.com"><c:out
-                value="${flight.airportByDepartureLocation_name}" /> (<c:out
-                value="${flight.airportByDepartureLocation_code}" />)</a><br />
+                value="${flight.airportByDepartureLocation.name}" /> (<c:out
+                value="${flight.airportByDepartureLocation.code}" />)</a><br />
               <c:out value="${flight.departureTime}" /></td>
               <td><a href="http://maps.google.com"><c:out
-                value="${flight.airportByArrivalLocation_name}" /> (<c:out
-                value="${flight.airportByArrivalLocation_code}" />)</a><br />
+                value="${flight.airportByArrivalLocation.name}" /> (<c:out
+                value="${flight.airportByArrivalLocation.code}" />)</a><br />
               <c:out value="${flight.arrivalTime}" />
               <div>(<c:out value="${flight.durationHours}" /> hours)</div>
               </td>
@@ -457,9 +457,9 @@ function submitWithReturnFlightNo(no) {
               <table border="0">
                 <tr>
                   <td><img
-                    src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline_code}.gif"
-                    alt="${flight.airline_code}" /></td>
-                  <td><c:out value="${flight.airline_name}" /></td>
+                    src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline.code}.gif"
+                    alt="${flight.airline.code}" /></td>
+                  <td><c:out value="${flight.airline.name}" /></td>
                 </tr>
               </table>
               </td>
