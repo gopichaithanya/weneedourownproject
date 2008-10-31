@@ -8,6 +8,15 @@
 <title>Itinerary for customer</title>
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
 </head>
+<script language="JavaScript">
+function cancelReserved(flightNo) {
+  location.href="cancelReservedFlightForCustomer.spring?flightNo=" + flightNo;
+}
+
+function book(flightNo) {
+	  location.href="bookFlightForCustomer.spring?flightNo=" + flightNo;
+}
+</script>
 <body>
 <c:out value="${aa}" />
 <jsp:include page="/WEB-INF/jsp/header1.jsp">
@@ -68,7 +77,7 @@
             </table>
             </td>
             <td><input type="button" value="Cancel"
-              onClick="cancelReserve(<c:out value="${flight.flightNo}"/>);" /></td>
+              onClick="cancelReserved(<c:out value="${flight.flightNo}"/>);" /></td>
             <td><input type="button" value="Book"
               onClick="book(<c:out value="${flight.flightNo}"/>);" /></td>
           </tr>
