@@ -27,7 +27,7 @@
   
     <bean name="/login.spring" class="springapp.web.LoginController">
     <property name="formView" value="login"/>
-    <property name="successView" value="flightSearchForCustomerForm.spring"/>
+    <property name="successView" value="itineraryForCustomer.spring"/>
     <property name="commandName" value="customer"/>
     <property name="commandClass" value="hibernate.Customer"/>
    <property name="validator">

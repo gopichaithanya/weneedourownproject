@@ -2,6 +2,8 @@ package hibernate;
 // Generated Oct 15, 2008 10:13:30 PM by Hibernate Tools 3.2.2.GA
 
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +26,8 @@ public class Flight implements java.io.Serializable {
     private Integer businessSeats;
     private Float businessPrice;
     private Set<Itinerary> itineraries = new HashSet<Itinerary>(0);
+
+    private final static SimpleDateFormat df_ = new SimpleDateFormat("EEE dd-MMM yyyy HH:mm aaa");
 
     public Flight() {
     }
@@ -124,7 +128,16 @@ public class Flight implements java.io.Serializable {
         this.itineraries = itineraries;
     }
 
-
+    public long getDurationHours() {
+       final Calendar departTime = Calendar.getInstance();
+       final Calendar arrivalTime = Calendar.getInstance();
+       departTime.setTime(getDepartureTime());
+       arrivalTime.setTime(getArrivalTime());
+       final long durationHours = Math.round(Math.ceil((arrivalTime.getTimeInMillis() - departTime
+             .getTimeInMillis())
+             / (1000 * 60 * 60)));
+       return durationHours;
+    }
 
 
 }

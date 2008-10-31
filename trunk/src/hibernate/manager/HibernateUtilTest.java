@@ -1,6 +1,7 @@
-package hibernate.util;
+package hibernate.manager;
 
 import static org.junit.Assert.*;
+
 
 import java.io.File;
 import java.io.IOException;

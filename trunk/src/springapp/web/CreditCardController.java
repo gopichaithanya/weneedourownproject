@@ -7,7 +7,6 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 
 import hibernate.*;
 import hibernate.manager.*;
-import hibernate.util.HibernateUtil;
 
 import java.io.IOException;
 import javax.servlet.ServletContext;

@@ -2,13 +2,13 @@ package springapp.web;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import java.lang.*;
 import hibernate.Customer;
 import hibernate.manager.*;
 
+@SuppressWarnings("unchecked")
 public class LoginValidator implements Validator {
 	
-	public boolean supports(Class aClass)
+   public boolean supports(Class aClass)
 	{
 		return aClass.equals(Customer.class);
 	}
