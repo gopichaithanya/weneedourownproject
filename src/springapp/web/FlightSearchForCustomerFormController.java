@@ -12,15 +12,19 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.servlet.view.RedirectView;
 
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerFormController extends SimpleFormController {
+
+   public static final String URL = "flightSearchForCustomerForm.spring";
 
    /**
     * This is for debugging purpose.
@@ -36,6 +40,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
 
       final List<String[]> airports = AirportManager.getAirportCodeAndName();
       mv.addObject("airports", airports);
+      mv.addObject("tripTypes", FlightSearchForCustomer.ETripType.values());
 
       return mv;
    }
@@ -49,17 +54,16 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       ModelAndView mv = null;
       {
          final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
-         if (cmd.getDepartFlightNo().length() > 0
-               && (cmd.getTripType().equalsIgnoreCase(FlightSearchForCustomer.KEYWORD_oneWayTrip) || cmd
-                     .getReturnFlightNo().length() > 0)) {
+         if (false == cmd.isNullDepartFlightNo()
+               && (cmd.isOneWayTrip() || false == cmd.isNullReturnFlightNo())) {
             // after step 3 with round trip or after step 2 with one way trip
             mv = onSubmit3(request, response, command, errors);
-         } else if (cmd.getDepartFlightNo().length() == 0) {
-            // after step 1
-            mv = onSubmit1(request, response, command, errors);
-         } else {
+         } else if (false == cmd.isNullDepartFlightNo()) {
             // after step 2
             mv = onSubmit2(request, response, command, errors);
+         } else {
+            // after step 1
+            mv = onSubmit1(request, response, command, errors);
          }
       }
       mv.addObject(this.getCommandName(), command);
@@ -76,14 +80,12 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
                .getDepartYear(), cmd.getDepartMonth(), cmd.getDepartDay(), cmd.getDepartHour(), cmd
                .getSearchingHourRange());
       else
-         flights = getFlightList(null, null, null, null, null, null, null);
+         flights = getFlightList(null, null, 0, 0, 0, 0, 0);
 
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedDepartFlights", flights);
-      mv.addObject("isOneWayTrip", cmd.getTripType().equalsIgnoreCase(
-            FlightSearchForCustomer.KEYWORD_oneWayTrip));
-      mv.addObject("isRoundTrip", cmd.getTripType().equalsIgnoreCase(
-            FlightSearchForCustomer.KEYWORD_roundTrip));
+      mv.addObject("isOneWayTrip", cmd.isOneWayTrip());
+      mv.addObject("isRoundTrip", cmd.isRoundTrip());
       return mv;
    }
 
@@ -97,7 +99,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
                .getReturnYear(), cmd.getReturnMonth(), cmd.getReturnDay(), cmd.getReturnHour(), cmd
                .getSearchingHourRange());
       else
-         flights = getFlightList(null, null, null, null, null, null, null);
+         flights = getFlightList(null, null, 0, 0, 0, 0, 0);
 
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedReturnFlights", flights);
@@ -109,11 +111,22 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
    private ModelAndView onSubmit3(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
-      final ModelAndView mv = super.onSubmit(request, response, command, errors);
+      final HttpSession session = request.getSession();
+      final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
+
+      int[] flights = null;
+      if (cmd.isOneWayTrip())
+         flights = new int[] { cmd.getDepartFlightNo() };
+      else if (cmd.isRoundTrip())
+         flights = new int[] { cmd.getDepartFlightNo(), cmd.getReturnFlightNo() };
+
+      session.setAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER, flights);
+
+      final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
       return mv;
    }
 
-   public static FlightSearchForCustomerResult getFlight(String flightNo) {
+   public static FlightSearchForCustomerResult getFlight(int flightNo) {
       final int fno = Integer.valueOf(flightNo);
       Session session = HibernateUtil.getSessionFactory().getCurrentSession();
       session.beginTransaction();
@@ -124,8 +137,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
    }
 
    public static List<FlightSearchForCustomerResult> getFlightList(String departLocation,
-         String arrivalLocation, String year, String month, String day, String hour,
-         String hourRange) {
+         String arrivalLocation, int year, int month, int day, int hour, int hourRange) {
 
       final List<FlightSearchForCustomerResult> result = new ArrayList<FlightSearchForCustomerResult>();
 
@@ -133,15 +145,17 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       session.beginTransaction();
 
       Query q = null;
-      try {
+      {
          final Date[] departureTimeRange = getTimeRange(year, month, day, hour, hourRange);
-         q = session.createQuery(
-               "FROM Flight " + "WHERE DEPARTURE_LOCATION = ? " + "AND ARRIVAL_LOCATION = ? "
-                     + "AND DEPARTURE_TIME > ? " + "AND DEPARTURE_TIME < ? ").setString(0,
-               departLocation).setString(1, arrivalLocation).setTimestamp(2, departureTimeRange[0])
-               .setTimestamp(3, departureTimeRange[1]);
-      } catch (NumberFormatException e) {
-         q = session.createQuery("FROM Flight");
+         if (null == departLocation || null == arrivalLocation || null == departureTimeRange) {
+            q = session.createQuery("FROM Flight");
+         } else {
+            q = session.createQuery(
+                  "FROM Flight " + "WHERE DEPARTURE_LOCATION = ? " + "AND ARRIVAL_LOCATION = ? "
+                        + "AND DEPARTURE_TIME > ? " + "AND DEPARTURE_TIME < ? ").setString(0,
+                  departLocation).setString(1, arrivalLocation).setTimestamp(2,
+                  departureTimeRange[0]).setTimestamp(3, departureTimeRange[1]);
+         }
       }
       final Iterator<Flight> iter = q.list().iterator();
 
@@ -155,8 +169,12 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       return result;
    }
 
-   public static Date[] getTimeRange(String year, String month, String day, String hour,
-         String searchingHourRange) {
+   public static Date[] getTimeRange(int year, int month, int day, int hour, int searchingHourRange) {
+      if (month <= 0 || month > 12)
+         return null;
+      if (day <= 0 || day > 31)
+         return null;
+
       final int y = Integer.valueOf(year);
       final int m = Integer.valueOf(month) - 1; // Month is 0-based in Calendar class
       final int d = Integer.valueOf(day);

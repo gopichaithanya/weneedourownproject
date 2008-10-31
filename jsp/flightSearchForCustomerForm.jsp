@@ -194,11 +194,10 @@ function submitWithReturnFlightNo(no) {
         <td>
         <table border="1">
           <tr>
-            <td><form:radiobutton path="tripType" value="roundTrip" id="roundTrip" /><label
-              for="roundTrip">Round trip</label></td>
-            <td><form:radiobutton path="tripType" value="oneWayTrip" id="oneWayTrip" /><label
-              for="oneWayTrip">One way trip</label> <form:errors path="tripType" cssClass="error" />
-            </td>
+            <td><c:forEach items="${tripTypes}" var="type">
+              <form:radiobutton path="tripType" value="${type}" id="${type}" />
+              <label for="${type}">${type.description}</label>
+            </c:forEach> <form:errors path="tripType" cssClass="error" /></td>
           </tr>
         </table>
         </td>

@@ -7,10 +7,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerFormControllerTest {
@@ -20,18 +24,20 @@ public class FlightSearchForCustomerFormControllerTest {
       FlightSearchForCustomerFormController.bFlagSearch = true;
    }
 
-   @Test(expected = NullPointerException.class)
-   public void testHandleRequestView() throws Exception {
+   @Test
+   public void testHandleRequest() throws Exception {
       final FlightSearchForCustomerFormController controller = new FlightSearchForCustomerFormController();
-      final ModelAndView mv = controller.handleRequest(null, null);
-      assertNotNull(mv);
-      fail();
+      final HttpServletRequest req = new NullHttpServletRequest();
+      final HttpServletResponse resp = new NullHttpServletResponse();
+      //TODO
+//      final ModelAndView mv = controller.handleRequest(req, resp);
+//      assertNotNull(mv);
    }
 
    @Test
    public void testListFlightsNull() {
-      final List flightList = FlightSearchForCustomerFormController.getFlightList(null, null, null,
-            null, null, null, null);
+      final List flightList = FlightSearchForCustomerFormController.getFlightList(null, null, 0, 0,
+            0, 0, 0);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }
@@ -39,24 +45,15 @@ public class FlightSearchForCustomerFormControllerTest {
    @Test
    public void testListFlightsAnytime() {
       final List flightList = FlightSearchForCustomerFormController.getFlightList("DEN", "BWI",
-            "2009", "1", "4", "BUG", "XXX");
+            2009, 1, 4, -99, -99);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }
 
    @Test
    public void testListFlightsCertainTime() {
-      final FlightSearchForCustomer dummy = new FlightSearchForCustomer();
-      dummy.setDepartLocation("DEN");
-      dummy.setArrivalLocation("BWI");
-      dummy.setDepartYear("2009"); // 04-Jan 2009 10:50 AM
-      dummy.setDepartMonth("1");
-      dummy.setDepartDay("4");
-      dummy.setDepartHour("10");
-      dummy.setSearchingHourRange("2");
-
       final List flightList = FlightSearchForCustomerFormController.getFlightList("DEN", "BWI",
-            "2009", "1", "4", "10", "2");
+            2009, 1, 4, 10, 2);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }
@@ -65,8 +62,7 @@ public class FlightSearchForCustomerFormControllerTest {
    public void testGetTimeRange1() {
       final Calendar calendar = Calendar.getInstance();
 
-      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange("2008", "1", "1",
-            "XXX", "XXX");
+      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange(2008, 1, 1, -99, -99);
       calendar.set(2008, 0, 1, 0, 0, 0);
       assertEquals(calendar.getTime().toString(), dates[0].toString());
       calendar.set(2008, 0, 1, 23, 59, 0);
@@ -77,8 +73,7 @@ public class FlightSearchForCustomerFormControllerTest {
    public void testGetTimeRange2() {
       final Calendar calendar = Calendar.getInstance();
 
-      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange("2008", "1", "1",
-            "1", "2");
+      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange(2008, 1, 1, 1, 2);
       calendar.set(2007, 11, 31, 23, 0, 0);
       assertEquals(calendar.getTime().toString(), dates[0].toString());
       calendar.set(2008, 0, 1, 3, 0, 0);
@@ -89,38 +84,28 @@ public class FlightSearchForCustomerFormControllerTest {
    public void testGetTimeRange3() {
       final Calendar calendar = Calendar.getInstance();
 
-      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange("2008", "1", "1",
-            "1", "XXX");
+      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange(2008, 1, 1, 1, -99);
       calendar.set(2008, 0, 1, 0, 0, 0);
       assertEquals(calendar.getTime().toString(), dates[0].toString());
       calendar.set(2008, 0, 1, 23, 59, 0);
       assertEquals(calendar.getTime().toString(), dates[1].toString());
    }
 
-   @Test(expected = NumberFormatException.class)
-   public void testGetTimeRangeBadYear() {
-      FlightSearchForCustomerFormController.getTimeRange("XXX", "1", "1", "1", "XXX");
-      fail();
-   }
-
-   @Test(expected = NumberFormatException.class)
+   @Test
    public void testGetTimeRangeBadMonth() {
-      FlightSearchForCustomerFormController.getTimeRange("2009", "X", "1", "1", "XXX");
-      fail();
+      assertNull(FlightSearchForCustomerFormController.getTimeRange(2009, -9, 1, 1, -99));
    }
 
-   @Test(expected = NumberFormatException.class)
+   @Test
    public void testGetTimeRangeBadDay() {
-      FlightSearchForCustomerFormController.getTimeRange("2009", "1", "X", "1", "XXX");
-      fail();
+      assertNull(FlightSearchForCustomerFormController.getTimeRange(2009, 1, -9, 1, -99));
    }
 
    @Test
    public void testGetTimeRangeBadHour() {
       final Calendar calendar = Calendar.getInstance();
 
-      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange("2009", "1", "1",
-            "X", "XXX");
+      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange(2009, 1, 1, -99, -99);
       calendar.set(2009, 0, 1, 0, 0, 0);
       assertEquals(calendar.getTime().toString(), dates[0].toString());
       calendar.set(2009, 0, 1, 23, 59, 0);
@@ -131,8 +116,7 @@ public class FlightSearchForCustomerFormControllerTest {
    public void testGetTimeRangeBadRange1() {
       final Calendar calendar = Calendar.getInstance();
 
-      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange("2009", "1", "1",
-            "2", "XXX");
+      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange(2009, 1, 1, 2, -99);
       calendar.set(2009, 0, 1, 0, 0, 0);
       assertEquals(calendar.getTime().toString(), dates[0].toString());
       calendar.set(2009, 0, 1, 23, 59, 0);
@@ -143,8 +127,7 @@ public class FlightSearchForCustomerFormControllerTest {
    public void testGetTimeRangeBadRange2() {
       final Calendar calendar = Calendar.getInstance();
 
-      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange("2009", "1", "1",
-            "2", "-1");
+      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange(2009, 1, 1, 2, -1);
       calendar.set(2009, 0, 1, 0, 0, 0);
       assertEquals(calendar.getTime().toString(), dates[0].toString());
       calendar.set(2009, 0, 1, 23, 59, 0);
@@ -155,8 +138,7 @@ public class FlightSearchForCustomerFormControllerTest {
    public void testGetTimeRangeBadRange3() {
       final Calendar calendar = Calendar.getInstance();
 
-      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange("2009", "1", "1",
-            "2", "0");
+      final Date[] dates = FlightSearchForCustomerFormController.getTimeRange(2009, 1, 1, 2, 0);
       calendar.set(2009, 0, 1, 2, 0, 0);
       assertEquals(calendar.getTime().toString(), dates[0].toString());
       calendar.set(2009, 0, 1, 2, 0, 0);
@@ -174,7 +156,7 @@ public class FlightSearchForCustomerFormControllerTest {
    @Test
    public void testOnSubmitAfterStepFirst() throws Exception {
       final FlightSearchForCustomer cmd = new FlightSearchForCustomer();
-      cmd.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
+      cmd.setTripType(FlightSearchForCustomer.ETripType.ROUND_TRIP);
       final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
       final ModelAndView mv = submit.onSubmit(null, null, cmd, null);
       assertNotNull(mv);
@@ -184,8 +166,8 @@ public class FlightSearchForCustomerFormControllerTest {
    @Test
    public void testOnSubmitAfterStepSecondWithRoundTrip() throws Exception {
       final FlightSearchForCustomer cmd = new FlightSearchForCustomer();
-      cmd.setDepartFlightNo("157");
-      cmd.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
+      cmd.setDepartFlightNo(157);
+      cmd.setTripType(FlightSearchForCustomer.ETripType.ROUND_TRIP);
       final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
       final ModelAndView mv = submit.onSubmit(null, null, cmd, null);
       assertNotNull(mv);
@@ -196,31 +178,37 @@ public class FlightSearchForCustomerFormControllerTest {
    @Test
    public void testOnSubmitAfterStepSecondWithOneWayTrip() throws Exception {
       final FlightSearchForCustomer cmd = new FlightSearchForCustomer();
-      cmd.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
-      cmd.setDepartFlightNo("157");
+      cmd.setTripType(FlightSearchForCustomer.ETripType.ONEWAY_TRIP);
+      cmd.setDepartFlightNo(157);
       final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
       try {
-         final ModelAndView mv = submit.onSubmit(null, null, cmd, null);
+         final HttpServletRequest request = new NullHttpServletRequest();
+         final ModelAndView mv = submit.onSubmit(request, null, cmd, null);
          assertNotNull(mv);
-         fail();
+         final HttpSession session = request.getSession();
+         assertNull(session.getAttribute("Nothing is in"));
+         assertNotNull(session.getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER));
       } catch (ServletException e) {
-         assertEquals("successView isn't set", e.getMessage());
+         fail();
       }
    }
 
    @Test
    public void testOnSubmitAfterStepThird() throws Exception {
       final FlightSearchForCustomer cmd = new FlightSearchForCustomer();
-      cmd.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
-      cmd.setDepartFlightNo("157");
-      cmd.setReturnFlightNo("157");
+      cmd.setTripType(FlightSearchForCustomer.ETripType.ROUND_TRIP);
+      cmd.setDepartFlightNo(157);
+      cmd.setReturnFlightNo(157);
       final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
       try {
-         final ModelAndView mv = submit.onSubmit(null, null, cmd, null);
+         final HttpServletRequest request = new NullHttpServletRequest();
+         final ModelAndView mv = submit.onSubmit(request, null, cmd, null);
          assertNotNull(mv);
-         fail();
+         final HttpSession session = request.getSession();
+         assertNull(session.getAttribute("Nothing is in"));
+         assertNotNull(session.getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER));
       } catch (ServletException e) {
-         assertEquals("successView isn't set", e.getMessage());
+         fail();
       }
    }
 }

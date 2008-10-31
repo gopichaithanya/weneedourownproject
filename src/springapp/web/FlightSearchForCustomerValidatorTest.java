@@ -22,17 +22,17 @@ public class FlightSearchForCustomerValidatorTest {
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
       cmdOneWay1.setDepartLocation("DCA");
       cmdOneWay1.setArrivalLocation("SFO");
-      cmdOneWay1.setNumPassengers("1");
-      cmdOneWay1.setDepartYear("2008");
-      cmdOneWay1.setDepartMonth("12");
-      cmdOneWay1.setDepartDay("20");
-      cmdOneWay1.setTripType(FlightSearchForCustomer.KEYWORD_oneWayTrip);
+      cmdOneWay1.setNumPassengers(1);
+      cmdOneWay1.setDepartYear(2008);
+      cmdOneWay1.setDepartMonth(12);
+      cmdOneWay1.setDepartDay(20);
+      cmdOneWay1.setTripType(FlightSearchForCustomer.ETripType.ONEWAY_TRIP);
       return cmdOneWay1;
    }
 
    private static FlightSearchForCustomer createOneWay2() {
       final FlightSearchForCustomer cmdOneWay2 = createOneWay1();
-      cmdOneWay2.setDepartFlightNo("157");
+      cmdOneWay2.setDepartFlightNo(157);
       return cmdOneWay2;
    }
 
@@ -41,26 +41,26 @@ public class FlightSearchForCustomerValidatorTest {
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
       cmdRound1.setDepartLocation("DCA");
       cmdRound1.setArrivalLocation("SFO");
-      cmdRound1.setNumPassengers("1");
-      cmdRound1.setDepartYear("2008"); // 04-Jan 2009 10:50 AM
-      cmdRound1.setDepartMonth("12");
-      cmdRound1.setDepartDay("20");
-      cmdRound1.setTripType(FlightSearchForCustomer.KEYWORD_roundTrip);
-      cmdRound1.setReturnYear("2008");
-      cmdRound1.setReturnMonth("12");
-      cmdRound1.setReturnDay("21");
+      cmdRound1.setNumPassengers(1);
+      cmdRound1.setDepartYear(2008); // 04-Jan 2009 10:50 AM
+      cmdRound1.setDepartMonth(12);
+      cmdRound1.setDepartDay(20);
+      cmdRound1.setTripType(FlightSearchForCustomer.ETripType.ROUND_TRIP);
+      cmdRound1.setReturnYear(2008);
+      cmdRound1.setReturnMonth(12);
+      cmdRound1.setReturnDay(21);
       return cmdRound1;
    }
 
    private static FlightSearchForCustomer createRound2() {
       final FlightSearchForCustomer cmdRound2 = createRound1();
-      cmdRound2.setDepartFlightNo("157");
+      cmdRound2.setDepartFlightNo(157);
       return cmdRound2;
    }
 
    private static FlightSearchForCustomer createRound3() {
       final FlightSearchForCustomer cmdRound3 = createRound2();
-      cmdRound3.setReturnFlightNo("157");
+      cmdRound3.setReturnFlightNo(157);
       return cmdRound3;
    }
 
@@ -190,7 +190,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setNumPassengers("XXXX");
+      dummy.setNumPassengers(-99);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -200,17 +200,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setNumPassengers("0");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadNumPassengers3() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createOneWay1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setNumPassengers(null);
+      dummy.setNumPassengers(0);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -220,7 +210,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartYear("2007");
+      dummy.setDepartYear(2007);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -230,17 +220,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartYear("XX");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadDepartYear3() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createOneWay1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartYear(null);
+      dummy.setDepartYear(-99);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -250,7 +230,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartMonth("0");
+      dummy.setDepartMonth(0);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -260,17 +240,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartMonth("A");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadDepartMonth3() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createOneWay1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartMonth(null);
+      dummy.setDepartMonth(-9);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -280,9 +250,9 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartYear("2009");
-      dummy.setDepartMonth("2");
-      dummy.setDepartDay("29"); // No exist
+      dummy.setDepartYear(2009);
+      dummy.setDepartMonth(2);
+      dummy.setDepartDay(29); // No exist
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -292,17 +262,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartDay("A");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadDepartDay3() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createOneWay1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartDay(null);
+      dummy.setDepartDay(-9);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -312,27 +272,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartDay("-1");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadTripType1() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createOneWay1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setTripType("");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadTripType2() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createOneWay1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setTripType("XX");
+      dummy.setDepartDay(-1);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -352,7 +292,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnYear("2007");
+      dummy.setReturnYear(2007);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -362,18 +302,8 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartYear("2009");
-      dummy.setReturnYear("2008");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadReturnYear3() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createRound1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnYear(null);
+      dummy.setDepartYear(2009);
+      dummy.setReturnYear(2008);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -383,17 +313,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnYear("XXX");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadReturnYear5() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createRound1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnYear("");
+      dummy.setReturnYear(-999);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -403,17 +323,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnMonth("11");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadReturnMonth2() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createRound1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnMonth("");
+      dummy.setReturnMonth(11);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -423,17 +333,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnMonth(null);
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadReturnMonth4() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createRound1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnMonth("14");
+      dummy.setReturnMonth(14);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -443,7 +343,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnDay("19");
+      dummy.setReturnDay(19);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -453,27 +353,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnDay("XX");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadReturnDay3() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createRound1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnDay("");
-      v.validate(dummy, errors);
-      assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadReturnDay4() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createRound1();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnDay(null);
+      dummy.setReturnDay(-99);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -483,9 +363,9 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound1();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnYear("2009");
-      dummy.setReturnMonth("2");
-      dummy.setReturnDay("29"); // No exist
+      dummy.setReturnYear(2009);
+      dummy.setReturnMonth(2);
+      dummy.setReturnDay(29); // No exist
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -495,7 +375,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay2();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartFlightNo("99");
+      dummy.setDepartFlightNo(99);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -505,7 +385,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay2();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartFlightNo("1001");
+      dummy.setDepartFlightNo(1001);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -515,29 +395,9 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createOneWay2();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartFlightNo("XXX");
+      dummy.setDepartFlightNo(-999);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
-   }
-
-   @Test
-   public void testValidateBadDepartFlightNo4() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createOneWay2();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartFlightNo("");
-      v.validate(dummy, errors);
-      assertFalse(errors.hasErrors()); // this is not assertTrue
-   }
-
-   @Test
-   public void testValidateBadDepartFlightNo5() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createOneWay2();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setDepartFlightNo(null);
-      v.validate(dummy, errors);
-      assertFalse(errors.hasErrors()); // this is not assertTrue
    }
 
    @Test
@@ -545,7 +405,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound2();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnFlightNo("99");
+      dummy.setReturnFlightNo(99);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -555,7 +415,7 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound2();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnFlightNo("1000");
+      dummy.setReturnFlightNo(1000);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
@@ -565,28 +425,9 @@ public class FlightSearchForCustomerValidatorTest {
       final Errors errors = createErrors();
       final FlightSearchForCustomer dummy = createRound2();
       // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnFlightNo("XXX");
+      dummy.setReturnFlightNo(-999);
       v.validate(dummy, errors);
       assertTrue(errors.hasErrors());
    }
 
-   @Test
-   public void testValidateBadReturnFlightNo4() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createRound2();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnFlightNo("");
-      v.validate(dummy, errors);
-      assertFalse(errors.hasErrors()); // this is not assertTrue
-   }
-
-   @Test
-   public void testValidateBadReturnFlightNo5() {
-      final Errors errors = createErrors();
-      final FlightSearchForCustomer dummy = createRound2();
-      // 157,AA,DCA,2008-12-20 07:45:00.000000000,SFO,2008-12-20 13:34:00.000000000,30,479.0,10,1357.0
-      dummy.setReturnFlightNo(null);
-      v.validate(dummy, errors);
-      assertFalse(errors.hasErrors()); // this is not assertTrue
-   }
 }

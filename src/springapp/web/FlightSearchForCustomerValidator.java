@@ -54,8 +54,8 @@ public class FlightSearchForCustomerValidator implements Validator {
 
          errors.rejectValue("tripType", "error.FlightSearchForCustomer.tripType.not-specified",
                "Trip type is not specified. It can be either "
-                     + FlightSearchForCustomer.KEYWORD_oneWayTrip + " or "
-                     + FlightSearchForCustomer.KEYWORD_roundTrip + ".");
+                     + FlightSearchForCustomer.ETripType.ONEWAY_TRIP.name() + " or "
+                     + FlightSearchForCustomer.ETripType.ROUND_TRIP.name() + ".");
          errors.rejectValue("numPassengers",
                "error.FlightSearchForCustomer.numPassengers.not-specified",
                "The number of passengers is not specified.");
@@ -77,14 +77,12 @@ public class FlightSearchForCustomerValidator implements Validator {
                      + o.getArrivalLocation() + ", does not exist.");
 
       // Checking: tripType
-      final boolean bOneWayTrip = FlightSearchForCustomer.KEYWORD_oneWayTrip.equalsIgnoreCase(o
-            .getTripType());
-      final boolean bRoundTrip = FlightSearchForCustomer.KEYWORD_roundTrip.equalsIgnoreCase(o
-            .getTripType());
+      final boolean bOneWayTrip = o.isOneWayTrip();
+      final boolean bRoundTrip = o.isRoundTrip();
       if (!bOneWayTrip && !bRoundTrip)
          errors.rejectValue("tripType", "error.FlightSearchForCustomer.tripType.outOfBound",
-               "Trip type must be either " + FlightSearchForCustomer.KEYWORD_roundTrip + " or "
-                     + FlightSearchForCustomer.KEYWORD_oneWayTrip + ".");
+               "Trip type must be either " + FlightSearchForCustomer.ETripType.ROUND_TRIP.name()
+                     + " or " + FlightSearchForCustomer.ETripType.ONEWAY_TRIP.name() + ".");
 
       // Checking: numPassengers
       try {
@@ -166,22 +164,10 @@ public class FlightSearchForCustomerValidator implements Validator {
       }
 
       // Checking: departFlightNo
-      {
-         final String departFlightNo = o.getDepartFlightNo();
-         try {
-            final int dFlightNo = Integer.valueOf(departFlightNo);
-            if (bFlagFlightNoIsForcedToBe3Digits && (dFlightNo < 100 || dFlightNo > 999))
-               errors.rejectValue("departFlightNo",
-                     "error.FlightSearchForCustomer.departFlightNo.not-specified",
-                     "Flight number of departing flight should be 3 digits.");
-         } catch (NumberFormatException e) {
-            if (null != departFlightNo && !departFlightNo.equals(""))
-               errors.rejectValue("departFlightNo",
-                     "error.FlightSearchForCustomer.departFlightNo.notInteger",
-                     "Flight number of departing flight should be 3 digits.");
-            // it might be before step 2, then just skip.
-         }
-      }
+      if (bFlagFlightNoIsForcedToBe3Digits && false == o.isValidDepartFlightNo())
+         errors.rejectValue("departFlightNo",
+               "error.FlightSearchForCustomer.departFlightNo.not-specified",
+               "Flight number of departing flight should be 3 digits.");
 
       if (false == bRoundTrip)
          return;
@@ -251,21 +237,9 @@ public class FlightSearchForCustomerValidator implements Validator {
       }
 
       // Checking: returnFlightNo
-      {
-         final String returnFlightNo = o.getReturnFlightNo();
-         try {
-            final int rFlightNo = Integer.valueOf(returnFlightNo);
-            if (bFlagFlightNoIsForcedToBe3Digits && (rFlightNo < 100 || rFlightNo > 999))
-               errors.rejectValue("returnFlightNo",
-                     "error.FlightSearchForCustomer.returnFlightNo.not-specified",
-                     "Flight number of returning flight should be 3 digits.");
-         } catch (NumberFormatException e) {
-            if (null != returnFlightNo && !returnFlightNo.equals(""))
-               errors.rejectValue("returnFlightNo",
-                     "error.FlightSearchForCustomer.returnFlightNo.notInteger",
-                     "Flight number of returning flight should be 3 digits.");
-            // it might be before step 2, then just skip.
-         }
-      }
+      if (bFlagFlightNoIsForcedToBe3Digits && false == o.isValidReturnFlightNo())
+         errors.rejectValue("returnFlightNo",
+               "error.FlightSearchForCustomer.returnFlightNo.not-specified",
+               "Flight number of returning flight should be 3 digits.");
    }
 }

@@ -26,10 +26,12 @@
     <tr>
       <td>* Name</td>
       <td><form:input path="username" /></td>
+      <td>jjohnson</td>
     </tr>
     <tr>
       <td>* Login password</td>
       <td><form:password path="password" /></td>
+      <td>harley</td>
     </tr>
     <tr>
       <td><input type="submit" align="center" value="Enter"></td>

@@ -1,58 +1,114 @@
 package springapp.web;
 
+import java.util.Calendar;
+
 public class FlightSearchForCustomer {
+
+   public enum ETripType {
+      ROUND_TRIP("Round trip"), ONEWAY_TRIP("One way trip");
+
+      private String description;
+
+      ETripType(String description) {
+         this.description = description;
+      }
+
+      public String getDescription() {
+         return description;
+      }
+   };
 
    private String departLocation;
    private String arrivalLocation;
 
-   private String departMonth = "1";
-   private String departDay = "1";
-   private String departYear = "2008";
-   private String departHour = "anytime";
+   private int departMonth;
+   private int departDay;
+   private int departYear;
+   private int departHour;
 
-   private String searchingHourRange = "3";
-   private String numPassengers = "1";
-   private String tripType = "roundTrip";
+   private int searchingHourRange = 3;
+   private int numPassengers = 1;
+   private ETripType tripType = ETripType.ROUND_TRIP;
 
-   private String returnMonth = "1";
-   private String returnDay = "1";
-   private String returnYear;
-   private String returnHour;
-   
-   private String departFlightNo = "";
-   private String returnFlightNo = "";
-   public final static String KEYWORD_roundTrip = "roundTrip";
-   public final static String KEYWORD_oneWayTrip = "oneWayTrip";
+   private int returnMonth;
+   private int returnDay;
+   private int returnYear;
+   private int returnHour;
 
-   public void setDepartMonth(String departMonth) {
+   private Integer departFlightNo = null;
+   private Integer returnFlightNo = null;
+
+   private static final Calendar calendar = Calendar.getInstance();
+
+   public FlightSearchForCustomer() {
+      final int curMonth = calendar.get(Calendar.MONTH) + 1; // 0-based.
+      final int curDay = calendar.get(Calendar.DAY_OF_MONTH);
+      final int curYear = calendar.get(Calendar.YEAR);
+
+      returnMonth = departMonth = curMonth;
+      returnDay = departDay = curDay;
+      returnYear = departYear = curYear;
+   }
+
+   public boolean isOneWayTrip() {
+      return getTripType() == ETripType.ONEWAY_TRIP;
+   }
+
+   public boolean isRoundTrip() {
+      return getTripType() == ETripType.ROUND_TRIP;
+   }
+
+   public boolean isNullDepartFlightNo() {
+      return (null == getDepartFlightNo());
+   }
+
+   public boolean isNullReturnFlightNo() {
+      return (null == getReturnFlightNo());
+   }
+
+   public boolean isValidDepartFlightNo() {
+      if (null == getDepartFlightNo())
+         return true;
+      final int no = getDepartFlightNo();
+      return (no >= 100 && no <= 999);
+   }
+
+   public boolean isValidReturnFlightNo() {
+      if (null == getReturnFlightNo())
+         return true;
+      final int no = getReturnFlightNo();
+      return (no >= 100 && no <= 999);
+   }
+
+   public void setDepartMonth(int departMonth) {
       this.departMonth = departMonth;
    }
 
-   public String getDepartMonth() {
+   public int getDepartMonth() {
       return departMonth;
    }
 
-   public void setDepartDay(String departDay) {
+   public void setDepartDay(int departDay) {
       this.departDay = departDay;
    }
 
-   public String getDepartDay() {
+   public int getDepartDay() {
       return departDay;
    }
 
-   public void setDepartYear(String departYear) {
+   public void setDepartYear(int departYear) {
       this.departYear = departYear;
    }
 
-   public String getDepartYear() {
+   public int getDepartYear() {
       return departYear;
    }
 
-   public void setDepartHour(String departHour) {
+   public void setDepartHour(int departHour) {
       this.departHour = departHour;
    }
 
-   public String getDepartHour() {
+   public int getDepartHour() {
       return departHour;
    }
 
@@ -64,35 +120,35 @@ public class FlightSearchForCustomer {
       return departLocation;
    }
 
-   public void setReturnMonth(String arrivalMonth) {
+   public void setReturnMonth(int arrivalMonth) {
       this.returnMonth = arrivalMonth;
    }
 
-   public String getReturnMonth() {
+   public int getReturnMonth() {
       return returnMonth;
    }
 
-   public void setReturnDay(String arrivalDay) {
+   public void setReturnDay(int arrivalDay) {
       this.returnDay = arrivalDay;
    }
 
-   public String getReturnDay() {
+   public int getReturnDay() {
       return returnDay;
    }
 
-   public void setReturnYear(String arrivalYear) {
+   public void setReturnYear(int arrivalYear) {
       this.returnYear = arrivalYear;
    }
 
-   public String getReturnYear() {
+   public int getReturnYear() {
       return returnYear;
    }
 
-   public void setReturnHour(String arrivalHour) {
+   public void setReturnHour(int arrivalHour) {
       this.returnHour = arrivalHour;
    }
 
-   public String getReturnHour() {
+   public int getReturnHour() {
       return returnHour;
    }
 
@@ -104,43 +160,54 @@ public class FlightSearchForCustomer {
       return arrivalLocation;
    }
 
-   public void setNumPassengers(String nPassengers) {
+   public void setNumPassengers(int nPassengers) {
       this.numPassengers = nPassengers;
    }
 
-   public String getNumPassengers() {
+   public int getNumPassengers() {
       return numPassengers;
    }
 
-   public void setTripType(String tripType) {
+   public void setTripType(ETripType tripType) {
       this.tripType = tripType;
    }
 
-   public String getTripType() {
+   public ETripType getTripType() {
       return tripType;
    }
 
-   public void setSearchingHourRange(String searchingTimeRange) {
+//   public void setTripType(String tripType) {
+//      if (ETripType.ONEWAY_TRIP.equals(tripType))
+//         this.tripType = ETripType.ONEWAY_TRIP;
+//      if (ETripType.ROUND_TRIP.equals(tripType))
+//         this.tripType = ETripType.ROUND_TRIP;
+//   }
+//
+//   public String getTripType() {
+//      return tripType.name();
+//   }
+
+   public void setSearchingHourRange(int searchingTimeRange) {
       this.searchingHourRange = searchingTimeRange;
    }
 
-   public String getSearchingHourRange() {
+   public int getSearchingHourRange() {
       return searchingHourRange;
    }
 
-   public void setDepartFlightNo(String departFlightNo) {
+   public void setDepartFlightNo(Integer departFlightNo) {
       this.departFlightNo = departFlightNo;
    }
 
-   public String getDepartFlightNo() {
+   public Integer getDepartFlightNo() {
       return departFlightNo;
    }
 
-   public void setReturnFlightNo(String returnFlightNo) {
+   public void setReturnFlightNo(Integer returnFlightNo) {
       this.returnFlightNo = returnFlightNo;
    }
 
-   public String getReturnFlightNo() {
+   public Integer getReturnFlightNo() {
       return returnFlightNo;
    }
 }
