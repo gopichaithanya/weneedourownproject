@@ -69,3 +69,8 @@ table.itineraryForCustomerReserved>tbody>tr>td,table.itineraryForCustomerBooked>
 	text-align: left;
 	border-bottom: 1px solid black;
 }
+
+td.noFlight {
+	color: green;
+	border: 1px solid black;
+}

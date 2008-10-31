@@ -24,11 +24,17 @@ public class ItineraryForCustomerControllerTest {
 
       final ItineraryForCustomerController ctl = new ItineraryForCustomerController();
       final ModelAndView mv = ctl.handleRequest(req, resp);
+
       final List<Flight> reserved = (List<Flight>) mv.getModel().get("reservedFlights");
       assertNotNull(reserved);
+      assertFalse(reserved.isEmpty());
+
       final List<Flight> booked = (List<Flight>) mv.getModel().get("bookedFlights");
       assertNotNull(booked);
+      assertFalse(booked.isEmpty());
+
       final List<Flight> canceled = (List<Flight>) mv.getModel().get("canceledFlights");
       assertNotNull(canceled);
+      assertFalse(canceled.isEmpty());
    }
 }

@@ -5,9 +5,10 @@ import java.util.List;
 
 import org.hibernate.Session;
 
+@SuppressWarnings("unchecked")
 public class AirlineManager 
 {
-	public static List<String[]> getAirlineCodeAndName() 
+   public static List<String[]> getAirlineCodeAndName() 
 	{
 	      final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 	      session.beginTransaction();

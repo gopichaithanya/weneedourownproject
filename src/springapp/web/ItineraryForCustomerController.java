@@ -31,7 +31,7 @@ public class ItineraryForCustomerController implements Controller {
       final List<Flight> booked = ItineraryManager.getBooked(userName);
       final List<Flight> canceled = ItineraryManager.getCanceled(userName);
 
-      final ModelAndView mv = new ModelAndView("itineraryForCustomer");
+      final ModelAndView mv = new ModelAndView("itineraryForCustomer", "aa", "A"+userName+"A");
       mv.addObject("reservedFlights", reserved);
       mv.addObject("bookedFlights", booked);
       mv.addObject("canceledFlights", canceled);
