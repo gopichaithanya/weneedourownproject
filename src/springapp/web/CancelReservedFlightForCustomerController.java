@@ -10,13 +10,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.view.RedirectView;
 
-public class ReserveFlightForCustomerController implements Controller {
+public class CancelReservedFlightForCustomerController implements Controller {
 
-   public static final String URL = "reserveFlightForCustomer.spring";
+   public static final String PARAM_FLIGHT_NO = "flightNo";
+   public static final String URL = "cancelReservedFlightForCustomer.spring";
 
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
          throws Exception {
-
       // Check login
       final HttpSession session = request.getSession();
       final String userName = LoginController.getUserName(session);
@@ -25,19 +25,15 @@ public class ReserveFlightForCustomerController implements Controller {
 
       final ModelAndView mv = new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
       {
-         boolean bRst = false;
-         Integer[] flights = null;
+         Integer flightNo = null;
          try {
-            flights = (Integer[]) session
-                  .getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER);
-         } catch (ClassCastException e) {
+            flightNo = Integer.valueOf(request.getParameter(PARAM_FLIGHT_NO));
+         } catch (NumberFormatException e) {
          }
 
-         if (null != flights && flights.length > 0) {
-            bRst = true;
-            for (final Object flight : flights)
-               bRst &= ItineraryManager.reserve(userName, (Integer) flight);
-         }
+         boolean bRst = false;
+         if (null != flightNo)
+            bRst = ItineraryManager.cancelReserved(userName, flightNo);
          mv.addObject("result", bRst);
       }
       return mv;

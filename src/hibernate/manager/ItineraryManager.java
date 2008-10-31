@@ -14,10 +14,6 @@ import org.hibernate.Session;
 @SuppressWarnings("unchecked")
 public class ItineraryManager {
 
-   public static final String CANCELED = "canceled";
-   public static final String BOOKED = "booked";
-   public static final String RESERVED = "reserved";
-
    public static boolean reserve(String userName, int flightNo) {
       boolean bRst = false;
       {
@@ -27,19 +23,23 @@ public class ItineraryManager {
          session.beginTransaction();
          final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
          if (null == it) {
-            bRst = true;
             final Customer customer = new Customer(userName);
             final Flight flight = new Flight(flightNo);
             final Itinerary newIt = new Itinerary(pKey, customer, flight);
-            newIt.setStatus(RESERVED);
+            newIt.setStatus(Itinerary.EStatus.RESERVED.toString());
             session.save(newIt);
+            bRst = true;
+         } else {
+            it.setStatus(Itinerary.EStatus.RESERVED.toString());
+            session.update(it);
+            bRst = true;
          }
          session.getTransaction().commit();
       }
       return bRst;
    }
 
-   public static boolean cancelReserve(String userName, int flightNo) {
+   public static boolean cancelReserved(String userName, int flightNo) {
       boolean bRst = false;
       {
          final ItineraryId pKey = new ItineraryId(flightNo, userName);
@@ -47,9 +47,10 @@ public class ItineraryManager {
          final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
          session.beginTransaction();
          final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
-         if (null != it) {
+         if (null != it && it.getStatus().equals(Itinerary.EStatus.RESERVED.toString())) {
             bRst = true;
-            session.delete(it);
+            it.setStatus(Itinerary.EStatus.CANCELED.toString());
+            session.update(it);
          }
          session.getTransaction().commit();
       }
@@ -57,15 +58,15 @@ public class ItineraryManager {
    }
 
    public static List<Flight> getReserved(String userName) {
-      return getItinerary(userName, RESERVED);
+      return getItinerary(userName, Itinerary.EStatus.RESERVED.toString());
    }
 
    public static List<Flight> getBooked(String userName) {
-      return getItinerary(userName, BOOKED);
+      return getItinerary(userName, Itinerary.EStatus.BOOKED.toString());
    }
 
    public static List<Flight> getCanceled(String userName) {
-      return getItinerary(userName, CANCELED);
+      return getItinerary(userName, Itinerary.EStatus.CANCELED.toString());
    }
 
    private static List<Flight> getItinerary(String userName, String status) {

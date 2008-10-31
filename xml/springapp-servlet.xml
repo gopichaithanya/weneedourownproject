@@ -47,6 +47,7 @@
   </bean>
   
   <bean name="/reserveFlightForCustomer.spring" class="springapp.web.ReserveFlightForCustomerController" />
+  <bean name="/cancelReservedFlightForCustomer.spring" class="springapp.web.CancelReservedFlightForCustomerController" />
   <bean name="/itineraryForCustomer.spring" class="springapp.web.ItineraryForCustomerController" />
   
   <bean name="/enterCreditCardInfo.spring" class="springapp.web.CreditCardController">

@@ -21,16 +21,19 @@ public class NullHttpServletRequest implements HttpServletRequest {
    private Hashtable parameters = new Hashtable();
    private HttpSession session = new NullHttpSession();
 
+   public NullHttpServletRequest() {
+   }
+
+   public NullHttpServletRequest(Hashtable param) {
+      parameters = param;
+   }
+
    public HttpSession getSession() {
       return session;
    }
 
    public HttpSession getSession(boolean arg0) {
       return session;
-   }
-
-   public void setParameter(String key, String value) {
-      parameters.put(key, value);
    }
 
    public String getParameter(String key) {

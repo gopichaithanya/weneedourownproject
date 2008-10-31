@@ -108,11 +108,11 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final HttpSession session = request.getSession();
       final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
 
-      int[] flights = null;
+      Integer[] flights = null;
       if (cmd.isOneWayTrip())
-         flights = new int[] { cmd.getDepartFlightNo() };
+         flights = new Integer[] { cmd.getDepartFlightNo() };
       else if (cmd.isRoundTrip())
-         flights = new int[] { cmd.getDepartFlightNo(), cmd.getReturnFlightNo() };
+         flights = new Integer[] { cmd.getDepartFlightNo(), cmd.getReturnFlightNo() };
 
       session.setAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER, flights);
 
