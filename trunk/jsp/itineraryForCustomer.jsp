@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
 </head>
 <body>
-<c:out value="${aa}"/>
+<c:out value="${aa}" />
 <jsp:include page="/WEB-INF/jsp/header1.jsp">
   <jsp:param name="title2" value="Itinerary" />
 </jsp:include>
@@ -41,7 +41,6 @@
 
       <tbody>
         <c:forEach items="${reservedFlights}" var="flight">
-
           <tr>
             <td><a href="http://maps.google.com"><c:out
               value="${flight.airportByDepartureLocation.name}" /> (<c:out
