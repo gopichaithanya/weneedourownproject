@@ -17,7 +17,7 @@
         <div style="float: left" align="left" class="title1">Proj4398: MakeMyTrip.Com - An
         Online Travel Reservation System</div>
         <div style="float: right" align="right"><a href="login.spring">Login</a> <a
-          href="register.spring">Register</a></div>
+          href="register.spring">Register</a> <a href="logout.spring">Logout</a></div>
         </td>
       </tr>
     </table>
