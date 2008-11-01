@@ -19,14 +19,15 @@ public class LoginValidator implements Validator {
 		
 		String username = customer.getUsername();
 		String password = customer.getPassword();
+		
 		boolean test = CustomerManager.login(username, password);
 		
 		// well, let's do nothing with the bean for now and return
         //return super.onSubmit(command);
 		if(test == false)
 		{
-			errors.rejectValue("username", "error.invalid.username", "User Name is invalid");
-			errors.rejectValue("password", "error.invalid.password", "Pass is invalid");
+			errors.rejectValue("username", "error.invalid.username", "User Name or");
+			errors.rejectValue("password", "error.invalid.password", "Password is invalid");
 		}
 			
 	}

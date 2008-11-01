@@ -31,9 +31,9 @@ public class LoginController extends SimpleFormController {
             .getAttribute(SessionConstants.LOGIN_REDIRECT_AFTER_LOGIN);
       session.removeAttribute(SessionConstants.LOGIN_REDIRECT_AFTER_LOGIN);
 
-      final String successView = (null == afterLogin || afterLogin.length() <= 0) ? getSuccessView()
-            : afterLogin;
-      final ModelAndView mv = new ModelAndView(new RedirectView(successView));
+//      final String successView = (null == afterLogin || afterLogin.length() <= 0) ? getSuccessView()
+//            : afterLogin;
+      final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
 
       session.setAttribute(SessionConstants.USERNAME, customer.getUsername());
       return mv;
