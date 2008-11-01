@@ -14,7 +14,7 @@ function cancelReserved(flightNo) {
 }
 
 function book(flightNo) {
-	  location.href="bookFlightForCustomer.spring?flightNo=" + flightNo;
+	  location.href="enterCreditCardInfo.spring?flightNo=" + flightNo;
 }
 </script>
 <body>

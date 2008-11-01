@@ -106,6 +106,13 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       mv.addObject("searchedReturnFlights", flights);
       final Flight departFlight = FlightManager.getFlight(cmd.getDepartFlightNo());
       mv.addObject("selectedDepartFlight", departFlight);
+
+      final List<Float> departLatLng = AirportManager.getAirportLatLong(cmd.getDepartLocation());
+      final List<Float> arrivalLatLng = AirportManager.getAirportLatLong(cmd.getArrivalLocation());
+      mv.addObject("departAirportLat", departLatLng.get(0));
+      mv.addObject("departAirportLng", departLatLng.get(1));
+      mv.addObject("arrivalAirportLat", arrivalLatLng.get(0));
+      mv.addObject("arrivalAirportLng", arrivalLatLng.get(1));
       return mv;
    }
 
