@@ -27,7 +27,7 @@ public class AirportManagerTest {
    @Test
    public void testGetAirportLatLong() {
       final List<Float> latLng = AirportManager.getAirportLatLong("YNG");
-      assertEquals(41.260555f, (float) latLng.get(0), 0.01);
-      assertEquals(-7.9322224f, (float) latLng.get(1), 0.01);
+      assertEquals(41.260556f, (float) latLng.get(0), 0.01); // 41-15-38.6480N
+      assertEquals(-80.678889f, (float) latLng.get(1), 0.01); // 080-40-44.7480W
    }
 }
