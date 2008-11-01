@@ -4,9 +4,22 @@
 <html>  
 	<head>  
 		<title>Enter Credit Card Information</title>  
+		<link rel="stylesheet" type="text/css" href="css/proj4398.css" />
 	</head>  
 
-	<body>  
+	<body>
+		<jsp:include page="/WEB-INF/jsp/header1.jsp">
+  			<jsp:param name="title2" value="Home > Register" />
+		</jsp:include>
+	
+		<spring:hasBindErrors name="customer">
+			<h3>You have errors in your input!</h3>
+				<font color="red">
+					<c:forEach items="${errors.allErrors}" var="error">
+						<spring:message code="${error.code}" text="${error.defaultMessage}"/><br/>
+					</c:forEach>
+		</font>
+		</spring:hasBindErrors>
 		<form:form commandName="customer" method="POST" action="enterCreditCardInfo.spring">
 			<table border="1">
 				<tr><td>Credit card number (16 digits)</td><td><form:input path="ccNo"/></td></tr>
@@ -14,6 +27,7 @@
 			  	<tr><td><input type="submit" align="center" value="Enter"></td></tr>
 			</table>
 		</form:form>
+		<%@ include file="/WEB-INF/jsp/footer.jsp"%>
 	</body>
 	  
 </html>

@@ -55,6 +55,9 @@
   	<property name="successView" value="ticket"/>
   	<property name="commandName" value="customer"/>
     <property name="commandClass" value="hibernate.Customer"/>
+    <property name="validator">
+  		<bean class="springapp.web.CreditCardValidator"/>
+  	</property>
   </bean>
   
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
