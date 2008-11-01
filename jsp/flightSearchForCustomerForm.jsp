@@ -7,78 +7,35 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Flight Searching</title>
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
-<script
-  src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAIQTJJux4wCMpPFMFJLPa7hSfYe32xyc8iPgGkKi4PlUHhtMrSRTWeQOoVYiS_PpdlIa8lKl6kZKMrA"
-  type="text/javascript"></script>
+<!--script type="text/javascript" src="js/MochiKit/MochiKit.js"></script-->
+<script type="text/javascript"
+  src="http://www.google.com/jsapi?key=ABQIAAAAIQTJJux4wCMpPFMFJLPa7hSfYe32xyc8iPgGkKi4PlUHhtMrSRTWeQOoVYiS_PpdlIa8lKl6kZKMrA"></script>
+<script type="text/javascript" src="js/proj4398.js"></script>
 <script language="JavaScript"><!--
-//
+ //
 
-var msIE = navigator.appName.indexOf("Microsoft");
-// Creates a marker at the given point with the given number label
-function createMarker(point, text) {
-  var marker = new GMarker(point);
-  GEvent.addListener(marker, "click", function() {
-   marker.openInfoWindowHtml(text);
-  });
-  return marker;
-}
+google.load("maps", "2");
 
-function getdegrees()
-{
-	var x=document.getElementById("airportlat");
-	if(x.length() > 0)
-		alert(x);
-}
-function load() {
-  if (GBrowserIsCompatible()) {
-    var map = new GMap2(document.getElementById("map"));
-map.addControl(new GSmallMapControl());
-map.addControl(new GMapTypeControl());
-    map.setCenter(new GLatLng(39.17536111111111, -75.33166666666666), 6);
-    directions = new GDirections(map);
-
-//	var x=document.getElementById("airportlat");
-//	if(x.length() > 0)
-//		alert(x);
-
-    // Download the data in data.xml and load it on the map. The format we
-    // expect is:
-    // <markers>
-    //   <marker lat="37.441" lng="-122.141"/>
-    //   <marker lat="37.322" lng="-121.213"/>
-    // </markers>
-    GDownloadUrl("phase1/airport.xml", function(data) {
-      var xml = GXml.parse(data);
-  var title = "";
-  var description = "";
-  var lat = "";
-  var lng = "";
-      var items = xml.documentElement.getElementsByTagName("Airport");
-      for (var i = 0; i < items.length; i++) {
-        var childNodes = items[i].childNodes;
-        for(var k=0; k<childNodes.length; k++) {
-        if(childNodes[k].nodeName == "Name")
-        	    title = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
-    	if(childNodes[k].nodeName == "Location")
-    	    description = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
-    	if(childNodes[k].nodeName == "Latitude")
-    	    lat = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
-	    	// alert("lat: " + lat);
-    	if(childNodes[k].nodeName == "Longitude")
-    	    lng = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
-	    	// alert("lng: " + lng);
-    }
-	
-        var point = new GLatLng(parseFloat(lat), parseFloat(lng));
-    var note = title + "<br>" + description;
-        map.addOverlay(createMarker(point, note));
-      }
-    });
-
-    directions.load("from: Baltimore, MD to: Washington, DC");
-  }
+//Call this function when the page has been loaded
+function initialize() {
+  var departMapObj = document.getElementById("departMap");
+  var arrivalMapObj = document.getElementById("arrivalMap");
   
+  if(null != departMapObj) {
+    var lat = document.getElementById("departAirportLat").value;
+    var lng = document.getElementById("departAirportLng").value;
+    var departMap = new google.maps.Map2(departMapObj);
+    departMap.setCenter(new google.maps.LatLng(lat, lng), 13);
+  }
+  if(null != arrivalMapObj) {
+    var lat = document.getElementById("arrivalAirportLat").value;
+    var lng = document.getElementById("arrivalAirportLng").value;
+    var arrivalMap = new google.maps.Map2(arrivalMapObj);
+    arrivalMap.setCenter(new google.maps.LatLng(lat, lng), 13);
+  }
 }
+
+google.setOnLoadCallback(initialize);
 
 
 function returnObjById( id )
@@ -107,16 +64,15 @@ function submitWithReturnFlightNo(no) {
   returnObjById("returnFlightNo").value = no;
   document.flightSearchForCustomerForm.submit();
 }
-// 
+//
 --></script>
 </head>
-<body onload="load()" onunload="GUnload()">
+<body onload="initialize()" onunload="GUnload()">
 
 <jsp:include page="/WEB-INF/jsp/header2.jsp">
   <jsp:param name="title2" value="Flight Search" />
 </jsp:include>
 
-<!-- div id="map" style="width: 600px; height: 400px"></div-->
 <c:choose>
   <c:when test="${isOneWayTrip}">
     <c:set var="totalSteps" value="2" />
@@ -275,10 +231,6 @@ function submitWithReturnFlightNo(no) {
 
   <form:hidden path="departFlightNo" id="departFlightNo" />
   <form:hidden path="returnFlightNo" id="returnFlightNo" />
-  <!-- 
-<input type="hidden" id="airportlat" value="<c:out value="${flight.airportByDepartureLocation_latitude2}" />"/><br />
-  				  <input type="hidden" id="airportlong" value="<c:out value="${flight.airportByDepartureLocation_longitude2}" />"/><br />
-             -->
   <form:errors path="departFlightNo" cssClass="error" />
   <form:errors path="returnFlightNo" cssClass="error" />
 
@@ -288,6 +240,26 @@ function submitWithReturnFlightNo(no) {
     value="${(searchedDepartFlights != null) && (empty flightSearchForCustomerCMD.departFlightNo)}" />
   <c:set var="step3"
     value="${(searchedReturnFlights != null) && (!empty flightSearchForCustomerCMD.departFlightNo)}" />
+
+  <c:choose>
+    <c:when test="${step2 || step3}">
+      <table border="1">
+        <tr>
+          <td>
+          <div id="departMap" style="width: 300px; height: 200px"></div>
+          </td>
+          <td>===></td>
+          <td>
+          <div id="arrivalMap" style="width: 300px; height: 200px"></div>
+          </td>
+        </tr>
+      </table>
+      <input type="hidden" id="departAirportLat" value="<c:out value="${departAirportLat}" />" />
+      <input type="hidden" id="departAirportLng" value="<c:out value="${departAirportLng}" />" />
+      <input type="hidden" id="arrivalAirportLat" value="<c:out value="${arrivalAirportLat}" />" />
+      <input type="hidden" id="arrivalAirportLng" value="<c:out value="${arrivalAirportLng}" />" />
+    </c:when>
+  </c:choose>
 
   <c:choose>
     <%-- step 1/3 --%>

@@ -2,10 +2,6 @@ package springapp.web;
 
 import static org.junit.Assert.*;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 
-@SuppressWarnings("unchecked")
 public class FlightSearchForCustomerFormControllerTest {
 
    @Before
@@ -46,10 +40,17 @@ public class FlightSearchForCustomerFormControllerTest {
    public void testOnSubmitAfterStepFirst() throws Exception {
       final FlightSearchForCustomer cmd = new FlightSearchForCustomer();
       cmd.setTripType(FlightSearchForCustomer.ETripType.ROUND_TRIP);
+      cmd.setDepartLocation("YNG");
+      cmd.setArrivalLocation("SGH");
       final FlightSearchForCustomerFormController submit = new FlightSearchForCustomerFormController();
+
       final ModelAndView mv = submit.onSubmit(null, null, cmd, null);
       assertNotNull(mv);
       assertTrue(mv.getModel().containsKey("searchedDepartFlights"));
+      assertEquals("148538.6480N", mv.getModel().get("departAirportLat"));
+      assertEquals("290444.7480W", mv.getModel().get("departAirportLng"));
+      assertEquals("143425.0450N", mv.getModel().get("arrivalAirportLat"));
+      assertEquals("301824.5765W", mv.getModel().get("arrivalAirportLng"));
    }
 
    @Test

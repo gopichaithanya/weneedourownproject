@@ -23,4 +23,11 @@ public class AirportManagerTest {
       assertEquals(567, airports.size());
       assertTrue(airports.get(0) instanceof Object);
    }
+
+   @Test
+   public void testGetAirportLatLong() {
+      final List<Float> latLng = AirportManager.getAirportLatLong("YNG");
+      assertEquals(41.260555f, (float) latLng.get(0), 0.01);
+      assertEquals(-7.9322224f, (float) latLng.get(1), 0.01);
+   }
 }
