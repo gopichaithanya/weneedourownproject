@@ -11,7 +11,7 @@
   
   <bean name="/register.spring" class="springapp.web.CustomerController">
     <property name="formView" value="register"/>
-    <property name="successView" value="registered"/>
+    <property name="successView" value="itineraryForCustomer.spring"/>
     <property name="commandName" value="customer"/>
     <property name="commandClass" value="hibernate.Customer"/>
     <property name="validator">
