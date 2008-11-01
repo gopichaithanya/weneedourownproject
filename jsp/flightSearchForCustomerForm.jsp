@@ -300,14 +300,14 @@ function submitWithReturnFlightNo(no) {
           <c:forEach items="${searchedDepartFlights}" var="flight">
 
             <tr>
-              <td><a href="http://maps.google.com"><c:out
+              <td><c:out
                 value="${flight.airportByDepartureLocation.name}" /> (<c:out
-                value="${flight.airportByDepartureLocation.code}" />)</a><br />
+                value="${flight.airportByDepartureLocation.code}" />)<br />
 
               <c:out value="${flight.departureTime}" /></td>
-              <td><a href="http://maps.google.com"><c:out
+              <td><c:out
                 value="${flight.airportByArrivalLocation.name}" /> (<c:out
-                value="${flight.airportByArrivalLocation.code}" />)</a><br />
+                value="${flight.airportByArrivalLocation.code}" />)<br />
               <c:out value="${flight.arrivalTime}" />
               <div>(<c:out value="${flight.durationHours}" /> hours)</div>
               </td>
@@ -362,13 +362,13 @@ function submitWithReturnFlightNo(no) {
 
         <tbody>
           <tr>
-            <td><a href="http://maps.google.com"><c:out
+            <td><c:out
               value="${selectedDepartFlight.airportByDepartureLocation.name}" /> (<c:out
-              value="${selectedDepartFlight.airportByDepartureLocation.code}" />)</a><br />
+              value="${selectedDepartFlight.airportByDepartureLocation.code}" />)<br />
             <c:out value="${selectedDepartFlight.departureTime}" /></td>
-            <td><a href="http://maps.google.com"><c:out
+            <td><c:out
               value="${selectedDepartFlight.airportByArrivalLocation.name}" /> (<c:out
-              value="${selectedDepartFlight.airportByArrivalLocation.code}" />)</a><br />
+              value="${selectedDepartFlight.airportByArrivalLocation.code}" />)<br />
             <c:out value="${selectedDepartFlight.arrivalTime}" />
             <div>(<c:out value="${selectedDepartFlight.durationHours}" /> hours)</div>
             </td>
@@ -411,13 +411,13 @@ function submitWithReturnFlightNo(no) {
         <tbody>
           <c:forEach items="${searchedReturnFlights}" var="flight">
             <tr>
-              <td><a href="http://maps.google.com"><c:out
+              <td><c:out
                 value="${flight.airportByDepartureLocation.name}" /> (<c:out
-                value="${flight.airportByDepartureLocation.code}" />)</a><br />
+                value="${flight.airportByDepartureLocation.code}" />)<br />
               <c:out value="${flight.departureTime}" /></td>
-              <td><a href="http://maps.google.com"><c:out
+              <td><c:out
                 value="${flight.airportByArrivalLocation.name}" /> (<c:out
-                value="${flight.airportByArrivalLocation.code}" />)</a><br />
+                value="${flight.airportByArrivalLocation.code}" />)<br />
               <c:out value="${flight.arrivalTime}" />
               <div>(<c:out value="${flight.durationHours}" /> hours)</div>
               </td>
