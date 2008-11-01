@@ -36,9 +36,15 @@ public class AirportManager {
       session.close();
       for (final Object val : latLng) {
          final String v = val.toString();
-         final float degree = Float.valueOf(v.substring(0, 2));
-         final float min = Float.valueOf(v.substring(3, 5));
-         final float sec = Float.valueOf(v.substring(6, 8));
+         int begin = 0;
+         int end = v.indexOf('-');
+         final float degree = Float.valueOf(v.substring(begin, end));
+         begin = end +1;
+         end = v.indexOf('-', begin);
+         final float min = Float.valueOf(v.substring(begin, end));
+         begin = end +1;
+         end = v.indexOf('.', begin);
+         final float sec = Float.valueOf(v.substring(begin, end));
          float absNum = degree + (min + (sec / 60)) / 60;
          final char lastChar = v.charAt(v.length() - 1);
          if (lastChar == 'W' || lastChar == 'S')
