@@ -47,10 +47,10 @@ public class FlightSearchForCustomerFormControllerTest {
       final ModelAndView mv = submit.onSubmit(null, null, cmd, null);
       assertNotNull(mv);
       assertTrue(mv.getModel().containsKey("searchedDepartFlights"));
-      assertEquals("148538.6480N", mv.getModel().get("departAirportLat"));
-      assertEquals("290444.7480W", mv.getModel().get("departAirportLng"));
-      assertEquals("143425.0450N", mv.getModel().get("arrivalAirportLat"));
-      assertEquals("301824.5765W", mv.getModel().get("arrivalAirportLng"));
+      assertEquals(41.260555f, (Float) mv.getModel().get("departAirportLat"), 0.01);
+      assertEquals(-7.932224f, (Float) mv.getModel().get("departAirportLng"), 0.01);
+      assertEquals(39.84028f, (Float) mv.getModel().get("arrivalAirportLat"), 0.01);
+      assertEquals(-7.91611f, (Float)mv.getModel().get("arrivalAirportLng"), 0.01);
    }
 
    @Test

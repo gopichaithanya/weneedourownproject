@@ -18,8 +18,8 @@ public class FlightSearchForCustomer {
       }
    };
 
-   private String departLocation;
-   private String arrivalLocation;
+   private String departLocation = "IAD";
+   private String arrivalLocation = "JFK";
 
    private int departMonth;
    private int departDay;
