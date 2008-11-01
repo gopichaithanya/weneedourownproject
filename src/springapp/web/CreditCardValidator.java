@@ -1,7 +1,12 @@
 package springapp.web;
 
+import hibernate.Customer;
+
 import java.net.*;
 import java.io.*;
+
+import org.springframework.validation.Validator;
+import org.springframework.validation.Errors;
 
 /**
  * This class represents an HTTP client class that sends credit card information
@@ -12,8 +17,11 @@ import java.io.*;
  *
  * @author Nick Duan
  */
-public class CreditCardValidator {
+public class CreditCardValidator implements Validator{
 
+	public boolean supports(Class aClass) {
+		return aClass.equals(Customer.class);
+	}
 
 	/**
 	 * Execute this method using the following arguments: <br>
@@ -25,23 +33,35 @@ public class CreditCardValidator {
 	 *	 <li>args[4]: password</li>
 	 * </ul>
 	 */
-    public static void main(String[] args)    {
+    public void validate(Object obj, Errors errors) {
 
-		/*if(args.length < 5) {
-			System.out.println("Usage: java ValidateCC url cardnumber expdate username password");
+    	Customer customer = (Customer)obj;
+    	
+    	if (customer.getCcNo() == null) {
+    		errors.rejectValue("ccNo", "error.invalid.ccNo", "Credit card number is blank");
 			return;
-		}*/
-
-		/*String urlString = args[0];
-    	long cardNumber = Long.parseLong(args[1]);
-		int expDate = Integer.parseInt(args[2]);
-		String temp = args[3] + ":" + args[4];
-		*/
-		String urlString = "http://localhost:8080/validation/ValidateCC";
-		long cardNumber = Long.parseLong("1111111111111111");
-		int expDate = Integer.parseInt("2222");
+    	}
+    	else if (((Long)customer.getCcNo()).toString().length() != 16) {
+			errors.rejectValue("ccNo", "error.invalid.ccNo", "Invalid Credit card number");
+			return;
+		}
+		
+    	if (customer.getExpiration() == null) {
+    		errors.rejectValue("expiration", "error.invalid.expiration", "Expiration date is blank");
+			return;
+    	}
+    	else if (((Integer)customer.getExpiration()).toString().length() != 4) {
+			errors.rejectValue("expiration", "error.invalid.expiration", "Invalid expiration date");
+			return;
+		}
+    	
+    	String urlString = "http://localhost:8080/validation/ValidateCC";
+		long cardNumber = customer.getCcNo(); 
+		//long cardNumber = Long.parseLong("1111111111111111");
+		int expDate = customer.getExpiration();
+		//int expDate = Integer.parseInt("2222");
 		String temp = "tomcat:tomcat";
-
+			
 		String encodedPassword = (new sun.misc.BASE64Encoder()).encode(temp.getBytes());
 
 
@@ -69,10 +89,11 @@ public class CreditCardValidator {
 
             if(line != null && line.equals("VALID"))
                 System.out.println("Valid card number " + cardNumber + " with exp date " + expDate);
-            else
+            else {
                 System.out.println("Invalid card number " + cardNumber + " with exp date " + expDate);
-
-
+                errors.rejectValue("ccNo", "error.invalid.ccNo", "Invalid credit card or expiration date");
+            }
+            
             responseReader.close();
             connection.disconnect();
         }
