@@ -18,21 +18,39 @@ google.load("maps", "2");
 
 //Call this function when the page has been loaded
 function initialize() {
-  var departMapObj = document.getElementById("departMap");
-  var arrivalMapObj = document.getElementById("arrivalMap");
+  if (false == GBrowserIsCompatible()) return;
+		  
+  var mapObj = document.getElementById("map");
   
-  if(null != departMapObj) {
-    var lat = document.getElementById("departAirportLat").value;
-    var lng = document.getElementById("departAirportLng").value;
-    var departMap = new google.maps.Map2(departMapObj);
-    departMap.setCenter(new google.maps.LatLng(lat, lng), 13);
-  }
-  if(null != arrivalMapObj) {
-    var lat = document.getElementById("arrivalAirportLat").value;
-    var lng = document.getElementById("arrivalAirportLng").value;
-    var arrivalMap = new google.maps.Map2(arrivalMapObj);
-    arrivalMap.setCenter(new google.maps.LatLng(lat, lng), 13);
-  }
+  if(null == mapObj) return;
+
+  var dLat = document.getElementById("departAirportLat").value;
+  var dLng = document.getElementById("departAirportLng").value;
+  var aLat = document.getElementById("arrivalAirportLat").value;
+  var aLng = document.getElementById("arrivalAirportLng").value;
+  var dLatLng = new GLatLng(dLat, dLng);
+  var aLatLng = new GLatLng(aLat, aLng);
+  var center = new GLatLng((parseFloat(dLat)+parseFloat(aLat))/2, (parseFloat(dLng)+parseFloat(aLng))/2);
+  var bound = new GLatLngBounds(dLatLng, aLatLng);
+  
+  var iconDepart = new GIcon(G_DEFAULT_ICON);
+  var iconArrival = new GIcon(G_DEFAULT_ICON);
+  iconDepart.image = "phase2/images/airportDepart.png";
+  iconArrival.image = "phase2/images/airportArrival.png";
+  var markerDepart = new GMarker(dLatLng, { icon:iconDepart });
+  var markerArrival = new GMarker(aLatLng, { icon:iconArrival });
+
+  var polyOptions = {geodesic:true};
+  var polyline = new GPolyline([ dLatLng, aLatLng ], "#ff0000", 10, 1, polyOptions);
+
+  var map = new GMap2(mapObj);
+  var depth = map.getBoundsZoomLevel(bound);
+  map.setCenter(center, depth);
+  map.addControl(new GSmallMapControl());
+  map.addControl(new GMapTypeControl());
+  map.addOverlay(markerDepart);
+  map.addOverlay(markerArrival);
+  map.addOverlay(polyline);
 }
 
 google.setOnLoadCallback(initialize);
@@ -246,11 +264,7 @@ function submitWithReturnFlightNo(no) {
       <table border="1">
         <tr>
           <td>
-          <div id="departMap" style="width: 300px; height: 200px"></div>
-          </td>
-          <td>===></td>
-          <td>
-          <div id="arrivalMap" style="width: 300px; height: 200px"></div>
+          <div id="map" style="width: 600px; height: 400px"></div>
           </td>
         </tr>
       </table>
@@ -300,13 +314,11 @@ function submitWithReturnFlightNo(no) {
           <c:forEach items="${searchedDepartFlights}" var="flight">
 
             <tr>
-              <td><c:out
-                value="${flight.airportByDepartureLocation.name}" /> (<c:out
+              <td><c:out value="${flight.airportByDepartureLocation.name}" /> (<c:out
                 value="${flight.airportByDepartureLocation.code}" />)<br />
 
               <c:out value="${flight.departureTime}" /></td>
-              <td><c:out
-                value="${flight.airportByArrivalLocation.name}" /> (<c:out
+              <td><c:out value="${flight.airportByArrivalLocation.name}" /> (<c:out
                 value="${flight.airportByArrivalLocation.code}" />)<br />
               <c:out value="${flight.arrivalTime}" />
               <div>(<c:out value="${flight.durationHours}" /> hours)</div>
@@ -362,12 +374,10 @@ function submitWithReturnFlightNo(no) {
 
         <tbody>
           <tr>
-            <td><c:out
-              value="${selectedDepartFlight.airportByDepartureLocation.name}" /> (<c:out
+            <td><c:out value="${selectedDepartFlight.airportByDepartureLocation.name}" /> (<c:out
               value="${selectedDepartFlight.airportByDepartureLocation.code}" />)<br />
             <c:out value="${selectedDepartFlight.departureTime}" /></td>
-            <td><c:out
-              value="${selectedDepartFlight.airportByArrivalLocation.name}" /> (<c:out
+            <td><c:out value="${selectedDepartFlight.airportByArrivalLocation.name}" /> (<c:out
               value="${selectedDepartFlight.airportByArrivalLocation.code}" />)<br />
             <c:out value="${selectedDepartFlight.arrivalTime}" />
             <div>(<c:out value="${selectedDepartFlight.durationHours}" /> hours)</div>
@@ -411,12 +421,10 @@ function submitWithReturnFlightNo(no) {
         <tbody>
           <c:forEach items="${searchedReturnFlights}" var="flight">
             <tr>
-              <td><c:out
-                value="${flight.airportByDepartureLocation.name}" /> (<c:out
+              <td><c:out value="${flight.airportByDepartureLocation.name}" /> (<c:out
                 value="${flight.airportByDepartureLocation.code}" />)<br />
               <c:out value="${flight.departureTime}" /></td>
-              <td><c:out
-                value="${flight.airportByArrivalLocation.name}" /> (<c:out
+              <td><c:out value="${flight.airportByArrivalLocation.name}" /> (<c:out
                 value="${flight.airportByArrivalLocation.code}" />)<br />
               <c:out value="${flight.arrivalTime}" />
               <div>(<c:out value="${flight.durationHours}" /> hours)</div>
