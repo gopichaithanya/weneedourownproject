@@ -48,9 +48,9 @@ public class FlightSearchForCustomerFormControllerTest {
       assertNotNull(mv);
       assertTrue(mv.getModel().containsKey("searchedDepartFlights"));
       assertEquals(41.260555f, (Float) mv.getModel().get("departAirportLat"), 0.01);
-      assertEquals(-7.932224f, (Float) mv.getModel().get("departAirportLng"), 0.01);
+      assertEquals(-80.678889f, (Float) mv.getModel().get("departAirportLng"), 0.01);
       assertEquals(39.84028f, (Float) mv.getModel().get("arrivalAirportLat"), 0.01);
-      assertEquals(-7.91611f, (Float)mv.getModel().get("arrivalAirportLng"), 0.01);
+      assertEquals(-83.8399f, (Float)mv.getModel().get("arrivalAirportLng"), 0.01);
    }
 
    @Test
