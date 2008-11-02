@@ -33,14 +33,15 @@ public class FlightManager {
     * @param flight - the flight to be added
     */
    public static void addFlight(Flight flight) {
-      Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-      session.beginTransaction();
+      
       try {
+    	 Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+         session.beginTransaction();
          session.save(flight);
+         session.getTransaction().commit();
       } catch (HibernateException e) {
          e.printStackTrace();
       }
-      session.getTransaction().commit();
    }
 
    /**
@@ -48,16 +49,15 @@ public class FlightManager {
     * @param flight - the flight to be removed
     */
    public void removeFlight(Flight flight) {
-      Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-      session.beginTransaction();
-
+      
       try {
+    	 Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+         session.beginTransaction();
          session.delete(flight);
+         session.getTransaction().commit();
       } catch (HibernateException e) {
          e.printStackTrace();
-      }
-
-      session.getTransaction().commit();
+      } 
    }
 
    /**
