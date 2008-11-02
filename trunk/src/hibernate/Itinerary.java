@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Itinerary implements java.io.Serializable {
 
    public enum EStatus {
-      CANCELED("cancled"), BOOKED("booked"), RESERVED("reserved");
+      CANCELED("canceled"), BOOKED("booked"), RESERVED("reserved");
 
       private static final HashMap<String, EStatus> reverseMap = new HashMap<String, EStatus>();
 
