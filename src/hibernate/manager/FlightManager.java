@@ -32,7 +32,7 @@ public class FlightManager {
     * Adds a flight to the database
     * @param flight - the flight to be added
     */
-   public void addFlight(Flight flight) {
+   public static void addFlight(Flight flight) {
       Session session = HibernateUtil.getSessionFactory().getCurrentSession();
       session.beginTransaction();
       try {
