@@ -19,9 +19,7 @@ google.load("maps", "2");
 //Call this function when the page has been loaded
 function initialize() {
   if (false == GBrowserIsCompatible()) return;
-		  
   var mapObj = document.getElementById("map");
-  
   if(null == mapObj) return;
 
   var dLat = document.getElementById("departAirportLat").value;
@@ -105,27 +103,30 @@ function submitWithReturnFlightNo(no) {
       value="${totalSteps}" /> steps)</caption>
     <tbody>
       <tr>
-        <th>Leaving from</th>
-        <td><form:select path="departLocation">
+        <th>Leaving from <img src="phase2/images/airportDepart.png" width="17" height="17" /></th>
+        <td>
+        <div><form:select path="departLocation">
           <c:forEach items="${airports}" var="airport">
             <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
           </c:forEach>
-        </form:select> <input type="button" value="Search Airport" /> <form:errors path="departLocation"
-          cssClass="error" /></td>
+        </form:select> <input type="button" value="Search Airport" /></div>
+        <form:errors path="departLocation" cssClass="error" /></td>
       </tr>
       <tr>
-        <th>Going to</th>
-        <td><form:select path="arrivalLocation">
+        <th>Going to <img src="phase2/images/airportArrival.png" width="17" height="17" /></th>
+        <td>
+        <div><form:select path="arrivalLocation">
           <c:forEach items="${airports}" var="airport">
             <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
           </c:forEach>
-        </form:select> <input type="button" value="Search Airport" /> <form:errors path="arrivalLocation"
-          cssClass="error" /></td>
+        </form:select> <input type="button" value="Search Airport" /></div>
+        <form:errors path="arrivalLocation" cssClass="error" /></td>
       </tr>
 
       <tr>
         <th>Departing Date</th>
-        <td><form:select path="departMonth">
+        <td>
+        <div><form:select path="departMonth">
           <form:option value="1" label="Jan" />
           <form:option value="2" label="Feb" />
           <form:option value="3" label="Mar" />
@@ -146,13 +147,14 @@ function submitWithReturnFlightNo(no) {
           <c:forEach var="year" begin="2008" end="2011" step="1">
             <form:option value="${year}" />
           </c:forEach>
-        </form:select> <input type="button" value="Calendar" /> <form:errors path="departMonth" cssClass="error" />
-        <form:errors path="departDay" cssClass="error" /> <form:errors path="departYear"
-          cssClass="error" /></td>
+        </form:select> <input type="button" value="Calendar" /></div>
+        <form:errors path="departMonth" cssClass="error" /> <form:errors path="departDay"
+          cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
       </tr>
       <tr>
         <th>Departing Time</th>
-        <td><form:select path="departHour">
+        <td>
+        <div><form:select path="departHour">
           <form:option value="anytime" label="Anytime" />
           <c:forEach var="hour" begin="0" end="11" step="1">
             <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
@@ -160,7 +162,8 @@ function submitWithReturnFlightNo(no) {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select></td>
+        </form:select></div>
+        </td>
       </tr>
 
       <tr>
@@ -168,10 +171,12 @@ function submitWithReturnFlightNo(no) {
         <td>
         <table border="1">
           <tr>
-            <td><c:forEach items="${tripTypes}" var="type">
+            <td>
+            <div><c:forEach items="${tripTypes}" var="type">
               <form:radiobutton path="tripType" value="${type}" id="${type}" />
               <label for="${type}">${type.description}</label>
-            </c:forEach> <form:errors path="tripType" cssClass="error" /></td>
+            </c:forEach></div>
+            <form:errors path="tripType" cssClass="error" /></td>
           </tr>
         </table>
         </td>
@@ -179,7 +184,8 @@ function submitWithReturnFlightNo(no) {
 
       <tr>
         <th>Returning Date</th>
-        <td><form:select path="returnMonth">
+        <td>
+        <div><form:select path="returnMonth">
           <form:option value="1" label="Jan" />
           <form:option value="2" label="Feb" />
           <form:option value="3" label="Mar" />
@@ -200,13 +206,14 @@ function submitWithReturnFlightNo(no) {
           <c:forEach var="year" begin="2008" end="2011" step="1">
             <form:option value="${year}" />
           </c:forEach>
-        </form:select> <input type="button" value="Calendar" /> <form:errors path="returnMonth" cssClass="error" />
-        <form:errors path="returnDay" cssClass="error" /> <form:errors path="returnYear"
-          cssClass="error" /></td>
+        </form:select> <input type="button" value="Calendar" /></div>
+        <form:errors path="returnMonth" cssClass="error" /> <form:errors path="returnDay"
+          cssClass="error" /> <form:errors path="returnYear" cssClass="error" /></td>
       </tr>
       <tr>
         <th>Returning Time</th>
-        <td><form:select path="returnHour">
+        <td>
+        <div><form:select path="returnHour">
           <form:option value="anytime" label="Anytime" />
           <c:forEach var="hour" begin="0" end="11" step="1">
             <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
@@ -214,13 +221,15 @@ function submitWithReturnFlightNo(no) {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select></td>
+        </form:select></div>
+        </td>
       </tr>
 
       <tr>
         <th>The number of<br />
         passengers</th>
         <td>
+        <div>
         <table border="1">
           <tr>
             <c:forEach var="nPerson" begin="1" end="8" step="1">
@@ -236,6 +245,7 @@ function submitWithReturnFlightNo(no) {
             </select> <form:errors path="numPassengers" cssClass="error" /></td>
           </tr>
         </table>
+        </div>
         </td>
       </tr>
 
@@ -264,7 +274,7 @@ function submitWithReturnFlightNo(no) {
       <table border="1">
         <tr>
           <td>
-          <div id="map" style="width: 600px; height: 400px"></div>
+          <div id="map" style="width: 600px; height: 300px"></div>
           </td>
         </tr>
       </table>
