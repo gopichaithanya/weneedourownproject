@@ -30,7 +30,13 @@
       class="title2"><%=request.getParameter("title2")%></span></td>
   </tr>
   <tr>
-    <td valign="top" align="center"><img src="MakeMyTrip/images/image001.jpg" />
+    <td valign="top" align="center">
+    <table border="1">
+      <tr>
+        <td align="left"><%@ include file="/WEB-INF/jsp/links.jsp"%></td>
+      </tr>
+    </table>
+    <img src="MakeMyTrip/images/image001.jpg" />
     <p><font color="#99cc00"><b>Find airline tickets.....</b></font></p>
     <p><font color="#969696"><b>.... for your dream<br />
     destinations at<br />

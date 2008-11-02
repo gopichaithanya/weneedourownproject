@@ -37,4 +37,8 @@ public class ItineraryForCustomerControllerTest {
       assertNotNull(canceled);
       assertFalse(canceled.isEmpty());
    }
+   
+   @Test
+   public void testHandleRequestNoLogin() {
+   }
 }

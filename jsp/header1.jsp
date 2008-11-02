@@ -31,12 +31,11 @@
   </tr>
   <tr>
     <td valign="top">
-    <UL>
-      <LI><a href="login.spring">Login</a></LI>
-      <LI><a href="register.spring">Register</a></LI>
-      <LI><a href="flightSearchForCustomerForm.spring">Flight Search</a></LI>
-      <LI><a href="itineraryForCustomer.spring">Itinerary</a></LI>
-    </UL>
+    <table border="1">
+      <tr>
+        <td align="left"><%@ include file="/WEB-INF/jsp/links.jsp"%></td>
+      </tr>
+    </table>
     <img width="187" src="phase2/images/img95560953.jpg" />
     <p><font color="#99cc00"><b>Find airline tickets.....</b></font></p>
     <p><font color="#969696"><b>.... for your dream<br />

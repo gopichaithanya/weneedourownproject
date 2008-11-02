@@ -2,6 +2,9 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <%@page import="java.util.List"%>
 <html>
+<head>Adding flight</head>
+<link rel="stylesheet" type="text/css" href="css/proj4398.css" />
+<script type="text/javascript" src="js/proj4398.js"></script>
 <body>
 <jsp:include page="/WEB-INF/jsp/header2.jsp">
   <jsp:param name="title2" value="Flight Search" />
