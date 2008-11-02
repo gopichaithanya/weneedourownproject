@@ -29,7 +29,11 @@ function initialize() {
   var dLatLng = new GLatLng(dLat, dLng);
   var aLatLng = new GLatLng(aLat, aLng);
   var center = new GLatLng((parseFloat(dLat)+parseFloat(aLat))/2, (parseFloat(dLng)+parseFloat(aLng))/2);
-  var bound = new GLatLngBounds(dLatLng, aLatLng);
+  var n = Math.max(dLatLng.lat(), aLatLng.lat());
+  var s = Math.min(dLatLng.lat(), aLatLng.lat());
+  var e = Math.max(dLatLng.lng(), aLatLng.lng());
+  var w = Math.min(dLatLng.lng(), aLatLng.lng());
+  var bound = new GLatLngBounds(new GLatLng(s,w), new GLatLng(n,e));
   
   var iconDepart = new GIcon(G_DEFAULT_ICON);
   var iconArrival = new GIcon(G_DEFAULT_ICON);
