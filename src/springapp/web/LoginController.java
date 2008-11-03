@@ -33,7 +33,12 @@ public class LoginController extends SimpleFormController {
 
 //      final String successView = (null == afterLogin || afterLogin.length() <= 0) ? getSuccessView()
 //            : afterLogin;
-      final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
+      String username = customer.getUsername();
+      ModelAndView mv = new ModelAndView();
+      if(username.compareTo("administrator") == 0)
+    	  mv = new ModelAndView(new RedirectView("addflight.spring"));
+      else
+    	  mv = new ModelAndView(new RedirectView(getSuccessView()));
 
       session.setAttribute(SessionConstants.USERNAME, customer.getUsername());
       return mv;

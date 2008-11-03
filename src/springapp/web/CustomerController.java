@@ -31,9 +31,15 @@ public class CustomerController extends SimpleFormController {
 		 final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
 		Customer customer = (Customer)command;
 		CustomerManager.register(customer);
-		Cookie c = new Cookie("username", customer.getUsername());
-		response.addCookie(c);
+		
+		 final HttpSession session = request.getSession();
 
+	      final String afterLogin = (String) session
+	            .getAttribute(SessionConstants.LOGIN_REDIRECT_AFTER_LOGIN);
+	      session.removeAttribute(SessionConstants.LOGIN_REDIRECT_AFTER_LOGIN);
+		//Cookie c = new Cookie("username", customer.getUsername());
+		//response.addCookie(c);
+	      session.setAttribute(SessionConstants.USERNAME, customer.getUsername());
 		//HttpSession session = request.getSession(true);
 		//session.setAttribute("username", customer.getUsername());
 		
@@ -41,6 +47,13 @@ public class CustomerController extends SimpleFormController {
 		
 		
 	}
+	 
+	   static public String getUserName(HttpSession session) {
+		      final String userId = (String) session.getAttribute(SessionConstants.USERNAME);
+		      if (null == userId || userId.length() <= 0)
+		         return null;
+		      return userId;
+		   }
 	
 	
 }
