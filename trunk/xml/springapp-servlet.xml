@@ -9,6 +9,8 @@
 
   <bean name="/hello.spring" class="springapp.web.HelloController"/>
   <bean name="/logout.spring" class="springapp.web.LogoutController"/>
+  <bean name="/maps.spring" class="springapp.web.MapController"/>
+  
   <bean name="/register.spring" class="springapp.web.CustomerController">
     <property name="formView" value="register"/>
     <property name="successView" value="itineraryForCustomer.spring"/>

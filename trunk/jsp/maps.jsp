@@ -1,14 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>Airport Listing</title>
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAIQTJJux4wCMpPFMFJLPa7hSfYe32xyc8iPgGkKi4PlUHhtMrSRTWeQOoVYiS_PpdlIa8lKl6kZKMrA"
-      type="text/javascript"></script>
-    <script type="text/javascript"><!--
-
-    //<![CDATA[
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<html>
+<head>
+ <title>Airport Listing</title>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAIQTJJux4wCMpPFMFJLPa7hSfYe32xyc8iPgGkKi4PlUHhtMrSRTWeQOoVYiS_PpdlIa8lKl6kZKMrA"
+      type="text/javascript">
+</script>
+<script type="text/javascript">
 
 	var msIE = navigator.appName.indexOf("Microsoft");
 	// Create a base icon for all of our markers that specifies the
@@ -87,7 +85,7 @@
         //   <marker lat="37.441" lng="-122.141"/>
         //   <marker lat="37.322" lng="-121.213"/>
         // </markers>
-        GDownloadUrl("airport.xml", function(data) {
+        GDownloadUrl("phase1/airport.xml", function(data) {
           var xml = GXml.parse(data);
 	  var title = "";
 	  var description = "";
@@ -108,6 +106,8 @@
             	    //gicon[mystr] = new GIcon(G_DEFAULT_ICON, mainimage);
             	    
 	        }
+	        if(childNodes[k].nodeName == "Code")
+	    	    code = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
 	    	if(childNodes[k].nodeName == "Location")
 	    	    description = (msIE>=0) ? childNodes[k].text : childNodes[k].textContent;
 	    	if(childNodes[k].nodeName == "Latitude")
@@ -119,7 +119,7 @@
 	    }
 		
             var point = new GLatLng(parseFloat(lat), parseFloat(lng));
-	    	var note ="Aiport "+ i + "<br>"+ title + "<br>" + description;
+	    	var note = "<br>"+ title + "<br>" + description + "<br>" + code;
 	    	
             map.addOverlay(createMarker(point, title,note));
           }
@@ -130,17 +130,17 @@
       }
 
     }
-
-    //]]>
-    --></script>
-  </head>
+</script>
+</head>
   <body onload="load()" onunload="GUnload()">
-    
+    <jsp:include page="/WEB-INF/jsp/header2.jsp">
+  <jsp:param name="title2" value="Airport Listing" />
+</jsp:include>
 <table border=1>
 
       <tr>
         <td>
-           <div id="map" style="width: 600px; height: 500px"></div>
+           <div id="map" style="width: 500px; height: 500px"></div>
         </td>
         <td width = 150 valign="top" style="text-decoration: underline; color: #4444ff;">
            <div id="side_bar"></div>
@@ -148,6 +148,6 @@
       </tr>
     </table>
 
-  
+  <%@ include file="/WEB-INF/jsp/footer.jsp"%>
   </body>
 </html>
