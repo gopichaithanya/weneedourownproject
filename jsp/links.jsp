@@ -5,4 +5,5 @@
   <LI><a href="itineraryForCustomer.spring">Itinerary</a></LI>
   <LI><a href="addflight.spring">Add flight</a></LI>
   <LI><a href="enterCreditCardInfo.spring">Booking ticket</a></LI>
+  <LI><a href="maps.spring">Airport Listing</a></LI>
 </UL>
