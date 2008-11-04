@@ -37,7 +37,7 @@ DIV,UL,OL /* Left */
 div#container
 {
 	position:relative;
-	width: 921px;
+	width: 920px;
 	margin-top: 0px;
 	margin-left: auto;
 	margin-right: auto;
@@ -96,7 +96,7 @@ function MM_swapImage() {
 <div id="container">
 <div id="shape10" style="position:absolute; overflow:hidden; left:3px; top:66px; width:85px; height:18px; z-index:0"><img border=0 width="100%" height="100%" alt="" src="images/rect40532402.gif"></div>
 
-<div id="shape9" style="position:absolute; overflow:hidden; left:4px; top:66px; width:83px; height:1733px; z-index:1; background-image:url(images/imageline2.gif)"></div>
+<div id="shape9" style="position:absolute; overflow:hidden; left:4px; top:66px; width:83px; height:2224px; z-index:1; background-image:url(images/imageline2.gif)"></div>
 
 <div id="image7" style="position:absolute; overflow:hidden; left:88px; top:95px; width:662px; height:16px; z-index:2"><img src="images/image_line3.gif" alt="" border=0 width=662 height=16></div>
 
@@ -149,7 +149,7 @@ function MM_swapImage() {
 
 <div id="image2" style="position:absolute; overflow:hidden; left:64px; top:133px; width:47px; height:16px; z-index:9"><img src="images/image_line62.gif" alt="" border=0 width=47 height=16></div>
 
-<div id="text6" style="position:absolute; overflow:hidden; left:95px; top:757px; width:787px; height:1038px; z-index:10; background-color:#FFFFD7"><div class="wpmd">
+<div id="text6" style="position:absolute; overflow:hidden; left:95px; top:757px; width:787px; height:1537px; z-index:10; background-color:#FFFFD7"><div class="wpmd">
 <div><font color="#FF6600"><B><BR></B></font></div>
 <div><font color="#FF6600"><B> &nbsp; &nbsp; &nbsp; &nbsp;</B></font><font color="#FF0000"><B>SessionFactory </B></font></div>
 <div><font class="ws8" color="#FF0000" face="Verdana"><BR></font></div>
@@ -209,9 +209,37 @@ function MM_swapImage() {
 <div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">-</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">getCanceled(String username) </font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font></div>
 <div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">// returns the canceled flights for a given user</font></div>
 <div><font color="#FF9900" face="Courier New"><BR></font></div>
+<div><font color="#FF9900" face="Courier New"><BR></font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF0000"><B>Java Database Connectivity (JDBC)</B></font></div>
+<div><font color="#FF9900" face="Courier New"></font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF"></font></div>
+<div><font color="#3366FF"></font><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF">In order to connect to the database we configured the JDBC connections in a hibernate.cgf.xml file. </font></div>
+<div><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF">The definitions are provided below</font></div>
+<div><font color="#FF9900" face="Courier New"><BR></font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">&lt;!-- Database connection settings --&gt;</font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">&lt;property </font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">name="hibernate.connection.driver_class"&gt;org.hsqldb.jdbcDriver</font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">&lt;/property&gt;</font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">&lt;property name="hibernate.connection.url"&gt;jdbc:hsqldb:file:${catalina.base}/</font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">webapps/proj4398/WEB-INF/data/mydb</font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">&lt;/property&gt;</font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">&lt;property name="hibernate.connection.username"&gt;sa&lt;/property&gt;</font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">&lt;property name="hibernate.connection.password"&gt;&lt;/property&gt;</font></div>
+<div><font color="#FF9900" face="Courier New"><BR></font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">&lt;!-- JDBC connection pool --&gt;</font></div>
+<div><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#FF9900" face="Courier New">&lt;property name="hibernate.connection.pool_size"&gt;1&lt;/property&gt;</font></div>
+<div><font color="#FF9900" face="Courier New"><BR></font></div>
+<div><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF">The database connection settings specify the which driver to use for connecting to the database,</font></div>
+<div><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF">in this case the jdbcDriver. It also points to where the database data file are as indicated by </font></div>
+<div><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF">the 'url' property. Additional specifications include the database username and password as </font></div>
+<div><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF"> &nbsp; &nbsp; &nbsp; &nbsp;</font><font color="#3366FF">well as the number of threads in the JDBC connection pool.</font></div>
+<div><font color="#FF9900" face="Courier New"><BR></font></div>
+<div><font color="#FF9900" face="Courier New"><BR></font></div>
+<div><font color="#FF9900" face="Courier New"><BR></font></div>
+<div><font color="#FF9900" face="Courier New"><BR></font></div>
+<div><font color="#FF9900" face="Courier New"><BR></font></div>
 </div></div>
 
-<div id="shape4" style="position:absolute; overflow:hidden; left:888px; top:759px; width:26px; height:1047px; z-index:11; background-image:url(images/imageline2.gif)"></div>
+<div id="shape4" style="position:absolute; overflow:hidden; left:888px; top:759px; width:26px; height:1534px; z-index:11; background-image:url(images/imageline2.gif)"></div>
 
 <div id="shape3" style="position:absolute; overflow:hidden; left:753px; top:95px; width:26px; height:656px; z-index:12; background-image:url(images/imageline2.gif)"></div>
 
@@ -245,7 +273,7 @@ function MM_swapImage() {
 <hr size=3 width=920 color="#82B40C">
 </div>
 
-<div id="hr2" style="position:absolute; overflow:hidden; left:1px; top:1802px; width:920px; height:28px; z-index:17">
+<div id="hr2" style="position:absolute; overflow:hidden; left:0px; top:2290px; width:920px; height:28px; z-index:17">
 <hr size=3 width=920 color="#82B40C">
 </div>
 
