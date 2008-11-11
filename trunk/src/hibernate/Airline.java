@@ -11,42 +11,91 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class Airline  implements java.io.Serializable {
 
-	
+	/**
+	 * Airline code
+	 */
 	private String code;
+	
+	/**
+	 * Airline name
+	 */
     private String name;
+    
+    /**
+     * List of flights for the given airline
+     */
     private Set<Flight> flights = new HashSet<Flight>(0);
 
+    /**
+     * Constructs a new airline object
+     */
     public Airline() {
     }
 
-	
+	/**
+	 * Constructs a new airline object with the specified code
+	 * @param code - airline code
+	 */
     public Airline(String code) {
         this.code = code;
     }
+    
+    /**
+     * Constructs a new airline object with the specified code and name
+     * @param code - airline code
+     * @param name - airline name
+     * @param flights - list of flights
+     */
     public Airline(String code, String name, Set<Flight> flights) {
        this.code = code;
        this.name = name;
        this.flights = flights;
     }
    
+    /**
+     * Returns the airline code
+     * @return the airline code
+     */
     public String getCode() {
         return this.code;
     }
     
+    /**
+     * Sets the airline code
+     * @param code - the airline code
+     */
     public void setCode(String code) {
         this.code = code;
     }
+    
+    /**
+     * Returns the airline name
+     * @return the airline name
+     */
     public String getName() {
         return this.name;
     }
     
+    /**
+     * Sets the name of the airline
+     * @param name - the name of the airline
+     */
     public void setName(String name) {
         this.name = name;
     }
+    
+    /**
+     * Returns the list of flights for the given airline
+     * @return the list of flights
+     */
     public Set<Flight> getFlights() {
         return this.flights;
     }
     
+    /**
+     * Sets the list of flights for the given airline
+     * @param flights - the list of flights
+     */
     public void setFlights(Set<Flight> flights) {
         this.flights = flights;
     }

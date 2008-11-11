@@ -37,20 +37,51 @@ public class Itinerary implements java.io.Serializable {
       }
    }
 
+   /**
+    * The itinerary id
+    */
    private ItineraryId id;
+   
+   /**
+    * The customer to whom the itinerary belongs to
+    */
    private Customer customer;
+   
+   /**
+    * The flight in the itinerary
+    */
    private Flight flight;
+   
+   /**
+    * The status of the flight whether its booked, reserved or canceled
+    */
    private EStatus status;
 
+   /**
+    * Constructs a new itinerary object
+    */
    public Itinerary() {
    }
 
+   /**
+    * Constructs a new itinerary object with the given parameters
+    * @param id
+    * @param customer - the customer 
+    * @param flight - the flight 
+    */
    public Itinerary(ItineraryId id, Customer customer, Flight flight) {
       this.id = id;
       this.customer = customer;
       this.flight = flight;
    }
 
+   /**
+    * Constructs a new itinerary object 
+    * @param id - the itinerary id
+    * @param customer - the customer to whom the itinerary belongs
+    * @param flight - the flight associated with the itinerary
+    * @param status - the status of the flight
+    */
    public Itinerary(ItineraryId id, Customer customer, Flight flight, String status) {
       this.id = id;
       this.customer = customer;
@@ -58,34 +89,66 @@ public class Itinerary implements java.io.Serializable {
       this.status = EStatus.get(status);
    }
 
+   /**
+    * Returns the itinerary id
+    * @return the itinerary id
+    */
    public ItineraryId getId() {
       return this.id;
    }
 
+   /**
+    * Sets the itinerary id
+    * @param id - the itinerary id
+    */
    public void setId(ItineraryId id) {
       this.id = id;
    }
 
+   /**
+    * Returns the customer to whom the itinerary belongs
+    * @return the customer to whom the itinerary belongs
+    */
    public Customer getCustomer() {
       return this.customer;
    }
 
+   /**
+    * Sets the customer to whom the itinerary belongs
+    * @param customer - the customer to whom the itinerary belongs
+    */
    public void setCustomer(Customer customer) {
       this.customer = customer;
    }
 
+   /**
+    * Returns the flight associated with the itinerary
+    * @return the flight associated with the itinerary
+    */
    public Flight getFlight() {
       return this.flight;
    }
 
+   /**
+    * Sets the flight associated with the itinerary
+    * @param flight - the flight associated with the itinerary
+    */
    public void setFlight(Flight flight) {
       this.flight = flight;
    }
 
+   /**
+    * Returns the status of the flight
+    * @return the status of the flight
+    */
    public String getStatus() {
       return this.status.toString();
    }
 
+   /**
+    * Sets the status of the flight
+    * @param status - the status of the flight
+    */
    public void setStatus(String status) {
       this.status = EStatus.get(status);
    }

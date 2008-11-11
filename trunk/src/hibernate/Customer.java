@@ -11,26 +11,89 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class Customer  implements java.io.Serializable {
 
-	
+	/**
+	 * The customer's login username
+	 */
 	private String username;
+	
+	/**
+	 * The customer's first name
+	 */
     private String firstName;
+    
+    /**
+     * The customer's last name
+     */
     private String lastName;
+    
+    /**
+     * The customer's street address
+     */
     private String street;
+    
+    /**
+     * The city where the customer resides
+     */
     private String city;
+    
+    /**
+     * The state where the customer resides
+     */
     private String state;
+    
+    /**
+     * The customer's zip code
+     */
     private Integer zip;
+    
+    /**
+     * The customer's login password
+     */
     private String password;
+    
+    /**
+     * The customer's credit card number
+     */
     private Long ccNo;
+    
+    /**
+     * The credit card expiration date
+     */
     private Integer expiration;
+    
+    /**
+     * The list of itineraries for the given customer
+     */
     private Set<Itinerary> itineraries = new HashSet<Itinerary>(0);
 
+    /**
+     * Constructs a new customer object
+     */
     public Customer() {
     }
 
-	
+	/**
+	 * Constructs a new customer object with the given username
+	 * @param username - the customer's username
+	 */
     public Customer(String username) {
         this.username = username;
     }
+    
+    /**
+     * Constructs a new customer object with the given parameters
+     * @param username - the customer's username
+     * @param firstName - the customer's first name
+     * @param lastName - the customer's last name
+     * @param street - the customer's street address
+     * @param city - the city where the customer resides
+     * @param state - the state where the customer resides
+     * @param zip - the customer's zip code
+     * @param password - the customer's login password
+     * @param ccNo - the customer's credit card number
+     * @param expiration - the credit card expiration date
+     * @param itineraries - the itineraries for the given customer
+     */
     public Customer(String username, String firstName, String lastName, String street, String city, String state, Integer zip, String password, Long ccNo, Integer expiration, Set<Itinerary> itineraries) {
        this.username = username;
        this.firstName = firstName;
@@ -45,87 +108,181 @@ public class Customer  implements java.io.Serializable {
        this.itineraries = itineraries;
     }
    
+    /**
+     * Returns the username 
+     * @return the customer's username
+     */
     public String getUsername() {
         return this.username;
     }
     
+    /**
+     * Sets the customer's username
+     * @param username - the customer's username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
+    
+    /**
+     * Returns the customer's first name
+     * @return the customer's first name
+     */
     public String getFirstName() {
         return this.firstName;
     }
     
+    /**
+     * Sets the customer's first name
+     * @param firstName - the customer's first name
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+    
+    /**
+     * Returns the customer's last name
+     * @return the customer's last name
+     */
     public String getLastName() {
         return this.lastName;
     }
-    
+
+    /**
+     * Sets the customer's last name
+     * @param lastName - the customer's last name
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    
+    /**
+     * Returns the customer's street address
+     * @return the customer's street address
+     */
     public String getStreet() {
         return this.street;
     }
     
+    /**
+     * Sets the customer's street address
+     * @param street - the customer's street address
+     */
     public void setStreet(String street) {
         this.street = street;
     }
+    
+    /**
+     * Returns the city where the customer resides
+     * @return the city where the customer resides
+     */
     public String getCity() {
         return this.city;
     }
     
+    /**
+     * Sets the city where the customer resides
+     * @param city - the city where the customer resides
+     */
     public void setCity(String city) {
         this.city = city;
     }
+    
+    /**
+     * Returns the state where the customer resides
+     * @return the state where the customer resides
+     */
     public String getState() {
         return this.state;
     }
     
+    /**
+     * Sets the state where the customer resides
+     * @param state - the state where the customer resides
+     */
     public void setState(String state) {
         this.state = state;
     }
+    
+    /**
+     * Returns the customer's zip code
+     * @return the customer's zip code
+     */
     public Integer getZip() {
         return this.zip;
     }
     
+    /**
+     * Sets the customer's zip code
+     * @param zip - the customer's zip code
+     */
     public void setZip(Integer zip) {
         this.zip = zip;
     }
+    
+    /**
+     * Returns the customer's login password
+     * @return the customer's login password
+     */
     public String getPassword() {
         return this.password;
     }
     
+    /**
+     * Sets the customer's login password
+     * @param password - the customer's login password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    /**
+     * Returns the customer's credit card number
+     * @return the customer's credit card number
+     */
     public Long getCcNo() {
         return this.ccNo;
     }
     
+    /**
+     * Sets the customer's credit card number
+     * @param ccNo - the customer's credit card number
+     */
     public void setCcNo(Long ccNo) {
         this.ccNo = ccNo;
     }
+    
+    /**
+     * Returns the credit card expiration date
+     * @return the credit card expiration date
+     */
     public Integer getExpiration() {
         return this.expiration;
     }
     
+    /**
+     * Sets the credit card expiration date
+     * @param expiration - the credit card expiration date
+     */
     public void setExpiration(Integer expiration) {
         this.expiration = expiration;
     }
+    
+    /**
+     * Returns the itineraries for the given customer
+     * @return the itineraries for the given customer
+     */
     public Set<Itinerary> getItineraries() {
         return this.itineraries;
     }
     
+    /**
+     * Sets the list of itineraries for the given customer
+     * @param itineraries - the list of itineraries for the given customer
+     */
     public void setItineraries(Set<Itinerary> itineraries) {
         this.itineraries = itineraries;
     }
-
-
-
-
 }
 
 
