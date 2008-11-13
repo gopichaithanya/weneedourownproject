@@ -23,6 +23,32 @@
 
     <display-name>SWE642 Project 4398</display-name>
     <description>SWE642 Project 4398</description>
+ <!-- Define a Security Constraint on this Application -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>HTMLManger and Manager command</web-resource-name>
+      <url-pattern>/addflight.spring</url-pattern>
+      <url-pattern>/enterCreditCardInfo.spring</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+       <!-- NOTE:  This role is not present in the default users file -->
+       <role-name>managergroup</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <!-- Define the Login Configuration for this Application -->
+  <login-config>
+    <auth-method>BASIC</auth-method>
+  </login-config>
+
+  <!-- Security roles referenced by this web application -->
+  <security-role>
+    <description>
+      The role that is required to log in to the Manager Application
+    </description>
+    <role-name>managergroup</role-name>
+  </security-role>
+
 
     <jsp-config>
       <taglib>
