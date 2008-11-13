@@ -3,7 +3,7 @@
   <role rolename="tomcat"/>
   <role rolename="role1"/>
   <role rolename="manager"/>
-  <user username="tomcat" password="tomcat" roles="tomcat"/>
+ <user username="tomcat" password="tomcat" roles="managergroup"/>
   <user username="both" password="tomcat" roles="tomcat,role1"/>
   <user username="role1" password="tomcat" roles="role1"/>
   <user username="TomcatManager" password="weneed" roles="manager"/>
