@@ -48,19 +48,20 @@
   	<property name="successView" value="reserveFlightForCustomer.spring"/>
   </bean>
   
-  <bean name="/reserveFlightForCustomer.spring" class="springapp.web.ReserveFlightForCustomerController" />
-  <bean name="/cancelReservedFlightForCustomer.spring" class="springapp.web.CancelReservedFlightForCustomerController" />
-  <bean name="/itineraryForCustomer.spring" class="springapp.web.ItineraryForCustomerController" />
-  
   <bean name="/enterCreditCardInfo.spring" class="springapp.web.CreditCardController">
   	<property name="formView" value="enterCreditCardInfo"/>
-  	<property name="successView" value="ticket"/>
+  	<property name="successView" value="ticket.spring"/>
   	<property name="commandName" value="customer"/>
     <property name="commandClass" value="hibernate.Customer"/>
     <property name="validator">
   		<bean class="springapp.web.CreditCardValidator"/>
   	</property>
   </bean>
+  
+  <bean name="/reserveFlightForCustomer.spring" class="springapp.web.ReserveFlightForCustomerController" />
+  <bean name="/cancelReservedFlightForCustomer.spring" class="springapp.web.CancelReservedFlightForCustomerController" />
+  <bean name="/itineraryForCustomer.spring" class="springapp.web.ItineraryForCustomerController" />
+  <bean name="/ticket.spring" class="springapp.web.TicketController"/>
   
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
