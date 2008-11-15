@@ -35,7 +35,13 @@ public class CreditCardController extends SimpleFormController {
 		
 	}*/
 
-	protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
+	protected void doSubmitAction(Object command) 
+	{
+		Customer customer = (Customer)command;
+		//return new ModelAndView(new RedirectView(getSuccessView()));
+		
+	}
+	/*protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
 			 	         Object command, BindException errors) throws Exception {
 
 		System.out.println("CreditCardController");
@@ -46,5 +52,5 @@ public class CreditCardController extends SimpleFormController {
 		//CustomerManager.register(customer);
 		
 		return new ModelAndView(new RedirectView(getSuccessView()));
-	}
+	}*/
 }
