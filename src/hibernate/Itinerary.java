@@ -58,6 +58,11 @@ public class Itinerary implements java.io.Serializable {
    private EStatus status;
 
    /**
+    * The ticket number
+    */
+   private String ticketNo;
+   
+   /**
     * Constructs a new itinerary object
     */
    public Itinerary() {
@@ -89,6 +94,22 @@ public class Itinerary implements java.io.Serializable {
       this.status = EStatus.get(status);
    }
 
+   /**
+    * Constructs a new itinerary object 
+    * @param id - the itinerary id
+    * @param customer - the customer to whom the itinerary belongs
+    * @param flight - the flight associated with the itinerary
+    * @param status - the status of the flight
+    * @param ticketNo - the ticketNo
+    */
+   public Itinerary(ItineraryId id, Customer customer, Flight flight, String status, String ticketNo) {
+	   this.id = id;
+	   this.customer = customer;
+	   this.flight = flight;
+	   this.status = EStatus.get(status);
+	   this.ticketNo = ticketNo;
+   }
+   
    /**
     * Returns the itinerary id
     * @return the itinerary id
@@ -151,6 +172,22 @@ public class Itinerary implements java.io.Serializable {
     */
    public void setStatus(String status) {
       this.status = EStatus.get(status);
+   }
+
+   /**
+    * Returns the ticket number
+    * @return the ticket number
+    */
+   public String getTicketNo() {
+	   return ticketNo;
+   }
+
+   /**
+    * Sets the ticket number
+    * @param ticketNo - th ticket number
+    */
+   public void setTicketNo(String ticketNo) {
+	   this.ticketNo = ticketNo;
    }
 
 }
