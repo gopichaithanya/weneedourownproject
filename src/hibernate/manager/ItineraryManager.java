@@ -39,6 +39,31 @@ public class ItineraryManager {
       return bRst;
    }
 
+   public static boolean book(String userName, int flightNo) {
+	  boolean bRst = false;
+	  {
+		 final ItineraryId pKey = new ItineraryId(flightNo, userName);
+
+	     final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+	     session.beginTransaction();
+	     final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
+	     if (null == it) {
+	        final Customer customer = new Customer(userName);
+	        final Flight flight = new Flight(flightNo);
+	        final Itinerary newIt = new Itinerary(pKey, customer, flight);
+	        newIt.setStatus(Itinerary.EStatus.BOOKED.toString());
+	        session.save(newIt);
+	        bRst = true;
+	     } else {
+	    	it.setStatus(Itinerary.EStatus.BOOKED.toString());
+	        session.update(it);
+	        bRst = true;
+	     }
+	     session.getTransaction().commit();
+	  }
+	  return bRst;
+   }
+
    public static boolean cancelReserved(String userName, int flightNo) {
       boolean bRst = false;
       {
