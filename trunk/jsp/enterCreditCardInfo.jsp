@@ -9,7 +9,7 @@
 
 	<body>
 		<jsp:include page="/WEB-INF/jsp/header1.jsp">
-  			<jsp:param name="title2" value="Home > Register" />
+  			<jsp:param name="title2" value="Home > Payment" />
 		</jsp:include>
 	
 		<spring:hasBindErrors name="customer">

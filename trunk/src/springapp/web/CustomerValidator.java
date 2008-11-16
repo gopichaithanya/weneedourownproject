@@ -34,10 +34,5 @@ public class CustomerValidator  implements Validator
 			errors.rejectValue("state", "error.invalid.state", "State is blank");
 		if (customer.getPassword().toString().length() < 6)
 			errors.rejectValue("password", "error.invalid.password", "Password must be at least 6 characters");
-		
-		//TODO Add credit card validation if info is provided
-		
-		//if (customer.getExpiration().toString().length()  != 4)
-		//	errors.rejectValue("expiration", "error.invalid.expiration", "State is blank");
 	}
 }

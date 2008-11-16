@@ -10,14 +10,14 @@
 	</head>
 	<body>
 		<jsp:include page="/WEB-INF/jsp/header1.jsp">
-  			<jsp:param name="title2" value="Home > Register" />
+  			<jsp:param name="title2" value="Home > Payment > Confirmation" />
 		</jsp:include>
-		Ticket information
+		<h3> Confirmation </h3>
 		<table border="1">
-  			<tr><td>Your ticket number is XX-FFF-YYYYYY-ZZZ</td></tr>
-			Credit card number (16 digits): <c:out value="${customer.ccNo}"/><br>
-			Credit card expiration date (mmdd): <c:out value="${customer.expiration}"/><br>
+  			<tr><td>Ticket #: <c:out value="${ticket}"/> </td></tr>
 		</table>
+		<br>
+		<a href="itineraryForCustomer.spring">Back to Itinerary</a>
 		<%@ include file="/WEB-INF/jsp/footer.jsp"%>
 	</body>
 </html>
