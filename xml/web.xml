@@ -32,7 +32,7 @@
     </web-resource-collection>
     <auth-constraint>
        <!-- NOTE:  This role is not present in the default users file -->
-       <role-name>managergroup</role-name>
+       <role-name>tomcat</role-name>
     </auth-constraint>
   </security-constraint>
 
