@@ -39,9 +39,6 @@ public class CreditCardController extends SimpleFormController {
 		System.out.println(c.getCcNo());
 		System.out.println(c.getExpiration());
 		
-		//book the flight once credit card is validated
-		ItineraryManager.book(c.getUsername(), flightNo);
-		
 		//create the ticket object
 		String ticket;
 		
@@ -49,6 +46,9 @@ public class CreditCardController extends SimpleFormController {
 		Flight f = FlightManager.getFlight(flightNo);
 		ticket = f.getAirline().getCode()+"-"+flightNo+"-"+c.getUsername().toUpperCase()+"-"+(rand.nextInt(900)+100);
 		System.out.println(f.getAirline().getCode()+"-"+flightNo+"-"+c.getUsername()+"-"+(rand.nextInt(900)+100));
+		
+		//book the flight once credit card is validated and a ticket is generated
+		ItineraryManager.book(c.getUsername(), flightNo, ticket);
 		
 		session.setAttribute(SessionConstants.TICKET, ticket);
 		ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView())); 

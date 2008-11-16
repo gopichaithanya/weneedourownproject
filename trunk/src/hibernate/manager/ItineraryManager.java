@@ -39,7 +39,7 @@ public class ItineraryManager {
       return bRst;
    }
 
-   public static boolean book(String userName, int flightNo) {
+   public static boolean book(String userName, int flightNo, String ticketNo) {
 	  boolean bRst = false;
 	  {
 		 final ItineraryId pKey = new ItineraryId(flightNo, userName);
@@ -52,10 +52,12 @@ public class ItineraryManager {
 	        final Flight flight = new Flight(flightNo);
 	        final Itinerary newIt = new Itinerary(pKey, customer, flight);
 	        newIt.setStatus(Itinerary.EStatus.BOOKED.toString());
+	        newIt.setTicketNo(ticketNo);
 	        session.save(newIt);
 	        bRst = true;
 	     } else {
 	    	it.setStatus(Itinerary.EStatus.BOOKED.toString());
+	    	it.setTicketNo(ticketNo);
 	        session.update(it);
 	        bRst = true;
 	     }
