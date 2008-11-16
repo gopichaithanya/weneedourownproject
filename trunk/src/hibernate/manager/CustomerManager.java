@@ -79,7 +79,7 @@ public class CustomerManager {
 		Customer customer = (Customer) session.get(Customer.class, new String(username));
 		customer.setCcNo(ccNo);
 		customer.setExpiration(expiration);
-		session.getTransaction().commit();
+		session.update(customer);
 		return customer;
 	}
 }

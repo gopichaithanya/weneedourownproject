@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 public class CreditCardController extends SimpleFormController {
 	
+	private Integer flightNo = null;
 	private Customer c = null;
 	
 	protected void doSubmitAction(Object command) {
@@ -28,7 +29,7 @@ public class CreditCardController extends SimpleFormController {
 		System.out.println(c.getUsername());
 		System.out.println(c.getCcNo());
 		System.out.println(c.getExpiration());
-		
+		ItineraryManager.book(c.getUsername(), flightNo);
 		//return new ModelAndView(new RedirectView(getSuccessView()));
 	}
 
@@ -38,6 +39,14 @@ public class CreditCardController extends SimpleFormController {
 		final String userName = LoginController.getUserName(session);
 		Customer customer = CustomerManager.getCustomer(userName);
 		c = customer;
+		
+		try {
+			flightNo = Integer.valueOf(request.getParameter("flightNo"));
+			System.out.println(flightNo);
+		} catch (NumberFormatException e) {
+			
+		}
+		
 		return customer;
 	}
 }
