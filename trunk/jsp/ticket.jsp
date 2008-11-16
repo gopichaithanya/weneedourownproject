@@ -15,6 +15,8 @@
 		Ticket information
 		<table border="1">
   			<tr><td>Your ticket number is XX-FFF-YYYYYY-ZZZ</td></tr>
+			Credit card number (16 digits): <c:out value="${customer.ccNo}"/><br>
+			Credit card expiration date (mmdd): <c:out value="${customer.expiration}"/><br>
 		</table>
 		<%@ include file="/WEB-INF/jsp/footer.jsp"%>
 	</body>
