@@ -10,7 +10,7 @@ import org.hibernate.HibernateException;
 public class CustomerManager {
 	
 	/**
-	 * Default Constructor
+	 * Constructora a new CustomerManager object
 	 */
 	public CustomerManager() {}
 	
@@ -57,25 +57,29 @@ public class CustomerManager {
 		return truth;
 	}
 	
-	public List<?> listCustomers() {
+	/**
+	 * 
+	 * @param username - the customer username
+	 * @return the customer with the given username
+	 */
+	public static Customer getCustomer(String username) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		List<?> result = session.createQuery("from Customer").list();
+		Customer customer = (Customer) session.get(Customer.class, new String(username));
 		session.getTransaction().commit();
-
-	    return result;
+		return customer;
 	}
 	
-	public static void main (String[] args){
-		CustomerManager mgr = new CustomerManager();
-		
-		List<?> customers = mgr.listCustomers();
-	    for (int i = 0; i < customers.size(); i++) {
-	    	Customer customer = (Customer) customers.get(i);
-	        System.out.println("Customer: " + customer.getUsername());
-	    }
-
-		HibernateUtil.getSessionFactory().close();
-		
+	/**
+	 * Updates a customer's info with the new ccNo and expiration date
+	 */
+	public static Customer updateCcNoAndExpiration(String username, Long ccNo, Integer expiration) {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		Customer customer = (Customer) session.get(Customer.class, new String(username));
+		customer.setCcNo(ccNo);
+		customer.setExpiration(expiration);
+		session.getTransaction().commit();
+		return customer;
 	}
 }

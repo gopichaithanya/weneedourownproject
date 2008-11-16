@@ -14,5 +14,5 @@ CREATE TABLE customer (first_name CHAR(20), last_name CHAR(20),
 			PRIMARY KEY(username));
 
 INSERT INTO customer VALUES (NULL,NULL,NULL,NULL,NULL,NULL,'administrator', 'tomcat', NULL, NULL);
-INSERT INTO customer VALUES ('Jack', 'Johnson', '1529 Main St', 'Fairfax', 'VA', 22030, 'jjohnson', 'harley', 4598213478349603, 0810);
+INSERT INTO customer VALUES ('Jack', 'Johnson', '1529 Main St', 'Fairfax', 'VA', 22030, 'jjohnson', 'harley', 2222222222222222, 1111);
 INSERT INTO customer VALUES ('Samantha', 'Morris', '302 Cherry Hill Rd', 'Gaithersburg', 'MD', 20877, 'sammy', 'gmualum03', NULL, NULL);
