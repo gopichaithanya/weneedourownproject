@@ -7,6 +7,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
+/**
+ * This is stub class for HttpSession class. This is only for unit testing.
+ * This stub class can store attributes.
+ * @see HttpSession
+ * @see NullHttpServletRequest
+ */
+@SuppressWarnings("unchecked")
 public class NullHttpSession implements HttpSession {
 
    private HashMap<Object, Object> attr = new HashMap<Object, Object>();
@@ -20,7 +27,6 @@ public class NullHttpSession implements HttpSession {
    }
 
    public Enumeration getAttributeNames() {
-      // TODO Auto-generated method stub
       return null;
    }
 

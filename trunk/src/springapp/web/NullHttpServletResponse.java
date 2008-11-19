@@ -8,6 +8,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * This is stub class for HttpServletResponse class. This is only for unit testing.
+ * @see HttpServletResponse
+ */
 public class NullHttpServletResponse implements HttpServletResponse {
 
    public void addCookie(Cookie arg0) {

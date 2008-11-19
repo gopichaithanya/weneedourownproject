@@ -14,6 +14,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
+/**
+ * A Spring controller for itinerary page.
+ * This controller retrieves reserved flights, booked flights, and canceled flights from database.
+ */
 public class ItineraryForCustomerController implements Controller {
 
    public static final String URL = "itineraryForCustomer.spring";

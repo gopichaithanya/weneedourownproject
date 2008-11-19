@@ -15,6 +15,14 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/**
+ * This is stub class for HttpServletRequest class. This is only for unit testing.
+ * This stub class can store parameters and has a NullHttpSession object.
+ * Since HttpServletRequest doesn't have setting parameter method,
+ * the parameter users want to store in should be passes through a constructor.
+ * @see HttpServletRequest
+ * @see NullHttpSession
+ */
 @SuppressWarnings("unchecked")
 public class NullHttpServletRequest implements HttpServletRequest {
 
@@ -24,6 +32,10 @@ public class NullHttpServletRequest implements HttpServletRequest {
    public NullHttpServletRequest() {
    }
 
+   /**
+    * When users want to store some parameters for testing, this constructor should be used. 
+    * @param param parameter data.
+    */
    public NullHttpServletRequest(Hashtable param) {
       parameters = param;
    }

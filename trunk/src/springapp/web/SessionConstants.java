@@ -1,7 +1,11 @@
 package springapp.web;
 
+/**
+ * SessionConstants class has variable names for session.
+ * The variable name that will be stored in session use be stores here.
+ * This makes compile possible to check variable name at compile time.
+ */
 public abstract class SessionConstants {
-
    public static final String USERNAME = "username";
    public static final String TICKET = "ticket";
    public static final String LOGIN_REDIRECT_AFTER_LOGIN = "login.redirectAfterLogin";
