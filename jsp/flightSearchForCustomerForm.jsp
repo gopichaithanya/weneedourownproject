@@ -13,6 +13,7 @@
   src="http://www.google.com/jsapi?key=ABQIAAAAIQTJJux4wCMpPFMFJLPa7hSfYe32xyc8iPgGkKi4PlUHhtMrSRTWeQOoVYiS_PpdlIa8lKl6kZKMrA"></script>
 <script type="text/javascript" src="js/proj4398.js"></script>
 <script type="text/javascript" src="js/datePicker.js"></script>
+<script type="text/javascript" src="js/searchAirport.js"></script>
 <script language="JavaScript"><!--
  //
 
@@ -111,11 +112,12 @@ function submitWithReturnFlightNo(no) {
       <tr>
         <th>Leaving from <img src="phase2/images/airportDepart.png" width="17" height="17" /></th>
         <td>
-        <div><form:select path="departLocation">
+        <div><form:select path="departLocation" id="departLocation">
           <c:forEach items="${airports}" var="airport">
             <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
           </c:forEach>
-        </form:select> <input type="button" value="Search Airport" /></div>
+        </form:select> <input type="button" value="Search Airport"
+          onClick="displayAirport('departLocation', 'departLocation')" /></div>
         <form:errors path="departLocation" cssClass="error" /></td>
       </tr>
       <tr>
@@ -247,12 +249,12 @@ function submitWithReturnFlightNo(no) {
                 id="passenger${nPerson}" /> <label for="passenger${nPerson}"><c:out
                 value="${nPerson}" /></label></td>
             </c:forEach>
-            <td><select>
+            <td><!-- select>
               <option value="">More</option>
               <c:forEach var="nPerson" begin="9" end="30" step="1">
                 <option value="${nPerson}" /><c:out value="${nPerson}" /></option>
               </c:forEach>
-            </select> <form:errors path="numPassengers" cssClass="error" /></td>
+            </select --> <form:errors path="numPassengers" cssClass="error" /></td>
           </tr>
         </table>
         </div>

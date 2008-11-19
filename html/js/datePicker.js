@@ -25,8 +25,6 @@ function displayDatePicker(dateFieldNameYear, dateFieldNameMonth,
 	var displayBelowThisObject = document.getElementById(displayBelowThisId);
 	if (!displayBelowThisObject)
 		displayBelowThisObject = targetMonth;
-	else
-		displayBelowThisObject = displayBelowThisObject[0];
 
 	var x = displayBelowThisObject.offsetLeft;
 	var y = displayBelowThisObject.offsetTop
