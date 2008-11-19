@@ -13,6 +13,9 @@ import org.apache.commons.logging.LogFactory;
 import java.io.IOException;
 import java.util.Date;
 
+/**
+ * A simple example controller that shows how Spring Framework works.
+ */
 public class HelloController implements Controller {
 
     protected final Log logger = LogFactory.getLog(getClass());

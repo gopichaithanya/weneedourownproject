@@ -8,6 +8,11 @@ import java.util.List;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * A validator for flight search. This validator is from Spring framework.
+ * This validator checkes whether or not the command object is valid.
+ * @see FlightSearchForCustomer
+ */
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerValidator implements Validator {
 

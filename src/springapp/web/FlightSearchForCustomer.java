@@ -2,6 +2,22 @@ package springapp.web;
 
 import java.util.Calendar;
 
+/**
+ * This class is used for command object on flight search page.
+ * This class will contain these infomation:
+ * <LI> depart location; airport code
+ * <LI> arrival location; airport code
+ * <LI> departure Month from 1 to 12
+ * <LI> departure Year from 2008.
+ * <LI> departure Hour from 0 to 23.
+ * <LI> Trip type: round trip or one way trip.
+ * <LI> number of passengers
+ * <LI> return month from 1 to 12
+ * <LI> return year from 2008.
+ * <LI> return hour from 0 to 23
+ * <LI> return flight number (optional)
+ * <LI> departing flight number (optional)
+ */
 public class FlightSearchForCustomer {
 
    public enum ETripType {

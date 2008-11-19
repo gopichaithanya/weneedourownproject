@@ -15,6 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.springframework.web.servlet.view.RedirectView;
 
+/**
+ * A spring controller for flight searching.
+ * This searching functionality is for customer not for manager.
+ */
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerFormController extends SimpleFormController {
 
@@ -27,6 +31,10 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
     */
    static boolean bFlagSearch = false;
 
+   /**
+    * Handle request for web browser.
+    * This handler retrieves airport list from database. 
+    */
    public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse resp)
          throws Exception {
 
@@ -39,6 +47,12 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       return mv;
    }
 
+   /**
+    * <UL>This method reacts in 3 steps:
+    * <LI>1. selecting airports.
+    * <LI>2. selecting departing ticket.
+    * <LI>3. selecting arrival ticket.</UL>
+    */
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
@@ -64,6 +78,17 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       return mv;
    }
 
+   /**
+    * This method reacts for the first step, searching for airports. Validity wouldn't be checked here.
+    * @param request Spring framework passes request object.
+    * @param response Spring framework passes response object.
+    * @param command Spring framework passes command object.
+    * @param errors Error object for Spring framework
+    * @return ModelAndView object of Spring framework
+    * @throws Exception
+    * @see FlightSearchForCustomerValidator
+    * @see FlightSearchForCustomerFormController#onSubmit(HttpServletRequest, HttpServletResponse, Object, BindException)
+    */
    private ModelAndView onSubmit1(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
@@ -90,6 +115,17 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       return mv;
    }
 
+   /**
+    * This method reacts for the second step, searching for airports. Validity wouldn't be checked here.
+    * @param request Spring framework passes request object.
+    * @param response Spring framework passes response object.
+    * @param command Spring framework passes command object.
+    * @param errors Error object for Spring framework
+    * @return ModelAndView object of Spring framework
+    * @throws Exception
+    * @see FlightSearchForCustomerValidator
+    * @see FlightSearchForCustomerFormController#onSubmit(HttpServletRequest, HttpServletResponse, Object, BindException)
+    */
    private ModelAndView onSubmit2(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
@@ -116,6 +152,17 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       return mv;
    }
 
+   /**
+    * This method reacts for the third step, searching for airports. Validity wouldn't be checked here.
+    * @param request Spring framework passes request object.
+    * @param response Spring framework passes response object.
+    * @param command Spring framework passes command object.
+    * @param errors Error object for Spring framework
+    * @return ModelAndView object of Spring framework
+    * @throws Exception
+    * @see FlightSearchForCustomerValidator
+    * @see FlightSearchForCustomerFormController#onSubmit(HttpServletRequest, HttpServletResponse, Object, BindException)
+    */
    private ModelAndView onSubmit3(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 

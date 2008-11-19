@@ -10,6 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.view.RedirectView;
 
+/**
+ * A Spring controller for reserve flight. This is for customer not for manager.
+ */
 public class ReserveFlightForCustomerController implements Controller {
 
    public static final String URL = "reserveFlightForCustomer.spring";
