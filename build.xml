@@ -17,6 +17,7 @@
 	<property name="build.classes.dir" value="build/classes" />
 	<property name="build.hbm.dir" value="build/hbm" />
 	<property name="build.war.dir" value="build/war" />
+	<property name="build.docs.dir" value="build/docs" />
 	<property name="name" value="proj4398" />
 
 	<path id="master-classpath">
@@ -44,6 +45,7 @@
 		<echo message="clean       ==> Clean compiled files and WAR file" />
 		<echo message="buildtest   ==> Build the tests" />
 		<echo message="test        ==> Test all the tests" />
+        <echo message="javadoc         ==> Build javaDoc" />
 		<echo />
 		<echo message="deploy      ==> Deploy application as directory" />
 		<echo message="undeploy    ==> Delete deploied application" />
@@ -81,11 +83,16 @@
 		</javac>
 	</target>
 
-    <target name="buildWar" depends="build" description="Build WAR file.">
+    <target name="buildWar" depends="build, javadoc" description="Build WAR file.">
 		<mkdir dir="${build.war.dir}" />
 		<copy todir="${build.war.dir}" preservelastmodified="true">
 			<fileset dir="${html.dir}">
 				<include name="**/*.*" />
+			</fileset>
+		</copy>
+        <copy todir="${build.war.dir}/docs" preservelastmodified="true">
+			<fileset dir="${build.docs.dir}">
+				<include name="**/*" />
 			</fileset>
 		</copy>
         <mkdir dir="${build.war.dir}/WEB-INF" />
@@ -144,6 +151,7 @@
         <delete file="${dist.dir}/${name}.war"/>
         <delete dir="${build.war.dir}"/>
         <delete dir="${build.classes.dir}"/>
+        <delete dir="${build.docs.dir}"/>
         <delete>
 			<fileset dir="${build.dir}">
 				<include name="*.properties" />
@@ -151,6 +159,28 @@
 			</fileset>
         </delete>
 	</target>
+
+
+    <target name="javadoc" description="Generage JavaDoc files">
+        <javadoc
+            destdir="${build.docs.dir}/api"
+            author="true"
+            Overview="${src.dir}/overview.html"
+            version="true"
+            use="true"
+            windowtitle="Project 4398">
+			<classpath refid="master-classpath" />
+
+            <fileset dir="${src.dir}" defaultexcludes="yes">
+                <include name="**/*.java"/>
+                <exclude name="**/*Test.java"/>
+                <exclude name="**/*Tests.java"/>
+            </fileset>
+
+            <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+        </javadoc>
+        <echo message="Java doc files are accessable at here: http://localhost:8080/${name}/docs/api/" />
+    </target>
 
 	<target name="buildtest" depends="build" description="Compile test tree java files">
 		<mkdir dir="${build.classes.dir}" />
