@@ -127,7 +127,8 @@ function submitWithReturnFlightNo(no) {
           <c:forEach items="${airports}" var="airport">
             <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
           </c:forEach>
-        </form:select> <input type="button" value="Search Airport" /></div>
+        </form:select> <input type="button" value="Search Airport"
+          onClick="displayAirport('arrivalLocation', 'arrivalLocation')" /></div>
         <form:errors path="arrivalLocation" cssClass="error" /></td>
       </tr>
 
