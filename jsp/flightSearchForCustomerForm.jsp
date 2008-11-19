@@ -7,10 +7,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Flight Searching</title>
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
+<link rel="stylesheet" type="text/css" href="css/datePicker.css" />
 <!--script type="text/javascript" src="js/MochiKit/MochiKit.js"></script-->
 <script type="text/javascript"
   src="http://www.google.com/jsapi?key=ABQIAAAAIQTJJux4wCMpPFMFJLPa7hSfYe32xyc8iPgGkKi4PlUHhtMrSRTWeQOoVYiS_PpdlIa8lKl6kZKMrA"></script>
 <script type="text/javascript" src="js/proj4398.js"></script>
+<script type="text/javascript" src="js/datePicker.js"></script>
 <script language="JavaScript"><!--
  //
 
@@ -151,7 +153,9 @@ function submitWithReturnFlightNo(no) {
           <c:forEach var="year" begin="2008" end="2011" step="1">
             <form:option value="${year}" />
           </c:forEach>
-        </form:select> <input type="button" value="Calendar" /></div>
+        </form:select> <input type="button"
+          onClick="displayDatePicker('departYear','departMonth','departDay', 'departMonth');"
+          value="Calendar" /></div>
         <form:errors path="departMonth" cssClass="error" /> <form:errors path="departDay"
           cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
       </tr>
@@ -210,7 +214,9 @@ function submitWithReturnFlightNo(no) {
           <c:forEach var="year" begin="2008" end="2011" step="1">
             <form:option value="${year}" />
           </c:forEach>
-        </form:select> <input type="button" value="Calendar" /></div>
+        </form:select> <input type="button"
+          onClick="displayDatePicker('returnYear','returnMonth','returnDay', 'returnMonth');"
+          value="Calendar" /></div>
         <form:errors path="returnMonth" cssClass="error" /> <form:errors path="returnDay"
           cssClass="error" /> <form:errors path="returnYear" cssClass="error" /></td>
       </tr>
