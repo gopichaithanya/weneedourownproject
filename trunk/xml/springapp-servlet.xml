@@ -58,6 +58,12 @@
   	</property>
   </bean>
   
+  <bean name="/inventory.spring" class="springapp.web.InventoryReportController">
+  	<property name="formView" value="inventory"/>
+  	<property name="commandName" value="flight"/>
+    <property name="commandClass" value="hibernate.Flight"/>
+  </bean>
+  	
   <bean name="/reserveFlightForCustomer.spring" class="springapp.web.ReserveFlightForCustomerController" />
   <bean name="/cancelReservedFlightForCustomer.spring" class="springapp.web.CancelReservedFlightForCustomerController" />
   <bean name="/itineraryForCustomer.spring" class="springapp.web.ItineraryForCustomerController" />

@@ -78,10 +78,10 @@ public class FlightManager {
       return result;
    }
 
-   public List<?> listFlights() {
+   public static List<Flight> listFlights() {
       Session session = HibernateUtil.getSessionFactory().getCurrentSession();
       session.beginTransaction();
-      List<?> result = session.createQuery("from Flight").list();
+      List<Flight> result = session.createQuery("from Flight").list();
       session.getTransaction().commit();
 
       return result;
