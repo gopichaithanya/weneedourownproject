@@ -490,6 +490,11 @@
 				<include name="*.aar" />
 			</fileset>
 		</copy>
+		<copy todir="${dist.dir}" preservelastmodified="true">
+			<fileset dir="${build.dir}">
+				<include name="*.aar" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="run.client">
