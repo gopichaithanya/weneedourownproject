@@ -1,9 +1,7 @@
 package hibernate.manager;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import hibernate.*;
@@ -13,17 +11,13 @@ import org.hibernate.Session;
 import org.hibernate.HibernateException;
 
 /**
- * Hibernate class that implements the functions dealing with flight information used
- * by Spring
- * 
- * @author Israa Taha
- * @version 
+ * FlightManager contains functions to access and maintain flight objects
  */
 @SuppressWarnings("unchecked")
 public class FlightManager {
 
    /**
-    * Default Constructor
+    * Constructs a new FlightManager object
     */
    public FlightManager() {
    }
@@ -78,6 +72,10 @@ public class FlightManager {
       return result;
    }
 
+   /**
+    * Returns a list of all flights in the database
+    * @return a list of all flights
+    */
    public static List<Flight> listFlights() {
       Session session = HibernateUtil.getSessionFactory().getCurrentSession();
       session.beginTransaction();
@@ -87,6 +85,11 @@ public class FlightManager {
       return result;
    }
 
+   /**
+    * Returns the flight with the given flightNo
+    * @param flightNo - the flight number
+    * @return the flight object with the given flightNo, null if there is no such flight
+    */
    public static Flight getFlight(int flightNo) {
       final int fno = Integer.valueOf(flightNo);
       Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -96,6 +99,17 @@ public class FlightManager {
       return flight;
    }
 
+   /**
+    * Returns a list of flights that satisfy the given parameter constraints 
+    * @param departLoc - the flight departure location
+    * @param arrivalLoc - the flight arrival location
+    * @param year - the year
+    * @param month - the month
+    * @param day - the day
+    * @param hour - the hour
+    * @param hourRange - the hour range
+    * @return the list of flights
+    */
    public static List<Flight> getFlightList(String departLoc, String arrivalLoc, int year,
          int month, int day, int hour, int hourRange) {
 
@@ -121,6 +135,15 @@ public class FlightManager {
       return flights;
    }
 
+   /**
+    * Returns a date object with the time range
+    * @param year - the search year
+    * @param month - the search month
+    * @param day - the search day
+    * @param hour - the search hour
+    * @param searchingHourRange - the hour range
+    * @return the time range
+    */
    public static Date[] getTimeRange(int year, int month, int day, int hour, int searchingHourRange) {
       if (month <= 0 || month > 12)
          return null;
@@ -161,17 +184,5 @@ public class FlightManager {
       final Date endDate = endCalendar.getTime();
       final Date[] range = new Date[] { startDate, endDate };
       return range;
-   }
-
-   public static void main(String[] args) {
-      FlightManager mgr = new FlightManager();
-
-      List<?> flights = mgr.listFlights();
-      for (int i = 0; i < flights.size(); i++) {
-         Flight flight = (Flight) flights.get(i);
-         System.out.println("Flight: " + flight.getFlightNo());
-      }
-
-      HibernateUtil.getSessionFactory().close();
    }
 }
