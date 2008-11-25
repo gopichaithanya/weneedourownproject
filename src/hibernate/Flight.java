@@ -277,16 +277,16 @@ public class Flight implements java.io.Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Return a set of itineraries
+     * @return set of itineraries
      */
     public Set<Itinerary> getItineraries() {
         return this.itineraries;
     }
     
     /**
-     * 
-     * @param itineraries
+     * Set itineraries
+     * @param itineraries - a set of itineraries
      */
     public void setItineraries(Set<Itinerary> itineraries) {
         this.itineraries = itineraries;
@@ -306,8 +306,6 @@ public class Flight implements java.io.Serializable {
              / (1000 * 60 * 60)));
        return durationHours;
     }
-
-
 }
 
 

@@ -37,22 +37,22 @@ public class Airport  implements java.io.Serializable {
     private String state;
     
     /**
-     * 
+     * The first latitude value of the airport location
      */
     private String latitude1;
     
     /**
-     * 
+     * The second latitude value of the airport location
      */
     private String latitude2;
     
     /**
-     * 
+     * The first longitude value of the airport location
      */
     private String longitude1;
     
     /**
-     * 
+     * The second longitude value of the airport location
      */
     private String longitude2;
     
@@ -91,20 +91,20 @@ public class Airport  implements java.io.Serializable {
     }
     
     /**
-     * 
-     * @param code
-     * @param name
-     * @param city
-     * @param county
-     * @param state
-     * @param latitude1
-     * @param latitude2
-     * @param longitude1
-     * @param longitude2
-     * @param elevation
-     * @param telephone
-     * @param flightsForDepartureLocation
-     * @param flightsForArrivalLocation
+     * Constructs a new airport object with the give parameters
+     * @param code - the airport code
+     * @param name - the airport name
+     * @param city - the airport city
+     * @param county - the airport county
+     * @param state - the airport state
+     * @param latitude1 - the first latitude value of the airport location
+     * @param latitude2 - the second latitude value of the airport location
+     * @param longitude1 - the first longitude value of the airport location
+     * @param longitude2 - the second longitude value of the airport location
+     * @param elevation - the airport elevation
+     * @param telephone - the airport telephone number
+     * @param flightsForDepartureLocation - set of flights for given departure location
+     * @param flightsForArrivalLocation - set of flights for given arrival location
      */
     public Airport(String code, String name, String city, String county, String state, String latitude1, String latitude2, String longitude1, String longitude2, String elevation, String telephone, Set<Flight> flightsForDepartureLocation, Set<Flight> flightsForArrivalLocation) {
        this.code = code;
@@ -203,43 +203,65 @@ public class Airport  implements java.io.Serializable {
     }
     
     /**
-     * Return the latitude of the airport location
-     * @return - latitude1
+     * Return the first latitude value of the airport location
+     * @return the first latitude value
      */
     public String getLatitude1() {
         return this.latitude1;
     }
     
     /**
-     * Sets the latitude of the airport location
-     * @param latitude1 - the airport latitude
+     * Sets the first latitude value of the airport location
+     * @param latitude1 - the first latitude value
      */
     public void setLatitude1(String latitude1) {
         this.latitude1 = latitude1;
     }
     
     /**
-     * 
-     * @return
+     * Return the second latitude value of the airport location
+     * @return the second latitude value
      */
     public String getLatitude2() {
         return this.latitude2;
     }
     
+    /**
+     * Sets the second latitude value of airport location
+     * @param latitude2 - the second latitude value
+     */
     public void setLatitude2(String latitude2) {
         this.latitude2 = latitude2;
     }
+    
+    /**
+     * Returns the first longitude value of the airport location
+     * @return the first longitude value
+     */
     public String getLongitude1() {
         return this.longitude1;
     }
     
+    /**
+     * Sets the first longitude value of the airport location
+     * @param longitude1 - the first longitude value
+     */
     public void setLongitude1(String longitude1) {
         this.longitude1 = longitude1;
     }
+
+    /**
+     * Returns the second longitude value of the airport location
+     * @return the second longitude value
+     */
     public String getLongitude2() {
         return this.longitude2;
     }
     
+    /**
+     * Sets the second longitude value of the airport location
+     * @param longitude2 - the second longitude value
+     */
     public void setLongitude2(String longitude2) {
         this.longitude2 = longitude2;
     }

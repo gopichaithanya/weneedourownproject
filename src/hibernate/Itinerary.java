@@ -189,5 +189,4 @@ public class Itinerary implements java.io.Serializable {
    public void setTicketNo(String ticketNo) {
 	   this.ticketNo = ticketNo;
    }
-
 }
