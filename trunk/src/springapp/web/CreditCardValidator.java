@@ -19,6 +19,10 @@ import org.springframework.validation.Errors;
  */
 public class CreditCardValidator implements Validator{
 
+	/**
+	 * Returns true if this Validator can validate instances of the supplied aClass, false otherwise
+	 * @return true if class can be validated, false otherwise
+	 */
 	public boolean supports(Class aClass) {
 		return aClass.equals(Customer.class);
 	}

@@ -19,13 +19,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * CreditCardController is a Spring controller for the credit card page.
+ * 
+ * @author Israa Taha
+ */
 @SuppressWarnings("unused")
 public class CreditCardController extends SimpleFormController {
 	
+	/**
+	 * The flight number of the flight to be booked
+	 */
 	private Integer flightNo = null;
+	
+	/**
+	 * The customer booking the flight
+	 */
 	private Customer c = null;
 	
-	//protected void doSubmitAction(Object command) {
+	/**
+	 * Submit callback with all parameters.
+	 * @param request - current servlet request
+     * @param response - current servlet response
+     * @param command - form object with request parameters bound onto it
+     * @param errors - Errors instance without errors (subclass can add errors if it wants to) 
+	 * @return the ModelAndView object
+	 */
 	protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
 	         Object command, BindException errors) throws Exception {
 		
@@ -56,7 +75,13 @@ public class CreditCardController extends SimpleFormController {
 		return mv;
 	}
 
-	@Override
+	
+	/**
+	 * Retrieve a backing object for the current form from the given request
+	 * @param request - current HTTP request
+	 * @return the backing object 
+	 */
+	@Override			
 	protected Object formBackingObject(HttpServletRequest request) throws Exception {
 		final HttpSession session = request.getSession();
 		final String userName = LoginController.getUserName(session);
