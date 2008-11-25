@@ -99,10 +99,6 @@ public class Airline  implements java.io.Serializable {
     public void setFlights(Set<Flight> flights) {
         this.flights = flights;
     }
-
-
-
-
 }
 
 

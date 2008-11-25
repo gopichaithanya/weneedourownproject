@@ -9,53 +9,93 @@ package hibernate;
 @SuppressWarnings("serial")
 public class ItineraryId  implements java.io.Serializable {
 
-
+	/**
+	 * The flight number
+	 */
     private int flightNo;
+    
+    /**
+     * The customer's username
+     */
     private String username;
 
+    /**
+     * Constructs a new ItineraryId object
+     */
     public ItineraryId() {
     }
 
+    /**
+     * Constructs a new ItineraryId object for the given flight number and username
+     * @param flightNo - the flight number
+     * @param username - the customer's username
+     */
     public ItineraryId(int flightNo, String username) {
        this.flightNo = flightNo;
        this.username = username;
     }
    
+    /**
+     * Returns the flight number
+     * @return the flight number
+     */
     public int getFlightNo() {
         return this.flightNo;
     }
     
+    /**
+     * Sets the flight number
+     * @param flightNo - the flight number
+     */
     public void setFlightNo(int flightNo) {
         this.flightNo = flightNo;
     }
+    
+    /**
+     * Returns the username
+     * @return the customer's username
+     */
     public String getUsername() {
         return this.username;
     }
     
+    /**
+     * Sets the username
+     * @param username - the customer's username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
-
-   public boolean equals(Object other) {
-         if ( (this == other ) ) return true;
-		 if ( (other == null ) ) return false;
-		 if ( !(other instanceof ItineraryId) ) return false;
-		 ItineraryId castOther = ( ItineraryId ) other; 
+    /**
+     * Returns true if and only if the argument is not null and is an ItineraryId object 
+     * that represents the same boolean value as this object.
+     * @param other - the object to compare with
+     * @return true if the ItineraryId objects represent the same value; false otherwise
+     */
+    public boolean equals(Object other) {
+    	if ( (this == other ) ) return true;
+		if ( (other == null ) ) return false;
+		if ( !(other instanceof ItineraryId) ) return false;
+		ItineraryId castOther = ( ItineraryId ) other; 
          
-		 return (this.getFlightNo()==castOther.getFlightNo())
- && ( (this.getUsername()==castOther.getUsername()) || ( this.getUsername()!=null && castOther.getUsername()!=null && this.getUsername().equals(castOther.getUsername()) ) );
-   }
+		return (this.getFlightNo()==castOther.getFlightNo())
+				&& ( (this.getUsername()==castOther.getUsername()) 
+				|| ( this.getUsername()!=null && castOther.getUsername()!=null 
+				&& this.getUsername().equals(castOther.getUsername()) ) );
+    }
    
-   public int hashCode() {
-         int result = 17;
+    /**
+     * Returns a hash code for this object
+     * @return the hash code for the object
+     */
+    public int hashCode() {
+    	int result = 17;
          
-         result = 37 * result + this.getFlightNo();
-         result = 37 * result + ( getUsername() == null ? 0 : this.getUsername().hashCode() );
-         return result;
-   }   
-
-
+        result = 37 * result + this.getFlightNo();
+        result = 37 * result + ( getUsername() == null ? 0 : this.getUsername().hashCode() );
+        return result;
+    }   
 }
 
 
