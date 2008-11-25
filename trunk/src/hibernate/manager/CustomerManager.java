@@ -1,16 +1,17 @@
 package hibernate.manager;
 
-import java.util.List;
-
 import hibernate.Customer;
 
 import org.hibernate.Session;
 import org.hibernate.HibernateException;
 
+/**
+ * CustomerManager contains functions to access and maintain customer objects
+ */
 public class CustomerManager {
 	
 	/**
-	 * Constructora a new CustomerManager object
+	 * Constructors a new CustomerManager object
 	 */
 	public CustomerManager() {}
 	
@@ -58,7 +59,7 @@ public class CustomerManager {
 	}
 	
 	/**
-	 * 
+	 * Returns the customer object with the given username
 	 * @param username - the customer username
 	 * @return the customer with the given username
 	 */
