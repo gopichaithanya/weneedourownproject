@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
-public class CreditCardContollerTest {
+public class CreditCardControllerTest {
 
    private static class CreditCardControllerForTest extends CreditCardController {
       public Object formBackingObjectPublic(HttpServletRequest req) throws Exception {
@@ -37,6 +37,6 @@ public class CreditCardContollerTest {
       assertEquals(157, cmd.getFlight().getFlightNo());
       assertEquals(EStatus.RESERVED.toString(), cmd.getStatus());
       assertEquals(ESeatClass.ECONOMY.toString(), cmd.getSeatClass());
-      assertEquals(1, cmd.getNumOfSeats());
+      assertEquals(1, (int) cmd.getNumOfSeats());
    }
 }

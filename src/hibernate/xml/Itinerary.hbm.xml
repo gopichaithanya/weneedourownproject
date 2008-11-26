@@ -21,5 +21,14 @@
         <property name="status" type="string">
             <column name="STATUS" length="20" />
         </property>
+        <property name="seatClass" type="string">
+            <column name="SEATCLASS" length="20" />
+        </property>
+        <property name="numOfSeats" type="int">
+            <column name="NUMOFSEATS" />
+        </property>
+        <property name="ticketNo" type="string">
+            <column name="TICKETNO" />
+        </property>
     </class>
 </hibernate-mapping>
