@@ -159,6 +159,8 @@ public class Itinerary implements java.io.Serializable {
     * @param customer - the customer to whom the itinerary belongs
     * @param flight - the flight associated with the itinerary
     * @param status - the status of the flight
+    * @param numOfSeats - the number of seats
+    * @param seatClass - the seat class
     * @param ticketNo - the ticketNo
     */
    public Itinerary(ItineraryId id, Customer customer, Flight flight, String status, 
@@ -238,6 +240,7 @@ public class Itinerary implements java.io.Serializable {
 
    
    /**
+    * Returns the seat class
     * @return the seatClass
     */
    public String getSeatClass() {
@@ -245,6 +248,7 @@ public class Itinerary implements java.io.Serializable {
    }
 
    /**
+    * Sets the seat class
     * @param seatClass the seatClass to set
     */
    public void setSeatClass(String seatClass) {
@@ -252,6 +256,7 @@ public class Itinerary implements java.io.Serializable {
    }
 
    /**
+    * Returns the number of seats
     * @return the numOfSeats
     */
    public int getNumOfSeats() {
@@ -259,6 +264,7 @@ public class Itinerary implements java.io.Serializable {
    }
 
    /**
+    * Sets the number of seats
     * @param numOfSeats the numOfSeats to set
     */
    public void setNumOfSeats(int numOfSeats) {
