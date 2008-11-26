@@ -70,6 +70,7 @@ public class CreditCardController extends SimpleFormController {
     */
    @Override
    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+      Itinerary defaultCommandObj = new Itinerary();
       final HttpSession session = request.getSession();
       final String userName = LoginController.getUserName(session);
       final List<Itinerary> its = ItineraryManager.getReserved(userName);
@@ -79,13 +80,16 @@ public class CreditCardController extends SimpleFormController {
       try {
          flightNo = Integer.valueOf(request.getParameter("flightNo"));
       } catch (NumberFormatException e) {
-         return new Itinerary();
       }
 
-      for (final Itinerary it : its) {
-         if (it.getFlight().getFlightNo() == flightNo)
-            return it;
-      }
-      return new Itinerary();
+      if (null != flightNo)
+         for (final Itinerary it : its) {
+            if (it.getFlight().getFlightNo() == flightNo) {
+               defaultCommandObj = it;
+               break;
+            }
+         }
+
+      return defaultCommandObj;
    }
 }
