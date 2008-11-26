@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.validation.BindException;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 public class LoginController extends SimpleFormController {
 
    public static final String URL = "login.spring";
+   private static Logger logger = Logger.getLogger(LoginController.class.getName());
 
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
@@ -31,12 +33,12 @@ public class LoginController extends SimpleFormController {
             .getAttribute(SessionConstants.LOGIN_REDIRECT_AFTER_LOGIN);
       session.removeAttribute(SessionConstants.LOGIN_REDIRECT_AFTER_LOGIN);
 
-//      final String successView = (null == afterLogin || afterLogin.length() <= 0) ? getSuccessView()
-//            : afterLogin;
-      String username = customer.getUsername();
-      ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
+      final String successView = (null == afterLogin || afterLogin.length() <= 0) ? getSuccessView()
+            : afterLogin;
+      final String username = customer.getUsername();
 
-      session.setAttribute(SessionConstants.USERNAME, customer.getUsername());
+      ModelAndView mv = new ModelAndView(new RedirectView(successView));
+      session.setAttribute(SessionConstants.USERNAME, username);
       return mv;
    }
 
@@ -48,6 +50,7 @@ public class LoginController extends SimpleFormController {
    }
 
    static public ModelAndView redirectToLogin(HttpSession session, String urlAfterLogin) {
+      logger.info("redirectToLogin: " + urlAfterLogin);
       session.setAttribute(SessionConstants.LOGIN_REDIRECT_AFTER_LOGIN, urlAfterLogin);
       return new ModelAndView(new RedirectView(LoginController.URL));
    }
