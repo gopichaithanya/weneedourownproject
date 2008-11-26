@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@page import="java.util.List"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,7 +19,6 @@ function book(flightNo) {
 }
 </script>
 <body>
-<c:out value="${aa}" />
 <jsp:include page="/WEB-INF/jsp/header1.jsp">
   <jsp:param name="title2" value="Itinerary" />
 </jsp:include>
@@ -27,7 +27,7 @@ function book(flightNo) {
 <table border="1" class="itineraryForCustomerReserved">
   <caption class="itineraryForCustomerReservedTitle">Reserved</caption>
   <c:choose>
-    <c:when test="${empty reservedFlights}">
+    <c:when test="${empty reservedItinerary}">
       <tbody>
         <tr>
           <td class="noFlight">There is no reserved flight.</td>
@@ -49,37 +49,41 @@ function book(flightNo) {
       </thead>
 
       <tbody>
-        <c:forEach items="${reservedFlights}" var="flight">
+        <c:forEach items="${reservedItinerary}" var="iti">
           <tr>
-            <td><a href="http://maps.google.com"><c:out
-              value="${flight.airportByDepartureLocation.name}" /> (<c:out
-              value="${flight.airportByDepartureLocation.code}" />)</a><br />
+            <td><c:out value="${iti.flight.airportByDepartureLocation.name}" /> (<c:out
+              value="${iti.flight.airportByDepartureLocation.code}" />)<br />
 
-            <c:out value="${flight.departureTime}" /></td>
-            <td><a href="http://maps.google.com"><c:out
-              value="${flight.airportByArrivalLocation.name}" /> (<c:out
-              value="${flight.airportByArrivalLocation.code}" />)</a><br />
-            <c:out value="${flight.arrivalTime}" />
-            <div>(<c:out value="${flight.durationHours}" /> hours)</div>
+            <c:out value="${iti.flight.departureTime}" /></td>
+            <td><c:out value="${iti.flight.airportByArrivalLocation.name}" /> (<c:out
+              value="${iti.flight.airportByArrivalLocation.code}" />)<br />
+            <c:out value="${iti.flight.arrivalTime}" />
+            <div>(<c:out value="${iti.flight.durationHours}" /> hours)</div>
             </td>
             <td>
-            <div>$<c:out value="${flight.economyPrice}" /></div>
-            <div>($<c:out value="${flight.businessPrice}" />)</div>
+            <div>$<c:choose>
+              <c:when test="${fn:indexOf(iti.seatClass,'Business') == 0}">
+                <c:out value="${iti.flight.businessPrice}" />
+              </c:when>
+              <c:otherwise>
+                <c:out value="${iti.flight.economyPrice}" />
+              </c:otherwise>
+            </c:choose> (<c:out value="${iti.seatClass}" />)</div>
             </td>
             <td>
             <table border="0">
               <tr>
                 <td><img
-                  src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline.code}.gif"
-                  alt="${flight.airline.code}" /></td>
-                <td><c:out value="${flight.airline.name}" /></td>
+                  src="http://www.expedia.com/pubspec/images/airlines/sm${iti.flight.airline.code}.gif"
+                  alt="${iti.flight.airline.code}" /></td>
+                <td><c:out value="${iti.flight.airline.name}" /></td>
               </tr>
             </table>
             </td>
             <td><input type="button" value="Cancel"
-              onClick="cancelReserved(<c:out value="${flight.flightNo}"/>);" /></td>
+              onClick="cancelReserved(<c:out value="${iti.flight.flightNo}"/>);" /></td>
             <td><input type="button" value="Book"
-              onClick="book(<c:out value="${flight.flightNo}"/>);" /></td>
+              onClick="book(<c:out value="${iti.flight.flightNo}"/>);" /></td>
           </tr>
         </c:forEach>
       </tbody>
@@ -99,7 +103,7 @@ as well.
 <table border="1" class="itineraryForCustomerBooked">
   <caption class="itineraryForCustomerBookedTitle">Booked</caption>
   <c:choose>
-    <c:when test="${empty bookedFlights}">
+    <c:when test="${empty bookedItinerary}">
       <tbody>
         <tr>
           <td class="noFlight">There is no booked flight.</td>
@@ -119,31 +123,29 @@ as well.
       </thead>
 
       <tbody>
-        <c:forEach items="${bookedFlights}" var="flight">
+        <c:forEach items="${bookedItinerary}" var="iti">
 
           <tr>
-            <td><a href="http://maps.google.com"><c:out
-              value="${flight.airportByDepartureLocation.name}" /> (<c:out
-              value="${flight.airportByDepartureLocation.code}" />)</a><br />
+            <td><c:out value="${iti.flight.airportByDepartureLocation.name}" /> (<c:out
+              value="${iti.flight.airportByDepartureLocation.code}" />)<br />
 
-            <c:out value="${flight.departureTime}" /></td>
-            <td><a href="http://maps.google.com"><c:out
-              value="${flight.airportByArrivalLocation.name}" /> (<c:out
-              value="${flight.airportByArrivalLocation.code}" />)</a><br />
-            <c:out value="${flight.arrivalTime}" />
-            <div>(<c:out value="${flight.durationHours}" /> hours)</div>
+            <c:out value="${iti.flight.departureTime}" /></td>
+            <td><c:out value="${iti.flight.airportByArrivalLocation.name}" /> (<c:out
+              value="${iti.flight.airportByArrivalLocation.code}" />)<br />
+            <c:out value="${iti.flight.arrivalTime}" />
+            <div>(<c:out value="${iti.flight.durationHours}" /> hours)</div>
             </td>
             <td>
             <table border="0">
               <tr>
                 <td><img
-                  src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline.code}.gif"
-                  alt="${flight.airline.code}" /></td>
-                <td><c:out value="${flight.airline.name}" /></td>
+                  src="http://www.expedia.com/pubspec/images/airlines/sm${iti.flight.airline.code}.gif"
+                  alt="${iti.flight.airline.code}" /></td>
+                <td><c:out value="${iti.flight.airline.name}" /></td>
               </tr>
             </table>
             </td>
-            <td>XX-FF-YYYYYY-ZZZ</td>
+            <td><c:out value="${iti.ticketNo}" /></td>
           </tr>
         </c:forEach>
       </tbody>
@@ -165,7 +167,7 @@ as well.
 <table border="1" class="itineraryForCustomerCanceled">
   <caption class="itineraryForCustomerCanceledTitle">Canceled</caption>
   <c:choose>
-    <c:when test="${empty canceledFlights}">
+    <c:when test="${empty canceledItinerary}">
       <tbody>
         <tr>
           <td class="noFlight">There is no canceled flight.</td>
@@ -184,27 +186,25 @@ as well.
       </thead>
 
       <tbody>
-        <c:forEach items="${canceledFlights}" var="flight">
+        <c:forEach items="${canceledItinerary}" var="iti">
 
           <tr>
-            <td><a href="http://maps.google.com"><c:out
-              value="${flight.airportByDepartureLocation.name}" /> (<c:out
-              value="${flight.airportByDepartureLocation.code}" />)</a><br />
+            <td><c:out value="${iti.flight.airportByDepartureLocation.name}" /> (<c:out
+              value="${iti.flight.airportByDepartureLocation.code}" />)<br />
 
-            <c:out value="${flight.departureTime}" /></td>
-            <td><a href="http://maps.google.com"><c:out
-              value="${flight.airportByArrivalLocation.name}" /> (<c:out
-              value="${flight.airportByArrivalLocation.code}" />)</a><br />
-            <c:out value="${flight.arrivalTime}" />
-            <div>(<c:out value="${flight.durationHours}" /> hours)</div>
+            <c:out value="${iti.flight.departureTime}" /></td>
+            <td><c:out value="${iti.flight.airportByArrivalLocation.name}" /> (<c:out
+              value="${iti.flight.airportByArrivalLocation.code}" />)<br />
+            <c:out value="${iti.flight.arrivalTime}" />
+            <div>(<c:out value="${iti.flight.durationHours}" /> hours)</div>
             </td>
             <td>
             <table border="0">
               <tr>
                 <td><img
-                  src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline.code}.gif"
-                  alt="${flight.airline.code}" /></td>
-                <td><c:out value="${flight.airline.name}" /></td>
+                  src="http://www.expedia.com/pubspec/images/airlines/sm${iti.flight.airline.code}.gif"
+                  alt="${iti.flight.airline.code}" /></td>
+                <td><c:out value="${iti.flight.airline.name}" /></td>
               </tr>
             </table>
             </td>

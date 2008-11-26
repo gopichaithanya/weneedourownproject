@@ -10,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.view.RedirectView;
 
+import hibernate.Itinerary.ESeatClass;
+
 /**
  * A Spring controller for reserve flight. This is for customer not for manager.
  */
@@ -29,17 +31,20 @@ public class ReserveFlightForCustomerController implements Controller {
       final ModelAndView mv = new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
       {
          boolean bRst = false;
-         Integer[] flights = null;
-         try {
-            flights = (Integer[]) session
-                  .getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER);
-         } catch (ClassCastException e) {
-         }
+         final Integer[] flights = (Integer[]) session
+               .getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER);
 
-         if (null != flights && flights.length > 0) {
+         final ESeatClass seatClass = (ESeatClass) session
+               .getAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER);
+
+         final int numPassengers = (Integer) session
+               .getAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER);
+
+         if (null != flights && flights.length > 0 && null != seatClass && numPassengers > 0) {
             bRst = true;
             for (final Object flight : flights)
-               bRst &= ItineraryManager.reserve(userName, (Integer) flight);
+               bRst &= ItineraryManager
+                     .reserve(userName, (Integer) flight, seatClass, numPassengers);
          }
          mv.addObject("result", bRst);
       }

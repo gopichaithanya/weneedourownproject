@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import hibernate.*;
+import hibernate.Itinerary.ESeatClass;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -27,9 +28,9 @@ public class FlightManager {
     * @param flight - the flight to be added
     */
    public static void addFlight(Flight flight) {
-      
+
       try {
-    	 Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
          session.beginTransaction();
          session.save(flight);
          session.getTransaction().commit();
@@ -43,15 +44,15 @@ public class FlightManager {
     * @param flight - the flight to be removed
     */
    public void removeFlight(Flight flight) {
-      
+
       try {
-    	 Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
          session.beginTransaction();
          session.delete(flight);
          session.getTransaction().commit();
       } catch (HibernateException e) {
          e.printStackTrace();
-      } 
+      }
    }
 
    /**
@@ -141,25 +142,38 @@ public class FlightManager {
     * @param flightNo - the flight number
     * @param numOfSeats - the number of seats
     */
-   public static void updateSeats(int flightNo, int numOfSeats, String seatClass) {
-	   Flight flight = getFlight(flightNo); 
-	   
-	   Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-	   session.beginTransaction();
-	   
-	   if (seatClass.compareTo("business") == 0) {
-		   int businessSeats = getFlight(flightNo).getBusinessSeats();
-		   flight.setBusinessSeats(businessSeats - numOfSeats);
-		   session.update(flight);
-	   }
-	   else if (seatClass.compareTo("economy") == 0) {
-		   int economySeats = getFlight(flightNo).getEconomySeats();
-		   flight.setEconomySeats(economySeats - numOfSeats);
-		   session.update(flight);
-	   }
-	   session.getTransaction().commit();
+   public static boolean decreaseSeats(int flightNo, int numOfSeats, ESeatClass seatClass) {
+      boolean rst = false;
+      final Flight flight = getFlight(flightNo);
+
+      try {
+         if (ESeatClass.BUSINESS.equals(seatClass)) {
+            final int seat = getFlight(flightNo).getBusinessSeats();
+            final int newSeat = seat - numOfSeats;
+            if (newSeat < 0)
+               throw new IllegalArgumentException();
+            flight.setBusinessSeats(newSeat);
+            rst = true;
+         } else if (ESeatClass.ECONOMY.equals(seatClass)) {
+            final int seat = getFlight(flightNo).getEconomySeats();
+            final int newSeat = seat - numOfSeats;
+            if (newSeat < 0)
+               throw new IllegalArgumentException();
+            flight.setEconomySeats(newSeat);
+            rst = true;
+         }
+
+         final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+         session.beginTransaction();
+         session.update(flight);
+         session.getTransaction().commit();
+      } catch (IllegalArgumentException e) {
+         rst = false;
+      }
+
+      return rst;
    }
-   
+
    /**
     * Returns a date object with the time range
     * @param year - the search year

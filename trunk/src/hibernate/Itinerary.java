@@ -11,11 +11,11 @@ import java.util.HashMap;
 @SuppressWarnings("serial")
 public class Itinerary implements java.io.Serializable {
 
-	/**
-	 * Enumeration type for the status of a flight in the itinerary
-	 */
+   /**
+    * Enumeration type for the status of a flight in the itinerary
+    */
    public enum EStatus {
-      CANCELED("canceled"), BOOKED("booked"), RESERVED("reserved");
+      CANCELED("Canceled"), BOOKED("Booked"), RESERVED("Reserved");
 
       private static final HashMap<String, EStatus> reverseMap = new HashMap<String, EStatus>();
 
@@ -30,13 +30,12 @@ public class Itinerary implements java.io.Serializable {
          this.description = description;
       }
 
-      @Override
-      public String toString() {
-         return this.description;
+      public String getDescription() {
+         return description;
       }
 
-      public static EStatus get(String code) {
-         return reverseMap.get(code);
+      public static EStatus get(String name) {
+         return reverseMap.get(name);
       }
    }
 
@@ -44,46 +43,45 @@ public class Itinerary implements java.io.Serializable {
     * Enumeration type for the seat class
     */
    public enum ESeatClass {
-	      ECONOMY("economy"), BUSINESS("business");
+      ECONOMY("Economy"), BUSINESS("Business");
 
-	      private static final HashMap<String, ESeatClass> reverseMap = new HashMap<String, ESeatClass>();
+      private static final HashMap<String, ESeatClass> reverseMap = new HashMap<String, ESeatClass>();
 
-	      static {
-	         for (ESeatClass s : EnumSet.allOf(ESeatClass.class))
-	            reverseMap.put(s.toString(), s);
-	      }
+      static {
+         for (ESeatClass s : EnumSet.allOf(ESeatClass.class))
+            reverseMap.put(s.toString(), s);
+      }
 
-	      private String description;
+      private String description;
 
-	      private ESeatClass(String description) {
-	         this.description = description;
-	      }
+      private ESeatClass(String description) {
+         this.description = description;
+      }
 
-	      @Override
-	      public String toString() {
-	         return this.description;
-	      }
+      public String getDescription() {
+         return description;
+      }
 
-	      public static ESeatClass get(String code) {
-	         return reverseMap.get(code);
-	      }
-	   }
+      public static ESeatClass get(String name) {
+         return reverseMap.get(name);
+      }
+   }
 
    /**
     * The itinerary id
     */
    private ItineraryId id;
-   
+
    /**
     * The customer to whom the itinerary belongs to
     */
    private Customer customer;
-   
+
    /**
     * The flight in the itinerary
     */
    private Flight flight;
-   
+
    /**
     * The status of the flight whether its booked, reserved or canceled
     */
@@ -93,17 +91,17 @@ public class Itinerary implements java.io.Serializable {
     * The seat class
     */
    private ESeatClass seatClass;
-   
+
    /**
     * The number of booked seats
     */
-   private int numOfSeats;
-   
+   private Integer numOfSeats;
+
    /**
     * The ticket number
     */
    private String ticketNo;
-   
+
    /**
     * Constructs a new itinerary object
     */
@@ -115,7 +113,49 @@ public class Itinerary implements java.io.Serializable {
     * @param id
     * @param customer - the customer 
     * @param flight - the flight 
+    * @param seatClass TODO
+    * @param numPassenger TODO
     */
+   public Itinerary(ItineraryId id, Customer customer, Flight flight, ESeatClass seatClass,
+         Integer numPassengers) {
+      this.id = id;
+      this.customer = customer;
+      this.flight = flight;
+      this.setSeatClass(seatClass);
+      this.setNumOfSeats(numPassengers);
+   }
+
+   /**
+    * Constructs a new itinerary object 
+    * @param id - the itinerary id
+    * @param customer - the customer to whom the itinerary belongs
+    * @param flight - the flight associated with the itinerary
+    * @param status - the status of the flight
+    */
+   public Itinerary(ItineraryId id, Customer customer, Flight flight, EStatus status) {
+      this.id = id;
+      this.customer = customer;
+      this.flight = flight;
+      this.status = status;
+   }
+
+   /**
+    * Constructs a new itinerary object 
+    * @param id - the itinerary id
+    * @param customer - the customer to whom the itinerary belongs
+    * @param flight - the flight associated with the itinerary
+    * @param status - the status of the flight
+    * @param ticketNo - the ticketNo
+    */
+   public Itinerary(ItineraryId id, Customer customer, Flight flight, EStatus status,
+         String ticketNo) {
+      this.id = id;
+      this.customer = customer;
+      this.flight = flight;
+      this.status = status;
+      this.ticketNo = ticketNo;
+   }
+
    public Itinerary(ItineraryId id, Customer customer, Flight flight) {
       this.id = id;
       this.customer = customer;
@@ -128,52 +168,21 @@ public class Itinerary implements java.io.Serializable {
     * @param customer - the customer to whom the itinerary belongs
     * @param flight - the flight associated with the itinerary
     * @param status - the status of the flight
-    */
-   public Itinerary(ItineraryId id, Customer customer, Flight flight, String status) {
-      this.id = id;
-      this.customer = customer;
-      this.flight = flight;
-      this.status = EStatus.get(status);
-   }
-
-   /**
-    * Constructs a new itinerary object 
-    * @param id - the itinerary id
-    * @param customer - the customer to whom the itinerary belongs
-    * @param flight - the flight associated with the itinerary
-    * @param status - the status of the flight
-    * @param ticketNo - the ticketNo
-    */
-   public Itinerary(ItineraryId id, Customer customer, Flight flight, String status, 
-		   String ticketNo) {
-	   this.id = id;
-	   this.customer = customer;
-	   this.flight = flight;
-	   this.status = EStatus.get(status);
-	   this.ticketNo = ticketNo;
-   }
-   
-   /**
-    * Constructs a new itinerary object 
-    * @param id - the itinerary id
-    * @param customer - the customer to whom the itinerary belongs
-    * @param flight - the flight associated with the itinerary
-    * @param status - the status of the flight
     * @param numOfSeats - the number of seats
     * @param seatClass - the seat class
     * @param ticketNo - the ticketNo
     */
-   public Itinerary(ItineraryId id, Customer customer, Flight flight, String status, 
-		   int numOfSeats, String seatClass, String ticketNo) {
-	   this.id = id;
-	   this.customer = customer;
-	   this.flight = flight;
-	   this.status = EStatus.get(status);
-	   this.numOfSeats = numOfSeats;
-	   this.seatClass = ESeatClass.get(seatClass);
-	   this.ticketNo = ticketNo;
-   }  
-   
+   public Itinerary(ItineraryId id, Customer customer, Flight flight, EStatus status,
+         Integer numOfSeats, ESeatClass seatClass, String ticketNo) {
+      this.id = id;
+      this.customer = customer;
+      this.flight = flight;
+      this.status = status;
+      this.numOfSeats = numOfSeats;
+      this.seatClass = seatClass;
+      this.ticketNo = ticketNo;
+   }
+
    /**
     * Returns the itinerary id
     * @return the itinerary id
@@ -229,46 +238,59 @@ public class Itinerary implements java.io.Serializable {
    public String getStatus() {
       return this.status.toString();
    }
+//   public EStatus getStatus() {
+//      return this.status;
+//   }
 
    /**
     * Sets the status of the flight
     * @param status - the status of the flight
     */
+   public void setStatus(EStatus status) {
+      this.status = status;
+   }
+
    public void setStatus(String status) {
       this.status = EStatus.get(status);
    }
 
-   
    /**
-    * Returns the seat class
-    * @return the seatClass
-    */
+       * Returns the seat class
+       * @return the seatClass
+       */
    public String getSeatClass() {
-	   return this.seatClass.toString();
+      return this.seatClass.toString();
    }
+//   public ESeatClass getSeatClass() {
+//      return this.seatClass;
+//   }
 
    /**
     * Sets the seat class
     * @param seatClass the seatClass to set
     */
+   public void setSeatClass(ESeatClass seatClass) {
+      this.seatClass = seatClass;
+   }
+
    public void setSeatClass(String seatClass) {
-	   this.seatClass = ESeatClass.get(seatClass);
+      this.seatClass = ESeatClass.get(seatClass);
    }
 
    /**
     * Returns the number of seats
     * @return the numOfSeats
     */
-   public int getNumOfSeats() {
-	   return numOfSeats;
+   public Integer getNumOfSeats() {
+      return numOfSeats;
    }
 
    /**
     * Sets the number of seats
     * @param numOfSeats the numOfSeats to set
     */
-   public void setNumOfSeats(int numOfSeats) {
-	   this.numOfSeats = numOfSeats;
+   public void setNumOfSeats(Integer numOfSeats) {
+      this.numOfSeats = numOfSeats;
    }
 
    /**
@@ -276,7 +298,7 @@ public class Itinerary implements java.io.Serializable {
     * @return the ticket number
     */
    public String getTicketNo() {
-	   return ticketNo;
+      return ticketNo;
    }
 
    /**
@@ -284,6 +306,6 @@ public class Itinerary implements java.io.Serializable {
     * @param ticketNo - th ticket number
     */
    public void setTicketNo(String ticketNo) {
-	   this.ticketNo = ticketNo;
+      this.ticketNo = ticketNo;
    }
 }

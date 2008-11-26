@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import hibernate.Flight;
+import hibernate.Itinerary.ESeatClass;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -128,6 +129,22 @@ public class FlightManagerTest {
       assertEquals(calendar.getTime().toString(), dates[0].toString());
       calendar.set(2009, 0, 1, 2, 0, 0);
       assertEquals(calendar.getTime().toString(), dates[1].toString());
+   }
+
+   @Test
+   public void testUpdateSeat() {
+      final int orgSeat = FlightManager.getFlight(157).getEconomySeats();
+      assertTrue(orgSeat > 0);
+      
+      final boolean bRst1 = FlightManager.decreaseSeats(157, 1, ESeatClass.ECONOMY);
+      assertTrue(bRst1);
+      final int newSeat1 = FlightManager.getFlight(157).getEconomySeats();
+      assertEquals(orgSeat - 1, newSeat1);
+
+      final boolean bRst2 = FlightManager.decreaseSeats(157, -1, ESeatClass.ECONOMY);
+      assertTrue(bRst2);
+      final int newSeat2 = FlightManager.getFlight(157).getEconomySeats();
+      assertEquals(orgSeat, newSeat2);
    }
 
 }

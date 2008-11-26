@@ -20,10 +20,10 @@
 google.load("maps", "2");
 
 //Call this function when the page has been loaded
-function initialize() {
-  if (false == GBrowserIsCompatible()) return;
+function initGMap() {
   var mapObj = document.getElementById("map");
   if(null == mapObj) return;
+  if (false == GBrowserIsCompatible()) return;
 
   var dLat = document.getElementById("departAirportLat").value;
   var dLng = document.getElementById("departAirportLng").value;
@@ -58,7 +58,7 @@ function initialize() {
   map.addOverlay(polyline);
 }
 
-google.setOnLoadCallback(initialize);
+google.setOnLoadCallback(initGMap);
 
 
 function returnObjById( id )
@@ -87,10 +87,27 @@ function submitWithReturnFlightNo(no) {
   returnObjById("returnFlightNo").value = no;
   document.flightSearchForCustomerForm.submit();
 }
-//
+
+function clickOnTripType(tripType) {
+  var m = returnObjById('returnMonth');
+  var d = returnObjById('returnDay');
+  var y = returnObjById('returnYear');
+  var h = returnObjById('returnHour');
+  
+  if( tripType == "ONEWAY_TRIP" )
+    m.disabled = d.disabled = y.disabled = h.disabled = "true";
+  else
+    m.disabled = d.disabled = y.disabled = h.disabled = "false";
+}
+
+function initEvents() {
+  returnObjById('ROUND_TRIP').onClick = "clickOnTripType('ROUND_TRIP')";
+  returnObjById('ONEWAY_TRIP').onClick = "clickOnTripType('ONEWAY_TRIP')";
+}
+
 --></script>
 </head>
-<body onload="initialize()" onunload="GUnload()">
+<body onload="initEvents();" onunload="GUnload()">
 
 <jsp:include page="/WEB-INF/jsp/header2.jsp">
   <jsp:param name="title2" value="Flight Search" />
@@ -166,7 +183,7 @@ function submitWithReturnFlightNo(no) {
         <th>Departing Time</th>
         <td>
         <div><form:select path="departHour">
-          <form:option value="anytime" label="Anytime" />
+          <form:option value="-1" label="Anytime" />
           <c:forEach var="hour" begin="0" end="11" step="1">
             <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
           </c:forEach>
@@ -227,7 +244,7 @@ function submitWithReturnFlightNo(no) {
         <th>Returning Time</th>
         <td>
         <div><form:select path="returnHour">
-          <form:option value="anytime" label="Anytime" />
+          <form:option value="-1" label="Anytime" />
           <c:forEach var="hour" begin="0" end="11" step="1">
             <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
           </c:forEach>
@@ -236,6 +253,16 @@ function submitWithReturnFlightNo(no) {
           </c:forEach>
         </form:select></div>
         </td>
+      </tr>
+
+      <tr>
+        <th>Type of seat</th>
+        <td>
+        <div><c:forEach items="${seatClass}" var="type">
+          <form:radiobutton path="seatClass" value="${type}" id="${type}" />
+          <label for="${type}">${type.description}</label>
+        </c:forEach></div>
+        <form:errors path="seatClass" cssClass="error" /></td>
       </tr>
 
       <tr>

@@ -1,6 +1,7 @@
 package springapp.web;
 
 import hibernate.Flight;
+import hibernate.Itinerary;
 import hibernate.manager.ItineraryManager;
 
 import java.io.IOException;
@@ -29,17 +30,16 @@ public class ItineraryForCustomerController implements Controller {
       final HttpSession session = request.getSession();
       String userName = LoginController.getUserName(session);
       if (null == userName)
-         userName = "jjohnson"; // TODO
-         //return LoginController.redirectToLogin(session, URL);
+         return LoginController.redirectToLogin(session, URL);
 
-      final List<Flight> reserved = ItineraryManager.getReserved(userName);
-      final List<Flight> booked = ItineraryManager.getBooked(userName);
-      final List<Flight> canceled = ItineraryManager.getCanceled(userName);
+      final List<Itinerary> reserved = ItineraryManager.getReserved(userName);
+      final List<Itinerary> booked = ItineraryManager.getBooked(userName);
+      final List<Itinerary> canceled = ItineraryManager.getCanceled(userName);
 
       final ModelAndView mv = new ModelAndView("itineraryForCustomer");
-      mv.addObject("reservedFlights", reserved);
-      mv.addObject("bookedFlights", booked);
-      mv.addObject("canceledFlights", canceled);
+      mv.addObject("reservedItinerary", reserved);
+      mv.addObject("bookedItinerary", booked);
+      mv.addObject("canceledItinerary", canceled);
       return mv;
    }
 }
