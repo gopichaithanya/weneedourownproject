@@ -64,8 +64,8 @@ public class ItineraryManager {
 			session.beginTransaction();
 			final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
 			if (null == it) {
-				final Customer customer = new Customer(userName);
-				final Flight flight = new Flight(flightNo);
+				final Customer customer = CustomerManager.getCustomer(userName);
+				final Flight flight = FlightManager.getFlight(flightNo);
 				final Itinerary newIt = new Itinerary(pKey, customer, flight);
 				newIt.setStatus(Itinerary.EStatus.BOOKED.toString());
 				newIt.setTicketNo(ticketNo);
@@ -77,6 +77,49 @@ public class ItineraryManager {
 				session.update(it);
 				bRst = true;
 			}
+			session.getTransaction().commit();
+		}
+		return bRst;
+	}
+
+	/**
+	 * Returns true if the flight was successfully booked for the customer, false otherwise
+	 * @param userName - the customer's username
+	 * @param flightNo - the flight number
+	 * @param numOfSeats - the number of seats to be reserved
+	 * @param ticketNo - the ticket number
+	 * @return true if the flight was successfully booked for the customer, false otherwise
+	 */
+	public static boolean book(String userName, int flightNo, int numOfSeats, String seatClass, String ticketNo) {
+		boolean bRst = false;
+		{
+			final ItineraryId pKey = new ItineraryId(flightNo, userName);
+
+			final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			final Customer customer = CustomerManager.getCustomer(userName);
+			final Flight flight = FlightManager.getFlight(flightNo);
+			
+			final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
+			if (null == it) {
+				final Itinerary newIt = new Itinerary(pKey, customer, flight);
+				newIt.setStatus(Itinerary.EStatus.BOOKED.toString());
+				newIt.setNumOfSeats(numOfSeats);
+				newIt.setSeatClass(seatClass);
+				newIt.setTicketNo(ticketNo);
+				session.save(newIt);
+				bRst = true;
+			} else {
+				it.setStatus(Itinerary.EStatus.BOOKED.toString());
+				it.setSeatClass(seatClass);
+				it.setTicketNo(ticketNo);
+				it.setTicketNo(ticketNo);
+				session.update(it);
+				bRst = true;
+			}
+			FlightManager.updateSeats(flightNo, numOfSeats, seatClass);
+			
 			session.getTransaction().commit();
 		}
 		return bRst;

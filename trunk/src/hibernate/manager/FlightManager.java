@@ -136,6 +136,31 @@ public class FlightManager {
    }
 
    /**
+    * Updates the number of seats in a flight by decrementing the numOfSeats from the available
+    * seats in the requested seat class (business/economy)
+    * @param flightNo - the flight number
+    * @param numOfSeats - the number of seats
+    */
+   public static void updateSeats(int flightNo, int numOfSeats, String seatClass) {
+	   Flight flight = getFlight(flightNo); 
+	   
+	   Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+	   session.beginTransaction();
+	   
+	   if (seatClass.compareTo("business") == 0) {
+		   int businessSeats = getFlight(flightNo).getBusinessSeats();
+		   flight.setBusinessSeats(businessSeats - numOfSeats);
+		   session.update(flight);
+	   }
+	   else if (seatClass.compareTo("economy") == 0) {
+		   int economySeats = getFlight(flightNo).getEconomySeats();
+		   flight.setEconomySeats(economySeats - numOfSeats);
+		   session.update(flight);
+	   }
+	   session.getTransaction().commit();
+   }
+   
+   /**
     * Returns a date object with the time range
     * @param year - the search year
     * @param month - the search month
