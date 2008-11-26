@@ -41,7 +41,8 @@ public class ItineraryForCustomerController implements Controller {
       final List<Itinerary> canceled = ItineraryManager.getCanceled(userName);
 
       logger.info("Reserved size: " + reserved.size());
-      logger.info(reserved);
+      for (final Itinerary it : reserved)
+         logger.info(it);
 
       final ModelAndView mv = new ModelAndView("itineraryForCustomer");
       mv.addObject("reservedItinerary", reserved);

@@ -20,4 +20,4 @@ CREATE TABLE itinerary(	flight_no INTEGER,
 INSERT INTO itinerary VALUES (106, 'jjohnson', 'BOOKED', 1, 'ECONOMY', 'NW-106-JJOHNSON-000');
 INSERT INTO itinerary VALUES (154, 'jjohnson', 'CANCELED', null, null, null);
 INSERT INTO itinerary VALUES (167, 'jjohnson', 'BOOKED', 1, 'ECONOMY', 'NW-167-JJOHNSON-000');
-INSERT INTO itinerary VALUES (292, 'jjohnson', 'RESERVED', null, null, null);
+INSERT INTO itinerary VALUES (292, 'jjohnson', 'RESERVED', 1, 'ECONOMY', null);

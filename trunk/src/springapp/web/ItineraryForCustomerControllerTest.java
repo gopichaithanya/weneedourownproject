@@ -1,7 +1,6 @@
 package springapp.web;
 
 import static org.junit.Assert.*;
-import hibernate.Flight;
 import hibernate.Itinerary;
 
 import java.io.IOException;
