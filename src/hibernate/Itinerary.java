@@ -236,18 +236,17 @@ public class Itinerary implements java.io.Serializable {
     * @return the status of the flight
     */
    public String getStatus() {
+      if (null == this.status)
+         return null;
       return this.status.toString();
    }
-//   public EStatus getStatus() {
-//      return this.status;
-//   }
 
    /**
     * Sets the status of the flight
     * @param status - the status of the flight
     */
    public void setStatus(EStatus status) {
-      this.status = status;
+      this.status = (null == status) ? null : status;
    }
 
    public void setStatus(String status) {
@@ -259,11 +258,10 @@ public class Itinerary implements java.io.Serializable {
        * @return the seatClass
        */
    public String getSeatClass() {
+      if (null == this.seatClass)
+         return null;
       return this.seatClass.toString();
    }
-//   public ESeatClass getSeatClass() {
-//      return this.seatClass;
-//   }
 
    /**
     * Sets the seat class
@@ -274,7 +272,7 @@ public class Itinerary implements java.io.Serializable {
    }
 
    public void setSeatClass(String seatClass) {
-      this.seatClass = ESeatClass.get(seatClass);
+      this.seatClass = (null == seatClass) ? null : ESeatClass.get(seatClass);
    }
 
    /**

@@ -26,8 +26,8 @@ import javax.servlet.http.HttpSession;
 @SuppressWarnings("unchecked")
 public class NullHttpServletRequest implements HttpServletRequest {
 
-   private Hashtable parameters = new Hashtable();
-   private HttpSession session = new NullHttpSession();
+   private Hashtable<String, String> parameters = new Hashtable<String, String>();
+   private final HttpSession session = new NullHttpSession();
 
    public NullHttpServletRequest() {
    }
@@ -36,7 +36,7 @@ public class NullHttpServletRequest implements HttpServletRequest {
     * When users want to store some parameters for testing, this constructor should be used. 
     * @param param parameter data.
     */
-   public NullHttpServletRequest(Hashtable param) {
+   public NullHttpServletRequest(Hashtable<String, String> param) {
       parameters = param;
    }
 
