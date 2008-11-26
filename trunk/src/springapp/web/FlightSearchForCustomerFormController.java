@@ -29,7 +29,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
     * If this is false, all of flights will be shown; this is for debugging.
     * If this is true, flight searching will work.
     */
-   static boolean bFlagSearch = false;
+   static boolean bFlagSearch = true;
 
    /**
     * Handle request for web browser.
