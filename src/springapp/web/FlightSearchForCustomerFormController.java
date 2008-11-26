@@ -1,6 +1,7 @@
 package springapp.web;
 
 import hibernate.Flight;
+import hibernate.Itinerary.ESeatClass;
 import hibernate.manager.AirportManager;
 import hibernate.manager.FlightManager;
 
@@ -43,6 +44,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final List<String[]> airports = AirportManager.getAirportCodeAndName();
       mv.addObject("airports", airports);
       mv.addObject("tripTypes", FlightSearchForCustomer.ETripType.values());
+      mv.addObject("seatClass", ESeatClass.values());
 
       return mv;
    }
@@ -174,8 +176,13 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
          flights = new Integer[] { cmd.getDepartFlightNo() };
       else if (cmd.isRoundTrip())
          flights = new Integer[] { cmd.getDepartFlightNo(), cmd.getReturnFlightNo() };
+      
+      final ESeatClass seatClass = cmd.getSeatClass();
+      final int numPassengers = cmd.getNumPassengers();
 
       session.setAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER, flights);
+      session.setAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER, seatClass);
+      session.setAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER, numPassengers);
 
       final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
       return mv;

@@ -1,5 +1,6 @@
 package springapp.web;
 
+import hibernate.Itinerary.ESeatClass;
 import hibernate.manager.AirportManager;
 
 import java.util.Calendar;
@@ -88,6 +89,14 @@ public class FlightSearchForCustomerValidator implements Validator {
          errors.rejectValue("tripType", "error.FlightSearchForCustomer.tripType.outOfBound",
                "Trip type must be either " + FlightSearchForCustomer.ETripType.ROUND_TRIP.name()
                      + " or " + FlightSearchForCustomer.ETripType.ONEWAY_TRIP.name() + ".");
+
+      // Checking: seatClass
+      final boolean bBuzSeat = o.isBusinessSeat();
+      final boolean bEcoSeat = o.isEconomySeat();
+      if (!bBuzSeat && !bEcoSeat)
+         errors.rejectValue("seatClass", "error.FlightSearchForCustomer.seatClass.outOfBound",
+               "Seat type must be either " + ESeatClass.BUSINESS.name() + " or "
+                     + ESeatClass.ECONOMY.name() + ".");
 
       // Checking: numPassengers
       try {

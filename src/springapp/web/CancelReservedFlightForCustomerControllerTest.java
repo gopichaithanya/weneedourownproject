@@ -1,6 +1,8 @@
 package springapp.web;
 
 import static org.junit.Assert.*;
+import hibernate.Itinerary;
+import hibernate.Itinerary.ESeatClass;
 import hibernate.manager.ItineraryManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +22,7 @@ public class CancelReservedFlightForCustomerControllerTest {
    public void testHandleRequest() throws Exception {
       final String userName = "jjohnson";
       final String flightNo = "182";
-      ItineraryManager.reserve(userName, Integer.valueOf(flightNo));
+      ItineraryManager.reserve(userName, Integer.valueOf(flightNo), ESeatClass.ECONOMY, 1);
       final boolean bRst = testCancelReservedFlight(userName, flightNo);
       assertTrue(bRst);
    }

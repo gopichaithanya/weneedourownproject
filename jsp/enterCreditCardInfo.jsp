@@ -20,12 +20,15 @@
 					</c:forEach>
 		</font>
 		</spring:hasBindErrors>
-		<form:form commandName="customer" method="POST" action="enterCreditCardInfo.spring">
+		<form:form commandName="itinerary" method="POST" action="enterCreditCardInfo.spring">
 			<table border="1">
-				<tr><td>Credit card number (16 digits)</td><td><form:input path="ccNo"/></td></tr>
-			    <tr><td>Credit card expiration date (mmdd)</td><td><form:input path="expiration"/></td></tr>
+				<tr><td>Credit card number (16 digits)</td><td><form:input path="customer.ccNo"/></td></tr>
+			    <tr><td>Credit card expiration date (mmdd)</td><td><form:input path="customer.expiration"/></td></tr>
 			  	<tr><td><input type="submit" align="center" value="Enter"></td></tr>
 			</table>
+      <form:hidden path="flight.flightNo" />
+      <form:hidden path="seatClass" />
+      <form:hidden path="numOfSeats" />
 		</form:form>
 		<%@ include file="/WEB-INF/jsp/footer.jsp"%>
 	</body>

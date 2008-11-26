@@ -1,10 +1,12 @@
 package springapp.web;
 
+import hibernate.Itinerary.ESeatClass;
+
 import java.util.Calendar;
 
 /**
  * This class is used for command object on flight search page.
- * This class will contain these infomation:
+ * This class will contain these information:
  * <LI> depart location; airport code
  * <LI> arrival location; airport code
  * <LI> departure Month from 1 to 12
@@ -15,6 +17,7 @@ import java.util.Calendar;
  * <LI> return month from 1 to 12
  * <LI> return year from 2008.
  * <LI> return hour from 0 to 23
+ * <LI> seatClass
  * <LI> return flight number (optional)
  * <LI> departing flight number (optional)
  */
@@ -40,7 +43,7 @@ public class FlightSearchForCustomer {
    private int departMonth;
    private int departDay;
    private int departYear;
-   private int departHour;
+   private int departHour = -1;
 
    private int searchingHourRange = 3;
    private int numPassengers = 1;
@@ -49,7 +52,9 @@ public class FlightSearchForCustomer {
    private int returnMonth;
    private int returnDay;
    private int returnYear;
-   private int returnHour;
+   private int returnHour = -1;
+
+   private ESeatClass seatClass = ESeatClass.ECONOMY;
 
    private Integer departFlightNo = null;
    private Integer returnFlightNo = null;
@@ -192,17 +197,6 @@ public class FlightSearchForCustomer {
       return tripType;
    }
 
-//   public void setTripType(String tripType) {
-//      if (ETripType.ONEWAY_TRIP.equals(tripType))
-//         this.tripType = ETripType.ONEWAY_TRIP;
-//      if (ETripType.ROUND_TRIP.equals(tripType))
-//         this.tripType = ETripType.ROUND_TRIP;
-//   }
-//
-//   public String getTripType() {
-//      return tripType.name();
-//   }
-
    public void setSearchingHourRange(int searchingTimeRange) {
       this.searchingHourRange = searchingTimeRange;
    }
@@ -225,5 +219,21 @@ public class FlightSearchForCustomer {
 
    public Integer getReturnFlightNo() {
       return returnFlightNo;
+   }
+
+   public void setSeatClass(ESeatClass seatClass) {
+      this.seatClass = seatClass;
+   }
+
+   public ESeatClass getSeatClass() {
+      return seatClass;
+   }
+
+   public boolean isBusinessSeat() {
+      return seatClass == ESeatClass.BUSINESS;
+   }
+
+   public boolean isEconomySeat() {
+      return seatClass == ESeatClass.ECONOMY;
    }
 }

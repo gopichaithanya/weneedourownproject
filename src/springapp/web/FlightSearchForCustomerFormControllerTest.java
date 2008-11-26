@@ -23,7 +23,6 @@ public class FlightSearchForCustomerFormControllerTest {
       final FlightSearchForCustomerFormController controller = new FlightSearchForCustomerFormController();
       final HttpServletRequest req = new NullHttpServletRequest();
       final HttpServletResponse resp = new NullHttpServletResponse();
-      //TODO
 //      final ModelAndView mv = controller.handleRequest(req, resp);
 //      assertNotNull(mv);
    }

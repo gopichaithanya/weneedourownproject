@@ -2,6 +2,7 @@ package springapp.web;
 
 import static org.junit.Assert.*;
 import hibernate.Flight;
+import hibernate.Itinerary;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,15 +26,15 @@ public class ItineraryForCustomerControllerTest {
       final ItineraryForCustomerController ctl = new ItineraryForCustomerController();
       final ModelAndView mv = ctl.handleRequest(req, resp);
 
-      final List<Flight> reserved = (List<Flight>) mv.getModel().get("reservedFlights");
+      final List<Itinerary> reserved = (List<Itinerary>) mv.getModel().get("reservedItinerary");
       assertNotNull(reserved);
       assertFalse(reserved.isEmpty());
 
-      final List<Flight> booked = (List<Flight>) mv.getModel().get("bookedFlights");
+      final List<Itinerary> booked = (List<Itinerary>) mv.getModel().get("bookedItinerary");
       assertNotNull(booked);
       assertFalse(booked.isEmpty());
 
-      final List<Flight> canceled = (List<Flight>) mv.getModel().get("canceledFlights");
+      final List<Itinerary> canceled = (List<Itinerary>) mv.getModel().get("canceledItinerary");
       assertNotNull(canceled);
       assertFalse(canceled.isEmpty());
    }
