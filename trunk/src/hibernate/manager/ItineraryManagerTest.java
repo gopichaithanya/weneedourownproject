@@ -25,7 +25,7 @@ public class ItineraryManagerTest {
          if (157 != it.getFlight().getFlightNo())
             continue;
          bFound = true;
-         assertEquals(1, it.getNumOfSeats());
+         assertEquals(1, (int) it.getNumOfSeats());
          assertEquals(ESeatClass.ECONOMY.toString(), it.getSeatClass());
       }
       assertTrue(bFound);
