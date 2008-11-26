@@ -145,7 +145,12 @@
 				<include name="*.script" />
 			</fileset>
 		</copy>
-
+		<copy todir="${build.war.dir}/WEB-INF/src" preservelastmodified="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+    	
 		<war destfile="${dist.dir}/${name}.war" webxml="${xml.dir}/web.xml">
 			<fileset dir="${build.war.dir}">
 				<include name="**/*" />
