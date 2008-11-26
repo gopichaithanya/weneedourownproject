@@ -1,5 +1,6 @@
 package hibernate.manager;
 
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.regex.Pattern;
 
@@ -62,5 +63,12 @@ class HibernateUtil {
 	 */
 	public static SessionFactory getSessionFactory() {
 		return sessionFactory;
+	}
+	
+	public static void doTransaction(IHibernateTransaction trans) {
+      final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+      session.beginTransaction();
+	   trans.transaction(session);
+      session.getTransaction().commit();
 	}
 }

@@ -16,10 +16,11 @@ import org.junit.Test;
 public class CreditCardContollerTest {
 
    private static class CreditCardControllerForTest extends CreditCardController {
-      public Object formBackingObjectPublic(HttpServletRequest req) throws Exception{
+      public Object formBackingObjectPublic(HttpServletRequest req) throws Exception {
          return super.formBackingObject(req);
       }
    }
+
    @Test
    public void testDefaultObj() throws Exception {
       ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
@@ -32,11 +33,10 @@ public class CreditCardContollerTest {
       final CreditCardControllerForTest form = new CreditCardControllerForTest();
       final Itinerary cmd = (Itinerary) form.formBackingObjectPublic(req);
       assertNotNull(cmd);
-      assertEquals(cmd.getCustomer().getUsername(), "jjohnson");
-      assertEquals(cmd.getFlight().getFlightNo(), 157);
-      assertEquals(cmd.getStatus(), EStatus.RESERVED.toString());
-      assertEquals(cmd.getSeatClass(), ESeatClass.ECONOMY.toString());
-      assertEquals(cmd.getNumOfSeats(), 1);
-      
+      assertEquals("jjohnson", cmd.getCustomer().getUsername());
+      assertEquals(157, cmd.getFlight().getFlightNo());
+      assertEquals(EStatus.RESERVED.toString(), cmd.getStatus());
+      assertEquals(ESeatClass.ECONOMY.toString(), cmd.getSeatClass());
+      assertEquals(1, cmd.getNumOfSeats());
    }
 }

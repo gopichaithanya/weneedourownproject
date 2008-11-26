@@ -26,29 +26,40 @@ public class ItineraryManager {
     * @param passenger TODO
     * @return true if the flight was successfully reserved for the customer, false otherwise
     */
-   public static boolean reserve(String userName, int flightNo, ESeatClass seatClass, int passenger) {
-      boolean bRst = false;
-      {
-         final ItineraryId pKey = new ItineraryId(flightNo, userName);
+   public static boolean reserve(final String userName, final int flightNo,
+         final ESeatClass seatClass, final int passenger) {
+      if (null == seatClass)
+         return false;
 
-         final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-         session.beginTransaction();
-         final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
-         if (null == it) {
-            final Customer customer = new Customer(userName);
-            final Flight flight = new Flight(flightNo);
-            final Itinerary newIt = new Itinerary(pKey, customer, flight, seatClass, passenger);
-            newIt.setStatus(EStatus.RESERVED);
-            session.save(newIt);
-            bRst = true;
-         } else {
-            it.setStatus(EStatus.RESERVED);
-            session.update(it);
-            bRst = true;
+      final Boolean[] bRst = new Boolean[] { new Boolean(false) };
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+
+            final Customer customer = (Customer) session.get(Customer.class, userName);
+            final Flight flight = (Flight) session.get(Flight.class, flightNo);
+            if (null == customer || null == flight)
+               return;
+
+            final ItineraryId pKey = new ItineraryId(flightNo, userName);
+            final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
+            if (null == it) {
+               final Itinerary newIt = new Itinerary(pKey, customer, flight, seatClass, passenger);
+               newIt.setStatus(EStatus.RESERVED);
+               session.save(newIt);
+
+            } else if (false == it.getStatus().equals(EStatus.RESERVED.toString())) {
+               it.setCustomer(customer);
+               it.setFlight(flight);
+               it.setSeatClass(seatClass);
+               it.setNumOfSeats(passenger);
+               it.setStatus(EStatus.RESERVED);
+            } else
+               return;
+
+            bRst[0] = true;
          }
-         session.getTransaction().commit();
-      }
-      return bRst;
+      });
+      return bRst[0];
    }
 
    /**
@@ -82,8 +93,8 @@ public class ItineraryManager {
             bRst = true;
          } else {
             it.setStatus(EStatus.BOOKED);
+            it.setNumOfSeats(numOfSeats);
             it.setSeatClass(seatClass);
-            it.setTicketNo(ticketNo);
             it.setTicketNo(ticketNo);
             session.update(it);
             bRst = true;
