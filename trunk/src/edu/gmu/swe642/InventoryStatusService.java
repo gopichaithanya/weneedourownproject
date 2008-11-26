@@ -47,7 +47,7 @@ public class InventoryStatusService {
 	 * Return the number of empty seats on today's flights
 	 */
 
-	public int getNumOfEmptySeats(String testdate) {
+	public int getNumOfEmptySeats(Date date) {
 
 		int flightDate = 42;
 		int totalSeats = 0;
@@ -63,10 +63,11 @@ public class InventoryStatusService {
 			props.load(new FileInputStream("build.properties"));
 			String tomcatpath = props.getProperty("appserver.home");
 			System.out.println(tomcatpath);
+			System.out.println(date.toString());
 			final String url = "jdbc:hsqldb:file:build/mydb";
 			final String username = "sa";
 			final String password = "";
-			Date date = getDate(testdate);
+			//Date date = getDate(testdate);
 
 			DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy/hh");
 			String s = formatter.format(date);
@@ -78,7 +79,7 @@ public class InventoryStatusService {
 			int month = Integer.parseInt(dateParts[0]);
 			int day = Integer.parseInt(dateParts[1]);
 			int year = Integer.parseInt(dateParts[2]);
-			int hour = Integer.parseInt(dateParts[3]);
+			//int hour = Integer.parseInt(dateParts[3]);
 			System.out.print(month + "" + year + "");
 
 			Class.forName("org.hsqldb.jdbcDriver");
@@ -86,8 +87,8 @@ public class InventoryStatusService {
 			System.out.println(url);
 
 			Connection conn = null;
-			Date tdate = new Date();
-			long time = tdate.getTime();
+			//Date tdate = new Date();
+			//long time = tdate.getTime();
 			PreparedStatement pstmt = null;
 			// Timestamp stamptime = new Timestamp(time);
 			// System.out.println(stamptime.toString());
@@ -99,18 +100,17 @@ public class InventoryStatusService {
 			// Statement stmt = conn.createStatement();
 			pstmt = conn
 					.prepareStatement("select Business_Seats, Economy_Seats from Flight where "
-							+ "  DEPARTURE_TIME > ? and DEPARTURE_TIME < ?");
+							+ "  DEPARTURE_TIME > ?  and  DEPARTURE_TIME < ?");
 			String sql = "select Business_Seats, Economy_Seats from Flight DEPARTURE_TIME >"
-					+ tdate;
+					+ date;
 			System.out.println("The sql is" + sql);
 			// pstmt.setDate(0, (java.sql.Date) tdate);
-			Date[] dates = getTimeRange(year, month, day, hour, 12);
+			Date[] dates = getTimeRange(year, month, day, 12, 12);
 
-			// java.sql.Timestamp time1 = new Timestamp(year, month, day,
-			// hour - 2, 0, 0, 0);
 			Timestamp time1 = new Timestamp(dates[0].getTime());
-			java.sql.Timestamp time2 = new Timestamp(dates[1].getTime());
+			Timestamp time2 = new Timestamp(dates[1].getTime());
 			System.out.println(time1);
+			System.out.println(time2);
 
 			pstmt.setTimestamp(1, time1);
 
@@ -186,6 +186,17 @@ public class InventoryStatusService {
 	 * future date
 	 */
 	public int getNumOfEmptySeatsForDateRange(Date date) {
+		
+		try{
+			DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy/hh");
+			String s = formatter.format(date);
+			
+			System.out.println(s);
+		}catch(Exception e)
+		{
+			return 0;
+		}
+		
 		return 55;
 	}
 
@@ -216,11 +227,18 @@ public class InventoryStatusService {
 
 	public static void main(String[] args) {
 		InventoryStatusService test = new InventoryStatusService();
-		int e = test.getNumOfEmptySeats("12/22/2008/22");
-
+		
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+		
+		try{
+		Date today = (Date)formatter.parse("2008-12-26T08:10:00-12:00");
+		System.out.println(today.toString());
+		int e = test.getNumOfEmptySeats(today);
 		System.out.println(e);
-		Date today = new Date();
-		DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy/hh");
+		}catch(ParseException p)
+		{
+			System.out.println(p.toString());
+		}
 		// System.out.println(formatter.format(today));
 
 	}
