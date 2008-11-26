@@ -96,13 +96,17 @@ function clickOnTripType(tripType) {
   
   if( tripType == "ONEWAY_TRIP" )
     m.disabled = d.disabled = y.disabled = h.disabled = "true";
-  else
-    m.disabled = d.disabled = y.disabled = h.disabled = "false";
+  else {
+      m.removeAttribute('disabled');
+      d.removeAttribute('disabled');
+      y.removeAttribute('disabled');
+      h.removeAttribute('disabled');
+  }
 }
 
 function initEvents() {
-  returnObjById('ROUND_TRIP').onClick = "clickOnTripType('ROUND_TRIP')";
-  returnObjById('ONEWAY_TRIP').onClick = "clickOnTripType('ONEWAY_TRIP')";
+  returnObjById('ROUND_TRIP').addEventListener( 'click', function() { clickOnTripType('ROUND_TRIP'); }, false );
+  returnObjById('ONEWAY_TRIP').addEventListener( 'click', function() { clickOnTripType('ONEWAY_TRIP'); }, false );
 }
 
 --></script>
