@@ -1,6 +1,5 @@
 package springapp.web;
 
-import hibernate.Flight;
 import hibernate.Itinerary;
 import hibernate.manager.ItineraryManager;
 
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
@@ -23,6 +23,8 @@ public class ItineraryForCustomerController implements Controller {
 
    public static final String URL = "itineraryForCustomer.spring";
 
+   private Logger logger = Logger.getLogger(getClass().getName());
+
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
          throws ServletException, IOException {
 
@@ -32,9 +34,14 @@ public class ItineraryForCustomerController implements Controller {
       if (null == userName)
          return LoginController.redirectToLogin(session, URL);
 
+      logger.info("Username: " + userName);
+
       final List<Itinerary> reserved = ItineraryManager.getReserved(userName);
       final List<Itinerary> booked = ItineraryManager.getBooked(userName);
       final List<Itinerary> canceled = ItineraryManager.getCanceled(userName);
+
+      logger.info("Reserved size: " + reserved.size());
+      logger.info(reserved);
 
       final ModelAndView mv = new ModelAndView("itineraryForCustomer");
       mv.addObject("reservedItinerary", reserved);
