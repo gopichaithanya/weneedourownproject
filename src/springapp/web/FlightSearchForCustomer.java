@@ -47,7 +47,7 @@ public class FlightSearchForCustomer {
 
    private int searchingHourRange = 3;
    private int numPassengers = 1;
-   private ETripType tripType = ETripType.ROUND_TRIP;
+   private ETripType tripType = ETripType.ONEWAY_TRIP;
 
    private int returnMonth;
    private int returnDay;
