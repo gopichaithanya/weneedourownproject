@@ -70,7 +70,7 @@ public class ItineraryManager {
     * @param ticketNo TODO
     * @return true if the flight was successfully booked for the customer, false otherwise
     */
-   public static boolean book(String userName, final int flightNo, String ticketNo) {
+   public static boolean book(String userName, final int flightNo, final String ticketNo) {
       final ItineraryId pKey = new ItineraryId(flightNo, userName);
 
       final Boolean[] bRst1 = new Boolean[1];
@@ -80,6 +80,7 @@ public class ItineraryManager {
 
             its[0] = (Itinerary) session.get(Itinerary.class, pKey);
             its[0].setStatus(EStatus.BOOKED);
+            its[0].setTicketNo(ticketNo);
             bRst1[0] = true;
          }
       });
