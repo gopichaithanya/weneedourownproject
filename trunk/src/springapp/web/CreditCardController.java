@@ -86,6 +86,7 @@ public class CreditCardController extends SimpleFormController {
          for (final Itinerary it : its) {
             if (it.getFlight().getFlightNo() == flightNo) {
                defaultCommandObj = it;
+               logger.info("Default object is found.");
                break;
             }
          }
