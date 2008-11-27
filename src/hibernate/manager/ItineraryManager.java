@@ -66,44 +66,25 @@ public class ItineraryManager {
     * Returns true if the flight was successfully booked for the customer, false otherwise
     * @param userName - the customer's user name
     * @param flightNo - the flight number
-    * @param numOfSeats - the number of seats to be reserved
-    * @param ticketNo - the ticket number
     * @return true if the flight was successfully booked for the customer, false otherwise
     */
-   public static boolean book(String userName, int flightNo, ESeatClass seatClass, int numOfSeats,
-         String ticketNo) {
-      boolean bRst = false;
-      {
-         final ItineraryId pKey = new ItineraryId(flightNo, userName);
+   public static boolean book(String userName, final int flightNo) {
+      final ItineraryId pKey = new ItineraryId(flightNo, userName);
 
-         final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-         session.beginTransaction();
+      final Boolean[] bRst1 = new Boolean[1];
+      final Itinerary[] its = new Itinerary[1];
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
 
-         final Customer customer = CustomerManager.getCustomer(userName);
-         final Flight flight = FlightManager.getFlight(flightNo);
-
-         final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
-         if (null == it) {
-            final Itinerary newIt = new Itinerary(pKey, customer, flight);
-            newIt.setStatus(EStatus.BOOKED);
-            newIt.setNumOfSeats(numOfSeats);
-            newIt.setSeatClass(seatClass);
-            newIt.setTicketNo(ticketNo);
-            session.save(newIt);
-            bRst = true;
-         } else {
-            it.setStatus(EStatus.BOOKED);
-            it.setNumOfSeats(numOfSeats);
-            it.setSeatClass(seatClass);
-            it.setTicketNo(ticketNo);
-            session.update(it);
-            bRst = true;
+            its[0] = (Itinerary) session.get(Itinerary.class, pKey);
+            its[0].setStatus(EStatus.BOOKED);
+            bRst1[0] = true;
          }
-         FlightManager.decreaseSeats(flightNo, numOfSeats, seatClass);
+      });
 
-         session.getTransaction().commit();
-      }
-      return bRst;
+      final boolean bRst2 = FlightManager.decreaseSeats(flightNo, its[0].getNumOfSeats(), ESeatClass
+            .get(its[0].getSeatClass()));
+      return bRst1[0] && bRst2;
    }
 
    /**

@@ -132,7 +132,7 @@ public class FlightManagerTest {
    }
 
    @Test
-   public void testUpdateSeat() {
+   public void testDecreaseSeat() {
       final int orgSeat = FlightManager.getFlight(157).getEconomySeats();
       assertTrue(orgSeat > 0);
       

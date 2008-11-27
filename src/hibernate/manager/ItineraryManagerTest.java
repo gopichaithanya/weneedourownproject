@@ -58,4 +58,13 @@ public class ItineraryManagerTest {
       final List<Itinerary> flights = ItineraryManager.getReserved("jjohnson");
       assertTrue(flights.size() > 0);
    }
+
+   @Test
+   public void testBook() {
+      ItineraryManager.cancelReserved("jjohnson", 157);
+      final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
+      assertTrue(bReserve);
+      final boolean bBook = ItineraryManager.book("jjohnson", 157);
+      assertTrue(bBook);
+   }
 }

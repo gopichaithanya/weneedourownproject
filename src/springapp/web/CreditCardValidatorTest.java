@@ -1,5 +1,7 @@
 package springapp.web;
 
+import org.junit.Test;
+
 public class CreditCardValidatorTest {
 //including a 16-digit card number and a 4-digit expiration date. As a convenience for this project, a valid combination of credit card number and expiration date is defined in such a way that the 4-digit expiration date is defined with a valid mmdd format, and as an integer is a denominator of the 16-digit card number.
 //The credit card information has to be validated first before booking. The validation is done via a validation service, which will be provided by the instructor.
@@ -7,4 +9,8 @@ public class CreditCardValidatorTest {
 //If the credit card number is invalid, a web page with an error message will be displayed to the user and ask the user to re-enter the credit card information.
 //In addition to the database, the backend of the application also contains a credit card validation server (provided by the instructor). The validation server application is implemented as a Servlet application and provided by the instructor. Detailed usage and access APIs will be given during the class.
 //Please use the username tomcat and password tomcat as the username/password for credit card validation (using basic authentication). No need to submit the validation server as part of the deliverable. The validation server will be provided by the demo server and running on local host. Use the usergroup managergroup to define the user tomcat in your app server.
+   @Test
+   public void test() {
+
+   }
 }
