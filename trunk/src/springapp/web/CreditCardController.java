@@ -22,6 +22,10 @@ import org.springframework.web.servlet.view.RedirectView;
  */
 public class CreditCardController extends SimpleFormController {
 
+   /**
+    * parameter name for flight number.
+    */
+   public static final String PARAM_FLIGHT_NO = "flightNo";
    public static final String URL = "enterCreditCardInfo.spring";
 
    /**

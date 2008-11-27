@@ -1,5 +1,6 @@
 package hibernate;
 
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 
@@ -101,6 +102,11 @@ public class Itinerary implements java.io.Serializable {
     * The ticket number
     */
    private String ticketNo;
+   
+   /**
+    * Reserved time
+    */
+   private Date reservedTime;
 
    /**
     * Constructs a new itinerary object
@@ -113,8 +119,8 @@ public class Itinerary implements java.io.Serializable {
     * @param id
     * @param customer - the customer 
     * @param flight - the flight 
-    * @param seatClass TODO
-    * @param numPassenger TODO
+    * @param seatClass - Seat class : ECONOCY, BUSINESS
+    * @param numPassenger - the number of passenger or number of tickets
     */
    public Itinerary(ItineraryId id, Customer customer, Flight flight, ESeatClass seatClass,
          Integer numPassengers) {
@@ -305,5 +311,19 @@ public class Itinerary implements java.io.Serializable {
     */
    public void setTicketNo(String ticketNo) {
       this.ticketNo = ticketNo;
+   }
+
+   /**
+    * @param reservedTime the reservedTime to set
+    */
+   public void setReservedTime(Date reservedTime) {
+      this.reservedTime = reservedTime;
+   }
+
+   /**
+    * @return the reservedTime
+    */
+   public Date getReservedTime() {
+      return reservedTime;
    }
 }
