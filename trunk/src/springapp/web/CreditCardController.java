@@ -55,14 +55,10 @@ public class CreditCardController extends SimpleFormController {
             .getCustomer().getCcNo(), it.getCustomer().getExpiration());
       logger.info("Customer with new Credit info: " + c);
 
-      //create the ticket object
-      final Random rand = new Random();
-      final String ticketNo = f.getAirline().getCode() + "-" + flightNo + "-"
-            + c.getUsername().toUpperCase() + "-" + (rand.nextInt(900) + 100);
-      logger.info("Ticket no: " + ticketNo);
-
       //book the flight once credit card is validated and a ticket is generated
-      final boolean bRst = ItineraryManager.book(c.getUsername(), flightNo);
+      final String ticketNo = ItineraryManager.getTicketNum(f, c);
+      logger.info("Ticket no: " + ticketNo);
+      final boolean bRst = ItineraryManager.book(c.getUsername(), flightNo, ticketNo);
       logger.info("Booking result: " + bRst);
 
       session.setAttribute(SessionConstants.CREDIT_TICKET, ticketNo);
