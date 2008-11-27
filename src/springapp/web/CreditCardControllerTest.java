@@ -2,6 +2,7 @@ package springapp.web;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Method;
 import java.util.Hashtable;
 
 import hibernate.Itinerary;
@@ -15,12 +16,6 @@ import org.junit.Test;
 
 public class CreditCardControllerTest {
 
-   private static class CreditCardControllerForTest extends CreditCardController {
-      public Object formBackingObjectPublic(HttpServletRequest req) throws Exception {
-         return super.formBackingObject(req);
-      }
-   }
-
    @Test
    public void testDefaultObj() throws Exception {
       ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
@@ -30,13 +25,19 @@ public class CreditCardControllerTest {
       final HttpServletRequest req = new NullHttpServletRequest(param);
       req.getSession().setAttribute(SessionConstants.USERNAME, "jjohnson");
 
-      final CreditCardControllerForTest form = new CreditCardControllerForTest();
-      final Itinerary cmd = (Itinerary) form.formBackingObjectPublic(req);
+      final Method formBackingObject = CreditCardController.class.getDeclaredMethod(
+            "formBackingObject", new Class[] { HttpServletRequest.class });
+      formBackingObject.setAccessible(true);
+
+      final CreditCardController form = new CreditCardController();
+      final Itinerary cmd = (Itinerary) formBackingObject.invoke(form, new Object[] { req });
       assertNotNull(cmd);
       assertEquals("jjohnson", cmd.getCustomer().getUsername());
       assertEquals(157, cmd.getFlight().getFlightNo());
       assertEquals(EStatus.RESERVED.toString(), cmd.getStatus());
       assertEquals(ESeatClass.ECONOMY.toString(), cmd.getSeatClass());
       assertEquals(1, (int) cmd.getNumOfSeats());
+      
+      ItineraryManager.cancelReserved("jjohnson", 157);
    }
 }

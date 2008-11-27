@@ -36,6 +36,17 @@ public class ItineraryManagerTest {
       ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
       final boolean bCancel = ItineraryManager.cancelReserved("jjohnson", 157);
       assertTrue(bCancel);
+
+      final List<Itinerary> reserved = ItineraryManager.getReserved("jjohnson");
+      boolean bFound = false;
+      for (final Itinerary it : reserved) {
+         if (false == it.getCustomer().getUsername().equals("jjohnson"))
+            continue;
+         if (157 != it.getFlight().getFlightNo())
+            continue;
+         bFound = true;
+      }
+      assertFalse(bFound);
    }
 
    @Test
@@ -43,6 +54,7 @@ public class ItineraryManagerTest {
       ItineraryManager.cancelReserved("jjohnson", 157);
       final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
       assertTrue(bReserve);
+
       final List<Itinerary> flights = ItineraryManager.getReserved("jjohnson");
       assertTrue(flights.size() > 0);
    }
