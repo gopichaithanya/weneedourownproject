@@ -1,6 +1,7 @@
 package hibernate.manager;
 
 import java.util.List;
+import java.util.Random;
 
 import hibernate.Customer;
 import hibernate.Flight;
@@ -66,9 +67,10 @@ public class ItineraryManager {
     * Returns true if the flight was successfully booked for the customer, false otherwise
     * @param userName - the customer's user name
     * @param flightNo - the flight number
+    * @param ticketNo TODO
     * @return true if the flight was successfully booked for the customer, false otherwise
     */
-   public static boolean book(String userName, final int flightNo) {
+   public static boolean book(String userName, final int flightNo, String ticketNo) {
       final ItineraryId pKey = new ItineraryId(flightNo, userName);
 
       final Boolean[] bRst1 = new Boolean[1];
@@ -82,8 +84,8 @@ public class ItineraryManager {
          }
       });
 
-      final boolean bRst2 = FlightManager.decreaseSeats(flightNo, its[0].getNumOfSeats(), ESeatClass
-            .get(its[0].getSeatClass()));
+      final boolean bRst2 = FlightManager.decreaseSeats(flightNo, its[0].getNumOfSeats(),
+            ESeatClass.get(its[0].getSeatClass()));
       return bRst1[0] && bRst2;
    }
 
@@ -152,5 +154,13 @@ public class ItineraryManager {
       final List<Itinerary> its = q.list();
       session.close();
       return its;
+   }
+
+   public static String getTicketNum(Flight f, Customer c) {
+      //create the ticket object
+      final Random rand = new Random();
+      final String ticketNo = f.getAirline().getCode() + "-" + f.getFlightNo() + "-"
+            + c.getUsername().toUpperCase() + "-" + (rand.nextInt(900) + 100);
+      return ticketNo;
    }
 }
