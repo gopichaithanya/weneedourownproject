@@ -21,12 +21,17 @@ import org.springframework.web.servlet.mvc.Controller;
  */
 public class ItineraryForCustomerController implements Controller {
 
+   /**
+    * parameter name for flight number.
+    */
    public static final String URL = "itineraryForCustomer.spring";
 
    private Logger logger = Logger.getLogger(getClass().getName());
 
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
          throws ServletException, IOException {
+      
+      ItineraryManager.checkExpiredReservation();
 
       // Check login
       final HttpSession session = request.getSession();

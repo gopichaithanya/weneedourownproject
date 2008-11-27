@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
@@ -86,8 +88,8 @@ public class ReserveFlightForCustomerControllerTest {
 
    public boolean testReserveFlight(String userName, Object argReserveFlight,
          ESeatClass argSeatType, int argNumPassengers) throws Exception {
-      final HttpServletRequest req = new NullHttpServletRequest();
-      final HttpServletResponse resp = new NullHttpServletResponse();
+      final HttpServletRequest req = new MockHttpServletRequest();
+      final HttpServletResponse resp = new MockHttpServletResponse();
       final HttpSession session = req.getSession();
       session.setAttribute(SessionConstants.USERNAME, userName);
       final Controller ctl = new ReserveFlightForCustomerController();

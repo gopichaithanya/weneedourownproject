@@ -30,5 +30,8 @@
         <property name="ticketNo" type="string">
             <column name="TICKETNO" />
         </property>
+        <property name="reservedTime" type="timestamp">
+            <column name="RESERVED_TIME" length="6"/>
+        </property>
     </class>
 </hibernate-mapping>

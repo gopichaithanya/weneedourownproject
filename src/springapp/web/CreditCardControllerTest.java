@@ -12,6 +12,9 @@ import hibernate.manager.ItineraryManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -33,9 +36,8 @@ public class CreditCardControllerTest {
    public void testDefaultObj() throws Exception {
       ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
 
-      final Hashtable<String, String> param = new Hashtable<String, String>();
-      param.put("flightNo", String.valueOf(157));
-      final HttpServletRequest req = new NullHttpServletRequest(param);
+      final MockHttpServletRequest req = new MockHttpServletRequest();
+      req.setParameter(CreditCardController.PARAM_FLIGHT_NO, String.valueOf(157));
       req.getSession().setAttribute(SessionConstants.USERNAME, "jjohnson");
 
       final CreditCardController form = new CreditCardController();
@@ -54,8 +56,8 @@ public class CreditCardControllerTest {
 
    @Test
    public void testWithoutLogin() throws Exception {
-      final HttpServletRequest req = new NullHttpServletRequest();
-      final HttpServletResponse res = new NullHttpServletResponse();
+      final HttpServletRequest req = new MockHttpServletRequest();
+      final HttpServletResponse res = new MockHttpServletResponse();
       final CreditCardController form = new CreditCardController();
       final ModelAndView mv = form.handleRequest(req, res);
       assertNotNull(mv);

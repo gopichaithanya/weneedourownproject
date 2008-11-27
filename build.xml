@@ -79,6 +79,7 @@
 			<fileset dir="${src.dir}">
                 <include name="**/*.hbm.xml" />
 			</fileset>
+            <fileset file="${xml.dir}/log4j.properties"/>
 		</copy>
         <antcall target="loadDBOnlyWhenSQLFilesAreChanged"/>
 		<javac destdir="${build.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
@@ -118,7 +119,6 @@
 				<include name="**/*.hbm.xml" />
 			</fileset>
 			<fileset file="${xml.dir}/hibernate.cfg.xml"/>
-            <fileset file="${xml.dir}/log4j.properties"/>
 		</copy>
 
 		<copy todir="${build.war.dir}/WEB-INF/jsp" preservelastmodified="true">

@@ -5,18 +5,63 @@ import hibernate.Itinerary;
 import hibernate.Itinerary.ESeatClass;
 import hibernate.manager.ItineraryManager;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
-import java.util.Hashtable;
+import springapp.manager.MockServletContextWebContextLoader;
 
-@SuppressWarnings("unchecked")
-public class CancelReservedFlightForCustomerControllerTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = MockServletContextWebContextLoader.class, locations = { "/xml/springapp-servlet.xml" })
+public class CancelReservedFlightForCustomerControllerTest extends AbstractJUnit4SpringContextTests {
+
+   private String beanName = null;
+   private MockHttpServletRequest request = null;
+   private MockHttpServletResponse response = null;
+   private MockHttpSession session = null;
+   private CancelReservedFlightForCustomerController ctrl = null;
+
+   @Before
+   public void before() {
+      beanName = applicationContext
+            .getBeanNamesForType(CancelReservedFlightForCustomerController.class)[0];
+      assertEquals("/cancelReservedFlightForCustomer.spring", beanName);
+
+      request = new MockHttpServletRequest("POST", beanName);
+      assertNotNull(request);
+
+      response = new MockHttpServletResponse();
+      assertNotNull(response);
+
+      session = (MockHttpSession) request.getSession();
+      assertNotNull(session);
+
+      ctrl = (CancelReservedFlightForCustomerController) this.applicationContext.getBean(beanName);
+      assertNotNull(ctrl);
+   }
+
+   private boolean testCancelReservedFlight(String userName, String flightNo) throws Exception {
+      request.setParameter(CancelReservedFlightForCustomerController.PARAM_FLIGHT_NO, flightNo);
+      session.setAttribute(SessionConstants.USERNAME, userName);
+
+      final ModelAndView mv = ctrl.handleRequest(request, response);
+      assertNotNull(mv);
+
+      final boolean bRst = (Boolean) ModelAndViewAssert.assertAndReturnModelAttributeOfType(mv,
+            "result", Boolean.class);
+      return bRst;
+   }
 
    @Test
    public void testHandleRequest() throws Exception {
@@ -25,14 +70,6 @@ public class CancelReservedFlightForCustomerControllerTest {
       ItineraryManager.reserve(userName, Integer.valueOf(flightNo), ESeatClass.ECONOMY, 1);
       final boolean bRst = testCancelReservedFlight(userName, flightNo);
       assertTrue(bRst);
-   }
-
-   @Test
-   public void testHandleRequestNull() throws Exception {
-//      final String userName = "jjohnson";
-//      final String flightNo = null;
-//      final boolean bRst = testCancelReservedFlight(userName, flightNo);
-//      assertFalse(bRst);
    }
 
    @Test
@@ -51,18 +88,4 @@ public class CancelReservedFlightForCustomerControllerTest {
       assertFalse(bRst);
    }
 
-   public boolean testCancelReservedFlight(String userName, String flightNo) throws Exception {
-      final Hashtable<String, String> param = new Hashtable();
-      param.put(CancelReservedFlightForCustomerController.PARAM_FLIGHT_NO, flightNo);
-      final HttpServletRequest req = new NullHttpServletRequest(param);
-      final HttpServletResponse resp = new NullHttpServletResponse();
-      final HttpSession session = req.getSession();
-      session.setAttribute(SessionConstants.USERNAME, userName);
-      final Controller ctl = new CancelReservedFlightForCustomerController();
-
-      final ModelAndView mv = ctl.handleRequest(req, resp);
-      assertNotNull(mv);
-      final boolean bRst = (Boolean) mv.getModel().get("result");
-      return bRst;
-   }
 }

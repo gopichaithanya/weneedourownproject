@@ -2,18 +2,27 @@ package hibernate.manager;
 
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import hibernate.Customer;
+import hibernate.Flight;
 import hibernate.Itinerary;
+import hibernate.ItineraryId;
 import hibernate.Itinerary.ESeatClass;
 import hibernate.Itinerary.EStatus;
 
+import org.hibernate.Session;
 import org.junit.Test;
 
 public class ItineraryManagerTest {
 
    @Test
    public void testReserveFlight() {
+      final Calendar calendar = Calendar.getInstance();
+      final Date curDate = calendar.getTime();
+
       ItineraryManager.cancelReserved("jjohnson", 157);
       final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
       assertTrue(bReserve);
@@ -27,8 +36,13 @@ public class ItineraryManagerTest {
          if (157 != it.getFlight().getFlightNo())
             continue;
          bFound = true;
+
          assertEquals(1, (int) it.getNumOfSeats());
          assertEquals(ESeatClass.ECONOMY.toString(), it.getSeatClass());
+         assertEquals(EStatus.RESERVED.toString(), it.getStatus());
+
+         final Date reservedDate = it.getReservedTime();
+         assertEquals((float) curDate.getTime(), (float) reservedDate.getTime(), (float) 1000);
       }
       assertTrue(bFound);
    }
@@ -39,17 +53,50 @@ public class ItineraryManagerTest {
       final boolean bCancel = ItineraryManager.cancelReserved("jjohnson", 157);
       assertTrue(bCancel);
 
-      final List<Itinerary> reserved = ItineraryManager.getReserved("jjohnson");
-      assertNotNull(reserved);
+      final List<Itinerary> canceled = ItineraryManager.getCanceled("jjohnson");
+      assertNotNull(canceled);
       boolean bFound = false;
-      for (final Itinerary it : reserved) {
+      for (final Itinerary it : canceled) {
          if (false == it.getCustomer().getUsername().equals("jjohnson"))
             continue;
          if (157 != it.getFlight().getFlightNo())
             continue;
+
+         assertEquals(EStatus.CANCELED.toString(), it.getStatus());
          bFound = true;
       }
-      assertFalse(bFound);
+      assertTrue(bFound);
+   }
+
+   @Test
+   public void testBook() {
+      ItineraryManager.cancelReserved("jjohnson", 157);
+      final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
+      assertTrue(bReserve);
+
+      final String ticketNo = "XX-FF-YYYYYY-ZZZ";
+      final boolean bBook = ItineraryManager.book("jjohnson", 157, ticketNo);
+      assertTrue(bBook);
+
+      final List<Itinerary> booked = ItineraryManager.getBooked("jjohnson");
+      assertNotNull(booked);
+      boolean bFound = false;
+      for (final Itinerary it : booked) {
+         if (false == it.getCustomer().getUsername().equals("jjohnson"))
+            continue;
+         if (157 != it.getFlight().getFlightNo())
+            continue;
+         final String t = it.getTicketNo();
+         if (null == t)
+            continue;
+         if (false == t.equals(ticketNo))
+            continue;
+         assertEquals(EStatus.BOOKED.toString(), it.getStatus());
+         bFound = true;
+      }
+      assertTrue(bFound);
+
+      ItineraryManager.cancelReserved("jjohnson", 157);
    }
 
    @Test
@@ -100,32 +147,42 @@ public class ItineraryManagerTest {
    }
 
    @Test
-   public void testBook() {
-      ItineraryManager.cancelReserved("jjohnson", 157);
-      final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
-      assertTrue(bReserve);
+   public void testCheckExpiredReservation() {
+      if(true) return;
+      final Calendar calendar = Calendar.getInstance();
+      calendar.add(Calendar.SECOND, -ItineraryManager.reservationTimeOutSec - 1);
+      final Date justExpDate = calendar.getTime();
 
-      final String ticketNo = "XX-FF-YYYYYY-ZZZ";
-      final boolean bBook = ItineraryManager.book("jjohnson", 157, ticketNo);
-      assertTrue(bBook);
+      final ItineraryId pKey = new ItineraryId(157, "jjohnson");
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+            final Customer c = (Customer) session.get(Customer.class, "jjohnson");
+            final Flight f = (Flight) session.get(Flight.class, 157);
+            assertNotNull(pKey);
+            assertNotNull(c);
+            assertNotNull(f);
 
-      final List<Itinerary> booked = ItineraryManager.getBooked("jjohnson");
-      assertNotNull(booked);
+            final Itinerary newIt = new Itinerary(pKey, c, f, ESeatClass.ECONOMY, Integer
+                  .valueOf(1));
+            newIt.setStatus(EStatus.RESERVED);
+            newIt.setReservedTime(justExpDate);
+
+            session.save(newIt);
+         }
+      });
+
+      final List<Itinerary> canceled = ItineraryManager.getCanceled("jjohnson");
+      assertNotNull(canceled);
       boolean bFound = false;
-      for (final Itinerary it : booked) {
+      for (final Itinerary it : canceled) {
          if (false == it.getCustomer().getUsername().equals("jjohnson"))
             continue;
          if (157 != it.getFlight().getFlightNo())
             continue;
-         final String t = it.getTicketNo();
-         if (null == t)
-            continue;
-         if (false == t.equals(ticketNo))
-            continue;
+
+         assertEquals(EStatus.CANCELED.toString(), it.getStatus());
          bFound = true;
       }
       assertFalse(bFound);
-
-      ItineraryManager.cancelReserved("jjohnson", 157);
    }
 }

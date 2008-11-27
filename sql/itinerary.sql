@@ -13,11 +13,12 @@ CREATE TABLE itinerary(	flight_no INTEGER,
 			numOfSeats INTEGER,
 			seatClass CHAR(20),
 			ticketNo VARCHAR,
+            reserved_time TIMESTAMP,
 			PRIMARY KEY(flight_no, username),
 			FOREIGN KEY(flight_no) REFERENCES flight,
 			FOREIGN KEY(username) REFERENCES customer);
 
-INSERT INTO itinerary VALUES (106, 'jjohnson', 'BOOKED', 1, 'ECONOMY', 'NW-106-JJOHNSON-000');
-INSERT INTO itinerary VALUES (154, 'jjohnson', 'CANCELED', null, null, null);
-INSERT INTO itinerary VALUES (167, 'jjohnson', 'BOOKED', 1, 'ECONOMY', 'NW-167-JJOHNSON-000');
-INSERT INTO itinerary VALUES (292, 'jjohnson', 'RESERVED', 1, 'ECONOMY', null);
+INSERT INTO itinerary VALUES (106, 'jjohnson', 'BOOKED', 1, 'ECONOMY', 'NW-106-JJOHNSON-000', '2008-12-20 07:45:00');
+INSERT INTO itinerary VALUES (154, 'jjohnson', 'CANCELED', null, null, null, '2008-12-20 07:45:00');
+INSERT INTO itinerary VALUES (167, 'jjohnson', 'BOOKED', 1, 'ECONOMY', 'NW-167-JJOHNSON-000', '2008-12-20 07:45:00');
+INSERT INTO itinerary VALUES (292, 'jjohnson', 'RESERVED', 1, 'ECONOMY', null, '2008-12-20 07:45:00');

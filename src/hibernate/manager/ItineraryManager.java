@@ -1,5 +1,7 @@
 package hibernate.manager;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +22,12 @@ import org.hibernate.Session;
 public class ItineraryManager {
 
    /**
+    * Every reservations that is not paied in time will be canceled.
+    * The amount of time should be specified by this variable.
+    */
+   public static final int reservationTimeOutSec = 2 * 60; // seconds 
+
+   /**
     * Returns true if the flight was successfully reserved for the customer, false otherwise
     * @param userName - the customer's username
     * @param flightNo - the flight number
@@ -31,6 +39,9 @@ public class ItineraryManager {
          final ESeatClass seatClass, final int passenger) {
       if (null == seatClass)
          return false;
+
+      final Calendar calendar = Calendar.getInstance();
+      final Date curDate = calendar.getTime();
 
       final Boolean[] bRst = new Boolean[] { new Boolean(false) };
       HibernateUtil.doTransaction(new IHibernateTransaction() {
@@ -46,6 +57,7 @@ public class ItineraryManager {
             if (null == it) {
                final Itinerary newIt = new Itinerary(pKey, customer, flight, seatClass, passenger);
                newIt.setStatus(EStatus.RESERVED);
+               newIt.setReservedTime(curDate);
                session.save(newIt);
 
             } else if (false == it.getStatus().equals(EStatus.RESERVED.toString())) {
@@ -54,6 +66,7 @@ public class ItineraryManager {
                it.setSeatClass(seatClass);
                it.setNumOfSeats(passenger);
                it.setStatus(EStatus.RESERVED);
+               it.setReservedTime(curDate);
             } else
                return;
 
@@ -97,21 +110,20 @@ public class ItineraryManager {
     * @return true if the flight was canceled from the customer's itinerary, false otherwise
     */
    public static boolean cancelReserved(String userName, int flightNo) {
-      boolean bRst = false;
-      {
-         final ItineraryId pKey = new ItineraryId(flightNo, userName);
+      final Boolean[] bRst = new Boolean[] { false };
+      final ItineraryId pKey = new ItineraryId(flightNo, userName);
 
-         final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-         session.beginTransaction();
-         final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
-         if (null != it && it.getStatus().equals(EStatus.RESERVED.toString())) {
-            bRst = true;
-            it.setStatus(EStatus.CANCELED);
-            session.update(it);
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+            final Itinerary it = (Itinerary) session.get(Itinerary.class, pKey);
+            if (null != it && it.getStatus().equals(EStatus.RESERVED.toString())) {
+               bRst[0] = true;
+               it.setStatus(EStatus.CANCELED);
+               session.update(it);
+            }
          }
-         session.getTransaction().commit();
-      }
-      return bRst;
+      });
+      return bRst[0];
    }
 
    /**
@@ -147,21 +159,48 @@ public class ItineraryManager {
     * @param status - the status of flights to retrieve 
     * @return the list of itineraries
     */
-   private static List<Itinerary> getItinerary(String userName, EStatus status) {
-      final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-      session.beginTransaction();
-      final Query q = session.createQuery("FROM Itinerary WHERE USERNAME = ? AND STATUS = ?")
-            .setString(0, userName).setString(1, status.toString());
-      final List<Itinerary> its = q.list();
-      session.close();
-      return its;
+   private static List<Itinerary> getItinerary(final String userName, final EStatus status) {
+      checkExpiredReservation();
+
+      final Object[] rst = new Object[] { null };
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+            final Query q = session.createQuery("FROM Itinerary WHERE USERNAME = ? AND STATUS = ?")
+                  .setString(0, userName).setString(1, status.toString());
+            final List<Itinerary> its = q.list();
+            rst[0] = its;
+         }
+      });
+      return (List<Itinerary>) rst[0];
    }
 
+   /**
+    * create the ticket number
+    */
    public static String getTicketNum(Flight f, Customer c) {
-      //create the ticket object
       final Random rand = new Random();
       final String ticketNo = f.getAirline().getCode() + "-" + f.getFlightNo() + "-"
             + c.getUsername().toUpperCase() + "-" + (rand.nextInt(900) + 100);
       return ticketNo;
+   }
+
+   /**
+    * Cancel expired reservation.
+    */
+   public static void checkExpiredReservation() {
+      final Calendar calendar = Calendar.getInstance();
+      calendar.add(Calendar.SECOND, -reservationTimeOutSec);
+      final Date expDate = calendar.getTime();
+
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+            final Query q = session.createQuery("FROM Itinerary WHERE RESERVED_TIME < ?").setDate(
+                  0, expDate);
+            final List<Itinerary> its = q.list();
+            for (final Itinerary it : its) {
+               cancelReserved(it.getCustomer().getUsername(), it.getFlight().getFlightNo());
+            }
+         }
+      });
    }
 }
