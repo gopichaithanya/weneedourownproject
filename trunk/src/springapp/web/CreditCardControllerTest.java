@@ -39,6 +39,7 @@ public class CreditCardControllerTest {
       req.getSession().setAttribute(SessionConstants.USERNAME, "jjohnson");
 
       final CreditCardController form = new CreditCardController();
+      form.setCommandClass(Itinerary.class);
       final Itinerary cmd = (Itinerary) formBackingObject.invoke(form, new Object[] { req });
       assertNotNull(cmd);
       assertEquals("jjohnson", cmd.getCustomer().getUsername());

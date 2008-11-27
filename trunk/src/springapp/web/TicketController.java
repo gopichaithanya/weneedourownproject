@@ -27,7 +27,7 @@ public class TicketController extends SimpleFormController {
 		final HttpSession session = request.getSession();
 		
 		ModelAndView mv = new ModelAndView("ticket");
-		String ticket = (String)session.getAttribute(SessionConstants.TICKET);
+		String ticket = (String)session.getAttribute(SessionConstants.CREDIT_TICKET);
 		//String ticket = "US-292-jjohnson-ZZZ";
 		mv.addObject("ticket", ticket);
 		return mv;

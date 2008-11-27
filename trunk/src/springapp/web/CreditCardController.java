@@ -1,7 +1,6 @@
 package springapp.web;
 
 import hibernate.*;
-import hibernate.Itinerary.ESeatClass;
 import hibernate.manager.*;
 
 import java.util.List;
@@ -44,12 +43,10 @@ public class CreditCardController extends SimpleFormController {
 
       final Integer flightNo = (Integer) session.getAttribute(SessionConstants.CREDIT_FLIGHT_NO);
       session.removeAttribute(SessionConstants.CREDIT_FLIGHT_NO);
+      logger.info("flightNo: " + flightNo);
 
       final Itinerary it = (Itinerary) command;
       final Flight f = FlightManager.getFlight(flightNo);
-      final ESeatClass seatClass = ESeatClass.get(it.getSeatClass());
-      final Integer numOfSeats = it.getNumOfSeats();
-      logger.info("flightNo: " + flightNo);
       logger.info("Flight: " + f);
       logger.info("Itinerary: " + it);
 
@@ -65,11 +62,10 @@ public class CreditCardController extends SimpleFormController {
       logger.info("Ticket no: " + ticketNo);
 
       //book the flight once credit card is validated and a ticket is generated
-      final boolean bRst = ItineraryManager.book(c.getUsername(), flightNo, seatClass, numOfSeats,
-            ticketNo);
+      final boolean bRst = ItineraryManager.book(c.getUsername(), flightNo);
       logger.info("Booking result: " + bRst);
 
-      session.setAttribute(SessionConstants.TICKET, ticketNo);
+      session.setAttribute(SessionConstants.CREDIT_TICKET, ticketNo);
 
       final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
       return mv;
