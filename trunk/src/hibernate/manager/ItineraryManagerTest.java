@@ -117,7 +117,10 @@ public class ItineraryManagerTest {
             continue;
          if (157 != it.getFlight().getFlightNo())
             continue;
-         if (false == it.getTicketNo().equals(ticketNo))
+         final String t = it.getTicketNo();
+         if (null == t)
+            continue;
+         if (false == t.equals(ticketNo))
             continue;
          bFound = true;
       }
