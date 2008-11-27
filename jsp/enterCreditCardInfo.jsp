@@ -12,7 +12,7 @@
   			<jsp:param name="title2" value="Home > Payment" />
 		</jsp:include>
 	
-		<spring:hasBindErrors name="customer">
+		<spring:hasBindErrors name="itinerary">
 			<h3>You have errors in your input!</h3>
 				<font color="red">
 					<c:forEach items="${errors.allErrors}" var="error">
@@ -27,6 +27,7 @@
 			  	<tr><td><input type="submit" align="center" value="Enter"></td></tr>
 			</table>
       <form:hidden path="flight.flightNo" />
+      <form:hidden path="customer.username" />
       <form:hidden path="seatClass" />
       <form:hidden path="numOfSeats" />
 		</form:form>

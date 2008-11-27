@@ -6,7 +6,7 @@
 <title>Login</title>
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
 </head>
-<body>
+<body onLoad="document.getElementById('username').focus();">
 <jsp:include page="/WEB-INF/jsp/header1.jsp">
   <jsp:param name="title2" value="Home > Login" />
 </jsp:include>
