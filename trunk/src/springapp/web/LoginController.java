@@ -1,18 +1,11 @@
 package springapp.web;
 
-import java.lang.*;
-import java.util.List;
 import hibernate.Customer;
-import hibernate.manager.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.*;
-import javax.servlet.http.*;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
@@ -53,6 +46,14 @@ public class LoginController extends SimpleFormController {
       logger.info("redirectToLogin: " + urlAfterLogin);
       session.setAttribute(SessionConstants.LOGIN_REDIRECT_AFTER_LOGIN, urlAfterLogin);
       return new ModelAndView(new RedirectView(LoginController.URL));
+   }
+
+   @Override
+   protected Object formBackingObject(HttpServletRequest request) throws Exception {
+      final Customer c = (Customer) super.formBackingObject(request);
+      c.setUsername("tomcat");
+      c.setPassword("tomcat");
+      return c;
    }
 
 }

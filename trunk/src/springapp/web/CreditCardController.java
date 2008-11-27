@@ -23,6 +23,8 @@ import org.springframework.web.servlet.view.RedirectView;
  */
 public class CreditCardController extends SimpleFormController {
 
+   public static final String URL = "enterCreditCardInfo.spring";
+
    /**
     * Submit callback with all parameters.
     * @param request - current servlet request
@@ -34,32 +36,42 @@ public class CreditCardController extends SimpleFormController {
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
+      // Check login
       final HttpSession session = request.getSession();
+      final String userName = LoginController.getUserName(session);
+      if (null == userName)
+         return LoginController.redirectToLogin(session, URL);
 
-      //update customer's credit card information
+      final Integer flightNo = (Integer) session.getAttribute(SessionConstants.CREDIT_FLIGHT_NO);
+      session.removeAttribute(SessionConstants.CREDIT_FLIGHT_NO);
+
       final Itinerary it = (Itinerary) command;
-      final int flightNo = it.getFlight().getFlightNo();
-      final Customer c = CustomerManager.updateCcNoAndExpiration(it.getCustomer().getUsername(), it
-            .getCustomer().getCcNo(), it.getCustomer().getExpiration());
+      final Flight f = FlightManager.getFlight(flightNo);
       final ESeatClass seatClass = ESeatClass.get(it.getSeatClass());
       final Integer numOfSeats = it.getNumOfSeats();
+      logger.info("flightNo: " + flightNo);
+      logger.info("Flight: " + f);
+      logger.info("Itinerary: " + it);
+
+      //update customer's credit card information
+      final Customer c = CustomerManager.updateCcNoAndExpiration(it.getCustomer().getUsername(), it
+            .getCustomer().getCcNo(), it.getCustomer().getExpiration());
+      logger.info("Customer with new Credit info: " + c);
 
       //create the ticket object
-      String ticket;
-
       final Random rand = new Random();
-      Flight f = FlightManager.getFlight(flightNo);
-      ticket = f.getAirline().getCode() + "-" + flightNo + "-" + c.getUsername().toUpperCase()
-            + "-" + (rand.nextInt(900) + 100);
-      System.out.println(f.getAirline().getCode() + "-" + flightNo + "-" + c.getUsername() + "-"
-            + (rand.nextInt(900) + 100));
+      final String ticketNo = f.getAirline().getCode() + "-" + flightNo + "-"
+            + c.getUsername().toUpperCase() + "-" + (rand.nextInt(900) + 100);
+      logger.info("Ticket no: " + ticketNo);
 
       //book the flight once credit card is validated and a ticket is generated
-      ItineraryManager.book(c.getUsername(), flightNo, seatClass, numOfSeats, ticket);
+      final boolean bRst = ItineraryManager.book(c.getUsername(), flightNo, seatClass, numOfSeats,
+            ticketNo);
+      logger.info("Booking result: " + bRst);
 
-      session.setAttribute(SessionConstants.TICKET, ticket);
-      ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
-      //mv.addObject("ticket", ticket);
+      session.setAttribute(SessionConstants.TICKET, ticketNo);
+
+      final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
       return mv;
    }
 
@@ -70,16 +82,26 @@ public class CreditCardController extends SimpleFormController {
     */
    @Override
    protected Object formBackingObject(HttpServletRequest request) throws Exception {
-      Itinerary defaultCommandObj = new Itinerary();
+      Itinerary defaultCommandObj = (Itinerary) super.formBackingObject(request);
+
       final HttpSession session = request.getSession();
       final String userName = LoginController.getUserName(session);
       final List<Itinerary> its = ItineraryManager.getReserved(userName);
 
       //get the flight number of flight to be booked
       Integer flightNo = null;
-      try {
-         flightNo = Integer.valueOf(request.getParameter("flightNo"));
-      } catch (NumberFormatException e) {
+      final String param = request.getParameter("flightNo");
+      logger.info("Parameter for flightNo: " + param);
+
+      if (null == param) {
+         flightNo = (Integer) session.getAttribute(SessionConstants.CREDIT_FLIGHT_NO);
+      } else {
+         try {
+            flightNo = Integer.valueOf(param);
+         } catch (NumberFormatException e) {
+            logger.info("No flightNo is found.");
+         }
+         session.setAttribute(SessionConstants.CREDIT_FLIGHT_NO, flightNo);
       }
 
       if (null != flightNo)
@@ -92,5 +114,18 @@ public class CreditCardController extends SimpleFormController {
          }
 
       return defaultCommandObj;
+   }
+
+   @Override
+   public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
+         throws Exception {
+
+      // Check login
+      final HttpSession session = request.getSession();
+      final String userName = LoginController.getUserName(session);
+      if (null == userName)
+         return LoginController.redirectToLogin(session, URL);
+
+      return super.handleRequest(request, response);
    }
 }
