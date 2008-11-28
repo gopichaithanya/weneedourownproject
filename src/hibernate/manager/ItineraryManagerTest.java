@@ -13,56 +13,73 @@ import hibernate.ItineraryId;
 import hibernate.Itinerary.ESeatClass;
 import hibernate.Itinerary.EStatus;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ItineraryManagerTest {
 
+   private ItineraryId id = null;
+   private Itinerary it = null;
+   private Calendar calendar = null;
+
+   @Before
+   public void before() {
+      calendar = Calendar.getInstance();
+      id = new ItineraryId(157, "jjohnson");
+      it = createItinerary(id);
+      it.setSeatClass(ESeatClass.ECONOMY);
+      it.setNumOfSeats(1);
+      deleteItinerary(id);
+   }
+
+   @After
+   public void after() {
+      deleteItinerary(id);
+   }
+
    @Test
    public void testReserveFlight() {
-      final Calendar calendar = Calendar.getInstance();
       final Date curDate = calendar.getTime();
-
-      ItineraryManager.cancelReserved("jjohnson", 157);
-      final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
+      final boolean bReserve = ItineraryManager.reserve(id.getUsername(), id.getFlightNo(),
+            ESeatClass.get(it.getSeatClass()), it.getNumOfSeats());
       assertTrue(bReserve);
 
-      final List<Itinerary> reserved = ItineraryManager.getReserved("jjohnson");
+      final List<Itinerary> reserved = ItineraryManager.getReserved(id.getUsername());
       assertNotNull(reserved);
+
       boolean bFound = false;
-      for (final Itinerary it : reserved) {
-         if (false == it.getCustomer().getUsername().equals("jjohnson"))
+      for (final Itinerary i : reserved) {
+         assertEquals(EStatus.RESERVED.toString(), i.getStatus());
+         if (false == i.getId().equals(id))
             continue;
-         if (157 != it.getFlight().getFlightNo())
-            continue;
+
+         assertEquals(it.getNumOfSeats(), i.getNumOfSeats());
+         assertEquals(it.getSeatClass(), i.getSeatClass());
+         final Date reservedDate = i.getReservedTime();
+         assertEquals(curDate.getTime(), reservedDate.getTime(), 2000); // 2 sec
          bFound = true;
-
-         assertEquals(1, (int) it.getNumOfSeats());
-         assertEquals(ESeatClass.ECONOMY.toString(), it.getSeatClass());
-         assertEquals(EStatus.RESERVED.toString(), it.getStatus());
-
-         final Date reservedDate = it.getReservedTime();
-         assertEquals((float) curDate.getTime(), (float) reservedDate.getTime(), (float) 1000);
       }
       assertTrue(bFound);
    }
 
    @Test
    public void testCancelReserveFlight() {
-      ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
-      final boolean bCancel = ItineraryManager.cancelReserved("jjohnson", 157);
+      ItineraryManager.reserve(id.getUsername(), id.getFlightNo(), ESeatClass
+            .get(it.getSeatClass()), it.getNumOfSeats());
+      final boolean bCancel = ItineraryManager.cancelReserved(id.getUsername(), id.getFlightNo());
       assertTrue(bCancel);
 
-      final List<Itinerary> canceled = ItineraryManager.getCanceled("jjohnson");
+      final List<Itinerary> canceled = ItineraryManager.getCanceled(id.getUsername());
       assertNotNull(canceled);
+
       boolean bFound = false;
       for (final Itinerary it : canceled) {
-         if (false == it.getCustomer().getUsername().equals("jjohnson"))
-            continue;
-         if (157 != it.getFlight().getFlightNo())
-            continue;
-
          assertEquals(EStatus.CANCELED.toString(), it.getStatus());
+         if (false == it.getId().equals(id))
+            continue;
          bFound = true;
       }
       assertTrue(bFound);
@@ -70,119 +87,166 @@ public class ItineraryManagerTest {
 
    @Test
    public void testBook() {
-      ItineraryManager.cancelReserved("jjohnson", 157);
-      final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
+      final boolean bReserve = ItineraryManager.reserve(id.getUsername(), id.getFlightNo(),
+            ESeatClass.get(it.getSeatClass()), it.getNumOfSeats());
       assertTrue(bReserve);
 
       final String ticketNo = "XX-FF-YYYYYY-ZZZ";
-      final boolean bBook = ItineraryManager.book("jjohnson", 157, ticketNo);
+      final boolean bBook = ItineraryManager.book(id.getUsername(), id.getFlightNo(), ticketNo);
       assertTrue(bBook);
 
-      final List<Itinerary> booked = ItineraryManager.getBooked("jjohnson");
+      final List<Itinerary> booked = ItineraryManager.getBooked(id.getUsername());
       assertNotNull(booked);
+
       boolean bFound = false;
       for (final Itinerary it : booked) {
-         if (false == it.getCustomer().getUsername().equals("jjohnson"))
-            continue;
-         if (157 != it.getFlight().getFlightNo())
-            continue;
-         final String t = it.getTicketNo();
-         if (null == t)
-            continue;
-         if (false == t.equals(ticketNo))
-            continue;
          assertEquals(EStatus.BOOKED.toString(), it.getStatus());
+         if (false == it.getId().equals(id))
+            continue;
+
+         final String t = it.getTicketNo();
+         assertNotNull(t);
+         assertEquals(t, ticketNo);
          bFound = true;
       }
       assertTrue(bFound);
-
-      ItineraryManager.cancelReserved("jjohnson", 157);
    }
 
    @Test
    public void testGetReserved() {
-      ItineraryManager.cancelReserved("jjohnson", 157);
-      final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
+      final boolean bReserve = ItineraryManager.reserve(id.getUsername(), id.getFlightNo(),
+            ESeatClass.get(it.getSeatClass()), it.getNumOfSeats());
       assertTrue(bReserve);
 
-      final List<Itinerary> flights = ItineraryManager.getReserved("jjohnson");
+      final List<Itinerary> flights = ItineraryManager.getReserved(id.getUsername());
       assertNotNull(flights);
       assertTrue(flights.size() > 0);
-      for (final Itinerary it : flights)
-         assertEquals(EStatus.RESERVED.toString(), it.getStatus());
 
-      ItineraryManager.cancelReserved("jjohnson", 157);
+      boolean bFound = false;
+      for (final Itinerary it : flights) {
+         assertEquals(EStatus.RESERVED.toString(), it.getStatus());
+         if (it.getId().equals(id))
+            bFound = true;
+      }
+      assertTrue(bFound);
    }
 
    @Test
    public void testGetCanceled() {
-      ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
-      final boolean bCancel = ItineraryManager.cancelReserved("jjohnson", 157);
+      ItineraryManager.reserve(id.getUsername(), id.getFlightNo(), ESeatClass
+            .get(it.getSeatClass()), it.getNumOfSeats());
+      final boolean bCancel = ItineraryManager.cancelReserved(id.getUsername(), id.getFlightNo());
       assertTrue(bCancel);
 
-      final List<Itinerary> flights = ItineraryManager.getCanceled("jjohnson");
+      final List<Itinerary> flights = ItineraryManager.getCanceled(id.getUsername());
       assertNotNull(flights);
       assertTrue(flights.size() > 0);
-      for (final Itinerary it : flights)
+
+      boolean bFound = false;
+      for (final Itinerary it : flights) {
          assertEquals(EStatus.CANCELED.toString(), it.getStatus());
+         if (it.getId().equals(id))
+            bFound = true;
+      }
+      assertTrue(bFound);
    }
 
    @Test
    public void testGetBooked() {
-      ItineraryManager.cancelReserved("jjohnson", 157);
-      final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
+      final boolean bReserve = ItineraryManager.reserve(id.getUsername(), id.getFlightNo(),
+            ESeatClass.get(it.getSeatClass()), it.getNumOfSeats());
       assertTrue(bReserve);
 
       final String ticketNo = "XX-FF-YYYYYY-ZZZ";
-      final boolean bBooked = ItineraryManager.book("jjohnson", 157, ticketNo);
+      final boolean bBooked = ItineraryManager.book(id.getUsername(), id.getFlightNo(), ticketNo);
       assertTrue(bBooked);
 
-      final List<Itinerary> flights = ItineraryManager.getBooked("jjohnson");
+      final List<Itinerary> flights = ItineraryManager.getBooked(id.getUsername());
       assertNotNull(flights);
       assertTrue(flights.size() > 0);
-      for (final Itinerary it : flights)
-         assertEquals(EStatus.BOOKED.toString(), it.getStatus());
 
-      ItineraryManager.cancelReserved("jjohnson", 157);
+      boolean bFound = false;
+      for (final Itinerary it : flights) {
+         assertEquals(EStatus.BOOKED.toString(), it.getStatus());
+         if (it.getId().equals(id))
+            bFound = true;
+      }
+      assertTrue(bFound);
    }
 
    @Test
-   public void testCheckExpiredReservation() {
-      if(true) return;
-      final Calendar calendar = Calendar.getInstance();
-      calendar.add(Calendar.SECOND, -ItineraryManager.reservationTimeOutSec - 1);
-      final Date justExpDate = calendar.getTime();
+   public void testCheckExpiredReservationKept() {
+      assertEquals(EStatus.RESERVED, checkExpReserv(-ItineraryManager.reservationTimeOutSec + 4));
+   }
 
-      final ItineraryId pKey = new ItineraryId(157, "jjohnson");
+   @Test
+   public void testCheckExpiredReservationCanceled() {
+      assertEquals(EStatus.CANCELED, checkExpReserv(-ItineraryManager.reservationTimeOutSec - 4));
+   }
+
+   private EStatus checkExpReserv(int diffSec) {
+      calendar.add(Calendar.SECOND, diffSec);
+      final Date reservDate = calendar.getTime();
+
       HibernateUtil.doTransaction(new IHibernateTransaction() {
          public void transaction(Session session) {
-            final Customer c = (Customer) session.get(Customer.class, "jjohnson");
-            final Flight f = (Flight) session.get(Flight.class, 157);
-            assertNotNull(pKey);
-            assertNotNull(c);
-            assertNotNull(f);
-
-            final Itinerary newIt = new Itinerary(pKey, c, f, ESeatClass.ECONOMY, Integer
-                  .valueOf(1));
-            newIt.setStatus(EStatus.RESERVED);
-            newIt.setReservedTime(justExpDate);
-
-            session.save(newIt);
+            it.setSeatClass(ESeatClass.ECONOMY);
+            it.setNumOfSeats(1);
+            it.setStatus(EStatus.RESERVED);
+            it.setReservedTime(reservDate);
+            session.save(it);
          }
       });
 
-      final List<Itinerary> canceled = ItineraryManager.getCanceled("jjohnson");
-      assertNotNull(canceled);
-      boolean bFound = false;
-      for (final Itinerary it : canceled) {
-         if (false == it.getCustomer().getUsername().equals("jjohnson"))
-            continue;
-         if (157 != it.getFlight().getFlightNo())
-            continue;
+      ItineraryManager.checkExpiredReservation();
 
-         assertEquals(EStatus.CANCELED.toString(), it.getStatus());
-         bFound = true;
-      }
-      assertFalse(bFound);
+      final EStatus[] status = new EStatus[] { null };
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+
+            final Itinerary it = (Itinerary) session.get(Itinerary.class, id);
+            assertNotNull(it);
+            status[0] = EStatus.get(it.getStatus());
+         }
+      });
+      return status[0];
    }
+
+   private boolean deleteItinerary(final ItineraryId id) {
+      final Boolean[] bRst = new Boolean[] { false };
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+
+            final Itinerary it = (Itinerary) session.get(Itinerary.class, id);
+            if (null == it)
+               return;
+
+            session.delete(it);
+            bRst[0] = true;
+         }
+      });
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+            assertNull(session.get(Itinerary.class, id));
+         }
+      });
+      return bRst[0];
+   }
+
+   private static Itinerary createItinerary(final ItineraryId id) {
+      final Itinerary[] it = new Itinerary[] { new Itinerary() };
+      it[0].setId(id);
+
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+            final Flight f = (Flight) session.get(Flight.class, id.getFlightNo());
+            final Customer c = (Customer) session.get(Customer.class, id.getUsername());
+            it[0].setFlight(f);
+            it[0].setCustomer(c);
+         }
+      });
+
+      return it[0];
+   }
+
 }
