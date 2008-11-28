@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,6 +25,7 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
    private String beanName = null;
    private MockHttpServletRequest request = null;
    private MockHttpServletResponse response = null;
+   private MockHttpSession session = null;
    private FlightSearchForCustomerFormController ctrl = null;
    private FlightSearchForCustomer cmd = null;
 
@@ -36,9 +38,13 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
       assertEquals("/flightSearchForCustomerForm.spring", beanName);
 
       request = new MockHttpServletRequest("POST", beanName);
-      response = new MockHttpServletResponse();
       assertNotNull(request);
+
+      response = new MockHttpServletResponse();
       assertNotNull(response);
+
+      session = (MockHttpSession) request.getSession();
+      assertNotNull(session);
 
       ctrl = (FlightSearchForCustomerFormController) this.applicationContext.getBean(beanName);
       assertNotNull(ctrl);
@@ -52,7 +58,6 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
    @Test
    public void testHandleRequest() throws Exception {
       final ModelAndView mv = ctrl.handleRequest(request, response);
-      assertNotNull(mv);
       ModelAndViewAssert.assertViewName(mv, ctrl.getFormView());
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "airports");
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "tripTypes");
@@ -62,7 +67,6 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
    @Test
    public void testOnSubmitNull() throws Exception {
       final ModelAndView mv = ctrl.onSubmit(null, null, null, null);
-      assertNotNull(mv);
       ModelAndViewAssert.assertViewName(mv, ctrl.getFormView());
       assertTrue(mv.getModel().isEmpty());
    }
@@ -74,7 +78,6 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
       cmd.setArrivalLocation("SGH");
 
       final ModelAndView mv = ctrl.onSubmit(null, null, cmd, null);
-      assertNotNull(mv);
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "searchedDepartFlights");
       assertEquals(41.260555f, (Float) mv.getModel().get("departAirportLat"), 0.01);
       assertEquals(-80.678889f, (Float) mv.getModel().get("departAirportLng"), 0.01);
@@ -88,7 +91,6 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
       cmd.setTripType(FlightSearchForCustomer.ETripType.ROUND_TRIP);
 
       final ModelAndView mv = ctrl.onSubmit(null, null, cmd, null);
-      assertNotNull(mv);
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "selectedDepartFlight");
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "searchedReturnFlights");
    }
@@ -98,11 +100,8 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
       cmd.setTripType(FlightSearchForCustomer.ETripType.ONEWAY_TRIP);
       cmd.setDepartFlightNo(157);
 
-      final ModelAndView mv = ctrl.onSubmit(request, null, cmd, null);
-      assertNotNull(mv);
-
-      final HttpSession session = request.getSession();
-      assertNull(session.getAttribute("Nothing is in"));
+      assertNull(session.getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER));
+      ctrl.onSubmit(request, null, cmd, null);
       assertNotNull(session.getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER));
    }
 
@@ -112,11 +111,8 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
       cmd.setDepartFlightNo(157);
       cmd.setReturnFlightNo(157);
 
-      final ModelAndView mv = ctrl.onSubmit(request, null, cmd, null);
-      assertNotNull(mv);
-
-      final HttpSession session = request.getSession();
-      assertNull(session.getAttribute("Nothing is in"));
+      assertNull(session.getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER));
+      ctrl.onSubmit(request, null, cmd, null);
       assertNotNull(session.getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER));
    }
 }

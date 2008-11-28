@@ -13,7 +13,6 @@ import hibernate.ItineraryId;
 import hibernate.Itinerary.ESeatClass;
 import hibernate.Itinerary.EStatus;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
@@ -212,7 +211,7 @@ public class ItineraryManagerTest {
       return status[0];
    }
 
-   private boolean deleteItinerary(final ItineraryId id) {
+   public static boolean deleteItinerary(final ItineraryId id) {
       final Boolean[] bRst = new Boolean[] { false };
       HibernateUtil.doTransaction(new IHibernateTransaction() {
          public void transaction(Session session) {

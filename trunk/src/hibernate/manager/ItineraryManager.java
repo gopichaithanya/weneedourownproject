@@ -203,8 +203,11 @@ public class ItineraryManager {
             final Query q = session.createQuery("FROM Itinerary");
             final List<Itinerary> all = q.list();
             for (final Itinerary i : all) {
-               if (i.getReservedTime().before(expDate))
-                  its.add(i);
+               if (EStatus.get(i.getStatus()) != EStatus.RESERVED)
+                  continue;
+               if (i.getReservedTime().after(expDate))
+                  continue;
+               its.add(i);
             }
          }
       });

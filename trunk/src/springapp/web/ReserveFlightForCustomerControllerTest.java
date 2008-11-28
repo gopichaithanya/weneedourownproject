@@ -9,17 +9,26 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
-public class ReserveFlightForCustomerControllerTest {
+import springapp.manager.MockServletContextWebContextLoader;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = MockServletContextWebContextLoader.class, locations = { "/xml/springapp-servlet.xml" })
+public class ReserveFlightForCustomerControllerTest extends AbstractJUnit4SpringContextTests {
 
    @Test
    public void testReserveFlight1() throws Exception {
       final String userName = "jjohnson";
-      final boolean bRst = testReserveFlight(userName, new Integer[] { 182 }, ESeatClass.BUSINESS, 1);
+      final boolean bRst = testReserveFlight(userName, new Integer[] { 182 }, ESeatClass.BUSINESS,
+            1);
       assertTrue(bRst);
       ItineraryManager.cancelReserved(userName, 182);
    }
