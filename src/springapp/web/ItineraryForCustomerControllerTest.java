@@ -57,18 +57,9 @@ public class ItineraryForCustomerControllerTest extends AbstractJUnit4SpringCont
    public void testHandleRequest() throws ServletException, IOException {
       session.setAttribute(SessionConstants.USERNAME, "jjohnson");
       final ModelAndView mv = ctrl.handleRequest(request, response);
-
-      final List<Itinerary> reserved = (List<Itinerary>) ModelAndViewAssert
-            .assertAndReturnModelAttributeOfType(mv, "reservedItinerary", List.class);
-      assertNotNull(reserved);
-
-      final List<Itinerary> booked = (List<Itinerary>) ModelAndViewAssert
-            .assertAndReturnModelAttributeOfType(mv, "bookedItinerary", List.class);
-      assertNotNull(booked);
-
-      final List<Itinerary> canceled = (List<Itinerary>) ModelAndViewAssert
-            .assertAndReturnModelAttributeOfType(mv, "canceledItinerary", List.class);
-      assertNotNull(canceled);
+      ModelAndViewAssert.assertModelAttributeAvailable(mv, "reservedItinerary");
+      ModelAndViewAssert.assertModelAttributeAvailable(mv, "bookedItinerary");
+      ModelAndViewAssert.assertModelAttributeAvailable(mv, "canceledItinerary");
    }
 
    @Test
