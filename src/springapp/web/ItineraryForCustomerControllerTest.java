@@ -7,44 +7,73 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.*;
 import org.springframework.mock.web.*;
 
+import springapp.manager.MockServletContextWebContextLoader;
+
 @SuppressWarnings("unchecked")
-public class ItineraryForCustomerControllerTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = MockServletContextWebContextLoader.class, locations = { "/xml/springapp-servlet.xml" })
+public class ItineraryForCustomerControllerTest extends AbstractJUnit4SpringContextTests {
+
+   private String beanName = null;
+   private MockHttpServletRequest request = null;
+   private MockHttpServletResponse response = null;
+   private MockHttpSession session = null;
+   private ItineraryForCustomerController ctrl = null;
+   private String loginViewName = null;
+
+   @Before
+   public void before() throws Exception {
+      beanName = applicationContext.getBeanNamesForType(ItineraryForCustomerController.class)[0];
+      assertEquals("/itineraryForCustomer.spring", beanName);
+
+      request = new MockHttpServletRequest("POST", beanName);
+      assertNotNull(request);
+
+      response = new MockHttpServletResponse();
+      assertNotNull(response);
+
+      session = (MockHttpSession) request.getSession();
+      assertNotNull(session);
+
+      ctrl = (ItineraryForCustomerController) this.applicationContext.getBean(beanName);
+      assertNotNull(ctrl);
+
+      loginViewName = applicationContext.getBeanNamesForType(LoginController.class)[0];
+   }
 
    @Test
    public void testHandleRequest() throws ServletException, IOException {
-      final HttpServletRequest req = new MockHttpServletRequest();
-      final HttpServletResponse resp = new MockHttpServletResponse();
-      req.getSession().setAttribute(SessionConstants.USERNAME, "jjohnson");
-
-      final ItineraryForCustomerController ctl = new ItineraryForCustomerController();
-      final ModelAndView mv = ctl.handleRequest(req, resp);
-      assertNotNull(mv);
+      session.setAttribute(SessionConstants.USERNAME, "jjohnson");
+      final ModelAndView mv = ctrl.handleRequest(request, response);
 
       final List<Itinerary> reserved = (List<Itinerary>) ModelAndViewAssert
             .assertAndReturnModelAttributeOfType(mv, "reservedItinerary", List.class);
       assertNotNull(reserved);
-      assertFalse(reserved.isEmpty());
 
       final List<Itinerary> booked = (List<Itinerary>) ModelAndViewAssert
             .assertAndReturnModelAttributeOfType(mv, "bookedItinerary", List.class);
       assertNotNull(booked);
-      assertFalse(booked.isEmpty());
 
       final List<Itinerary> canceled = (List<Itinerary>) ModelAndViewAssert
             .assertAndReturnModelAttributeOfType(mv, "canceledItinerary", List.class);
       assertNotNull(canceled);
-      assertFalse(canceled.isEmpty());
    }
 
    @Test
-   public void testHandleRequestNoLogin() {
+   public void testWithoutLogin() throws Exception {
+      final ModelAndView mv = ctrl.handleRequest(request, response);
+      assertEquals("/" + ((RedirectView) mv.getView()).getUrl(), loginViewName);
    }
 }

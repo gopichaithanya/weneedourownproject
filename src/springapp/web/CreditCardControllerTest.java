@@ -3,64 +3,88 @@ package springapp.web;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
-import java.util.Hashtable;
 
 import hibernate.Itinerary;
+import hibernate.ItineraryId;
 import hibernate.Itinerary.ESeatClass;
 import hibernate.Itinerary.EStatus;
 import hibernate.manager.ItineraryManager;
+import hibernate.manager.ItineraryManagerTest;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-public class CreditCardControllerTest {
+import springapp.manager.MockServletContextWebContextLoader;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = MockServletContextWebContextLoader.class, locations = { "/xml/springapp-servlet.xml" })
+public class CreditCardControllerTest extends AbstractJUnit4SpringContextTests {
 
    private Method formBackingObject = null;
+   private String beanName = null;
+   private MockHttpServletRequest request = null;
+   private MockHttpServletResponse response = null;
+   private MockHttpSession session = null;
+   private CreditCardController ctrl = null;
+   private String loginViewName = null;
 
    @Before
-   public void before() throws SecurityException, NoSuchMethodException {
+   public void before() throws Exception {
+      beanName = applicationContext.getBeanNamesForType(CreditCardController.class)[0];
+      assertEquals("/enterCreditCardInfo.spring", beanName);
+
+      request = new MockHttpServletRequest("POST", beanName);
+      assertNotNull(request);
+
+      response = new MockHttpServletResponse();
+      assertNotNull(response);
+
+      session = (MockHttpSession) request.getSession();
+      assertNotNull(session);
+
+      ctrl = (CreditCardController) this.applicationContext.getBean(beanName);
+      assertNotNull(ctrl);
+
       formBackingObject = CreditCardController.class.getDeclaredMethod("formBackingObject",
             new Class[] { HttpServletRequest.class });
+      assertNotNull(formBackingObject);
       formBackingObject.setAccessible(true);
+
+      loginViewName = applicationContext.getBeanNamesForType(LoginController.class)[0];
    }
 
    @Test
    public void testDefaultObj() throws Exception {
       ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
 
-      final MockHttpServletRequest req = new MockHttpServletRequest();
-      req.setParameter(CreditCardController.PARAM_FLIGHT_NO, String.valueOf(157));
-      req.getSession().setAttribute(SessionConstants.USERNAME, "jjohnson");
+      request.setParameter(CreditCardController.PARAM_FLIGHT_NO, String.valueOf(157));
+      session.setAttribute(SessionConstants.USERNAME, "jjohnson");
 
-      final CreditCardController form = new CreditCardController();
-      form.setCommandClass(Itinerary.class);
-      final Itinerary cmd = (Itinerary) formBackingObject.invoke(form, new Object[] { req });
-      assertNotNull(cmd);
+      final Itinerary cmd = (Itinerary) formBackingObject.invoke(ctrl, new Object[] { request });
       assertEquals("jjohnson", cmd.getCustomer().getUsername());
-      assertNotNull(cmd.getFlight());
       assertEquals(157, cmd.getFlight().getFlightNo());
       assertEquals(EStatus.RESERVED.toString(), cmd.getStatus());
       assertEquals(ESeatClass.ECONOMY.toString(), cmd.getSeatClass());
       assertEquals(1, (int) cmd.getNumOfSeats());
 
-      ItineraryManager.cancelReserved("jjohnson", 157);
+      ItineraryManagerTest.deleteItinerary(new ItineraryId(157, "jjohnson"));
    }
 
    @Test
    public void testWithoutLogin() throws Exception {
-      final HttpServletRequest req = new MockHttpServletRequest();
-      final HttpServletResponse res = new MockHttpServletResponse();
-      final CreditCardController form = new CreditCardController();
-      final ModelAndView mv = form.handleRequest(req, res);
-      assertNotNull(mv);
-      assertEquals(RedirectView.class, mv.getView().getClass());
+      final ModelAndView mv = ctrl.handleRequest(request, response);
+      assertEquals("/" + ((RedirectView) mv.getView()).getUrl(), loginViewName);
    }
 }

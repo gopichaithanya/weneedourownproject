@@ -1,11 +1,8 @@
 package springapp.web;
 
 import static org.junit.Assert.*;
-import hibernate.Itinerary;
 import hibernate.Itinerary.ESeatClass;
 import hibernate.manager.ItineraryManager;
-
-import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +15,6 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 
 import springapp.manager.MockServletContextWebContextLoader;
 
