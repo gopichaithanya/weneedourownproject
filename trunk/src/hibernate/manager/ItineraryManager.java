@@ -1,5 +1,6 @@
 package hibernate.manager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import hibernate.ItineraryId;
 import hibernate.Itinerary.ESeatClass;
 import hibernate.Itinerary.EStatus;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -20,6 +22,8 @@ import org.hibernate.Session;
  */
 @SuppressWarnings("unchecked")
 public class ItineraryManager {
+
+   private final static Logger log = Logger.getLogger(ItineraryManager.class);
 
    /**
     * Every reservations that is not paied in time will be canceled.
@@ -192,15 +196,23 @@ public class ItineraryManager {
       calendar.add(Calendar.SECOND, -reservationTimeOutSec);
       final Date expDate = calendar.getTime();
 
+      final List<Itinerary> its = new ArrayList();
       HibernateUtil.doTransaction(new IHibernateTransaction() {
          public void transaction(Session session) {
-            final Query q = session.createQuery("FROM Itinerary WHERE RESERVED_TIME < ?").setDate(
-                  0, expDate);
-            final List<Itinerary> its = q.list();
-            for (final Itinerary it : its) {
-               cancelReserved(it.getCustomer().getUsername(), it.getFlight().getFlightNo());
+
+            final Query q = session.createQuery("FROM Itinerary");
+            final List<Itinerary> all = q.list();
+            for (final Itinerary i : all) {
+               if (i.getReservedTime().before(expDate))
+                  its.add(i);
             }
          }
       });
+
+      for (final Itinerary it : its) {
+         log.info("ExpiredReservations: " + it.getCustomer().getUsername() + ", "
+               + it.getFlight().getFlightNo());
+         cancelReserved(it.getCustomer().getUsername(), it.getFlight().getFlightNo());
+      }
    }
 }
