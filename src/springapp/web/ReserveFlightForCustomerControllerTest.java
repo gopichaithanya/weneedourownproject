@@ -1,22 +1,22 @@
 package springapp.web;
 
 import static org.junit.Assert.*;
+import hibernate.ItineraryId;
 import hibernate.Itinerary.ESeatClass;
-import hibernate.manager.ItineraryManager;
+import hibernate.manager.ItineraryManagerTest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.web.servlet.view.RedirectView;
 
 import springapp.manager.MockServletContextWebContextLoader;
 
@@ -24,13 +24,40 @@ import springapp.manager.MockServletContextWebContextLoader;
 @ContextConfiguration(loader = MockServletContextWebContextLoader.class, locations = { "/xml/springapp-servlet.xml" })
 public class ReserveFlightForCustomerControllerTest extends AbstractJUnit4SpringContextTests {
 
+   private String beanName = null;
+   private MockHttpServletRequest request = null;
+   private MockHttpServletResponse response = null;
+   private MockHttpSession session = null;
+   private ReserveFlightForCustomerController ctrl = null;
+   private String loginViewName = null;
+
+   @Before
+   public void before() throws Exception {
+      beanName = applicationContext.getBeanNamesForType(ReserveFlightForCustomerController.class)[0];
+      assertEquals("/reserveFlightForCustomer.spring", beanName);
+
+      request = new MockHttpServletRequest("POST", beanName);
+      assertNotNull(request);
+
+      response = new MockHttpServletResponse();
+      assertNotNull(response);
+
+      session = (MockHttpSession) request.getSession();
+      assertNotNull(session);
+
+      ctrl = (ReserveFlightForCustomerController) this.applicationContext.getBean(beanName);
+      assertNotNull(ctrl);
+
+      loginViewName = applicationContext.getBeanNamesForType(LoginController.class)[0];
+   }
+
    @Test
    public void testReserveFlight1() throws Exception {
       final String userName = "jjohnson";
       final boolean bRst = testReserveFlight(userName, new Integer[] { 182 }, ESeatClass.BUSINESS,
             1);
       assertTrue(bRst);
-      ItineraryManager.cancelReserved(userName, 182);
+      ItineraryManagerTest.deleteItinerary(new ItineraryId(182, userName));
    }
 
    @Test
@@ -39,8 +66,8 @@ public class ReserveFlightForCustomerControllerTest extends AbstractJUnit4Spring
       final boolean bRst = testReserveFlight(userName, new Integer[] { 182, 378 },
             ESeatClass.ECONOMY, 1);
       assertTrue(bRst);
-      ItineraryManager.cancelReserved(userName, 182);
-      ItineraryManager.cancelReserved(userName, 378);
+      ItineraryManagerTest.deleteItinerary(new ItineraryId(182, userName));
+      ItineraryManagerTest.deleteItinerary(new ItineraryId(378, userName));
    }
 
    @Test
@@ -97,19 +124,21 @@ public class ReserveFlightForCustomerControllerTest extends AbstractJUnit4Spring
 
    public boolean testReserveFlight(String userName, Object argReserveFlight,
          ESeatClass argSeatType, int argNumPassengers) throws Exception {
-      final HttpServletRequest req = new MockHttpServletRequest();
-      final HttpServletResponse resp = new MockHttpServletResponse();
-      final HttpSession session = req.getSession();
-      session.setAttribute(SessionConstants.USERNAME, userName);
-      final Controller ctl = new ReserveFlightForCustomerController();
 
+      session.setAttribute(SessionConstants.USERNAME, userName);
       session.setAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER, argReserveFlight);
       session.setAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER, argSeatType);
       session.setAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER, argNumPassengers);
 
-      final ModelAndView mv = ctl.handleRequest(req, resp);
-      assertNotNull(mv);
-      final boolean bRst = (Boolean) mv.getModel().get("result");
+      final ModelAndView mv = ctrl.handleRequest(request, response);
+      final boolean bRst = (Boolean) ModelAndViewAssert.assertAndReturnModelAttributeOfType(mv,
+            "result", Boolean.class);
       return bRst;
+   }
+
+   @Test
+   public void testWithoutLogin() throws Exception {
+      final ModelAndView mv = ctrl.handleRequest(request, response);
+      assertEquals("/" + ((RedirectView) mv.getView()).getUrl(), loginViewName);
    }
 }
