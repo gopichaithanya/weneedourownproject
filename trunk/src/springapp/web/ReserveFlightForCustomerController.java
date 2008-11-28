@@ -29,22 +29,21 @@ public class ReserveFlightForCustomerController implements Controller {
       final String userName = LoginController.getUserName(session);
       if (null == userName)
          return LoginController.redirectToLogin(session, URL);
-      logger.info("Username: " + userName);
 
       final ModelAndView mv = new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
       {
          boolean bRst = false;
          final Integer[] flights = (Integer[]) session
                .getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER);
-         logger.info("Flights: " + flights);
+         session.removeAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER);
 
          final ESeatClass seatClass = (ESeatClass) session
                .getAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER);
-         logger.info("Seat class: " + seatClass);
+         session.removeAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER);
 
          final int numPassengers = (Integer) session
                .getAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER);
-         logger.info("Num passengers: " + numPassengers);
+         session.removeAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER);
 
          if (null != flights && flights.length > 0 && null != seatClass && numPassengers > 0) {
             bRst = true;
