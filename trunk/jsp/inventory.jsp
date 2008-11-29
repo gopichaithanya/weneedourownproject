@@ -14,30 +14,49 @@
   			<jsp:param name="title2" value="Home > Inventory" />
 		</jsp:include>
 		
-		<table border ="1">
+		<table border ="1" width="585">
 			<thead>
 				<tr>
-					<th>Flight #</th>
-					<th>Economy seats</th>
-					<th>Business seats</th>
+					<th width="80">Airline
+						<div>Flight #</div>
+					</th>
+					<th width="100">Date</th>
+					<th width="130">Departure
+						<div>Arrival</div>
+					</th>
+					<th width="100">Economy seats</th>
+					<th width="100">Business seats</th>
 				</tr>
 			</thead>
 			
 			<tbody>
 				<c:forEach items="${flightList}" var="flight">
-					<tr>
-		      			<td><c:out value="${flight.flightNo}"/><br/></td>
-			  			<td><c:out value="${flight.economySeats}"/><br/></td>
-			  			<td><c:out value="${flight.businessSeats}"/><br/></td>
+					<tr align="center">
+		      			<td width="80"><c:out value="${flight.airline.code}"/>
+		      				<div><c:out value="${flight.flightNo}"/></div>
+		      			<br/></td>
+		      			<td width="100"><c:out value="${flight.departureTime}"/><br/></td>
+		      			<td width="130"><c:out value="${flight.airportByArrivalLocation.city}"/>
+		      				(<c:out value="${flight.airportByArrivalLocation.code}"/>)
+		      				<div><c:out value="${flight.airportByDepartureLocation.city}"/>
+		      					(<c:out value="${flight.airportByDepartureLocation.code}" />)
+		      				</div>
+		      			<br/></td>
+			  			<td width="100"><c:out value="${flight.economySeats}"/><br/></td>
+			  			<td width="100"><c:out value="${flight.businessSeats}"/><br/></td>
 			  		</tr>
-		  	</c:forEach>
+		  		</c:forEach>
+		  		<br><br>
+		  		<tr align="center">
+					<td width="80"></td>
+		      		<td width="100"></td>
+		      		<td width="130"><b>Totals:</b></td>
+			  		<td width="100"><b><c:out value="${emptyEconomySeats}"/></b><br/></td>
+			  		<td width="100"><b><c:out value="${emptyBusinessSeats}"/></b><br/></td>
+			  	</tr>
+		  		
 		  	</tbody>
 		</table>
-		<br>
-		Total # of empty Economy seats: 
-		<br>
-		Total # of empty Business seats:
-		<br>
 		<%@ include file="/WEB-INF/jsp/footer.jsp"%>
 	</body>
 </html>
