@@ -8,10 +8,11 @@
     <LI><a href="maps.spring">Airport Listing</a></LI>
   </UL>
   </LI>
-  
+
   <LI>Manager
   <UL>
     <LI><a href="addflight.spring">Add flight</a></LI>
+    <LI><a href="inventory.spring">Inventory</a></LI>
   </UL>
   </LI>
 </UL>
