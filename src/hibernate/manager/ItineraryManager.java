@@ -1,10 +1,10 @@
 package hibernate.manager;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import hibernate.Customer;
 import hibernate.Flight;
@@ -181,10 +181,30 @@ public class ItineraryManager {
    /**
     * create the ticket number
     */
-   public static String getTicketNum(Flight f, String userName) {
-      final Random rand = new Random();
+   public static String getTicketNum(Flight f, final String userName) {
+      final Integer[] uniq = new Integer[] { 0 };
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+            final Query q = session.createQuery("FROM Itinerary WHERE USERNAME = ?").setString(0,
+                  userName);
+            final List<Itinerary> its = q.list();
+            for (final Itinerary it : its) {
+               final String ticket = it.getTicketNo();
+               if (null == ticket)
+                  continue;
+               final String un = ticket.substring(ticket.length() - 3, ticket.length());
+               final Integer u = Integer.valueOf(un);
+               if (uniq[0] < u)
+                  uniq[0] = u;
+            }
+            ++uniq[0];
+            uniq[0] %= 1000;
+         }
+      });
+
+      final String uniqNum = new DecimalFormat("#000").format(uniq[0]);
       final String ticketNo = f.getAirline().getCode() + "-" + f.getFlightNo() + "-"
-            + userName.toUpperCase() + "-" + (rand.nextInt(900) + 100);
+            + userName.toUpperCase() + "-" + uniqNum;
       return ticketNo;
    }
 

@@ -262,10 +262,13 @@ public class ItineraryManagerTest {
        * The sequence number is unique for each traveler.
        */
       final Flight f = FlightManager.listFlights().get(0);
-      final String ticket = ItineraryManager.getTicketNum(f, "jjohnson");
-      assertEquals(f.getAirline().getCode(), ticket.substring(0,2));
+      final String userName = "jjohnson";
+      final String ticket = ItineraryManager.getTicketNum(f, userName);
+      assertEquals(f.getAirline().getCode(), ticket.substring(0, 2));
       assertEquals('-', ticket.charAt(2));
       assertEquals(String.valueOf(f.getFlightNo()), ticket.substring(3, 6));
       assertEquals('-', ticket.charAt(6));
+      assertEquals(userName.toUpperCase(), ticket.substring(7, 7 + userName.length()));
+      assertEquals('-', ticket.charAt(7 + userName.length()));
    }
 }
