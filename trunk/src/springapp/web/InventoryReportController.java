@@ -16,8 +16,6 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 /**
  * InventoryReportController is a Spring controller for the inventory page. It retrieves the
  * necessary inventory information to be displayed
- * 
- * @author Israa Taha
  */
 public class InventoryReportController extends SimpleFormController {
 	

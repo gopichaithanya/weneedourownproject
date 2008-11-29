@@ -16,8 +16,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * CreditCardController is a Spring controller for the credit card page.
- * 
- * @author Israa Taha
  */
 public class CreditCardController extends SimpleFormController {
 
@@ -25,6 +23,10 @@ public class CreditCardController extends SimpleFormController {
     * parameter name for flight number.
     */
    public static final String PARAM_FLIGHT_NO = "flightNo";
+
+   /**
+    * URL for bean
+    */
    public static final String URL = "enterCreditCardInfo.spring";
 
    /**
@@ -131,6 +133,10 @@ public class CreditCardController extends SimpleFormController {
       return flightNo;
    }
 
+   /**
+    * Handle the requests from clients.
+    * @see org.springframework.web.servlet.mvc.AbstractController#handleRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+    */
    @Override
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
          throws Exception {

@@ -17,15 +17,14 @@ import org.springframework.validation.Errors;
  * the credit card number and the experation date as integer numbers and take the modulo
  * operation on exp date from card number.  If the modulo is zero, then the card is valid.
  * Otherwise, the card is false.
- *
- * @author Nick Duan
  */
 public class CreditCardValidator implements Validator {
 
    /**
-    * URL of Credit Card Validator
+    * URL of Credit Card Validator.
+    * This is given by professor.
     */
-   public static final String urlString = "http://localhost:8080/validation/ValidateCC";
+   public static final String URL_VALIDATOR = "http://localhost:8080/validation/ValidateCC";
 
    /**
     * User name for the validator
@@ -116,7 +115,7 @@ public class CreditCardValidator implements Validator {
       String encodedPassword = (new sun.misc.BASE64Encoder()).encode(temp.getBytes());
 
       try {
-         URL url = new URL(urlString);
+         URL url = new URL(URL_VALIDATOR);
          HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
          connection.setRequestProperty("Authorization", "Basic " + encodedPassword);

@@ -17,19 +17,30 @@ import org.springframework.validation.Validator;
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerValidator implements Validator {
 
-   public static final int MAX_YEAR = 10;
    /**
-    * Currently flight number does not seems 3 digits.
-    * But the description our professor gave us said it should be 3 digits.
+    * The flight searching maximum years from today
+    */
+   public static final int MAX_YEAR = 10;
+
+   /**
+    * For the debugging purpose, some of flight number doesn't need to be 3-digits.
     * If this value is false, then this validator does not check the number of digits of flightNo.
     * If this value is true, then this validator checks the number of digits of flightNo. 
     */
-   static boolean bFlagFlightNoIsForcedToBe3Digits = false;
+   static boolean bFlagFlightNoIsForcedToBe3Digits = true;
 
+   /**
+    * supporting classes for validation.
+    * @see org.springframework.validation.Validator#supports(java.lang.Class)
+    */
    public boolean supports(Class clazz) {
       return springapp.web.FlightSearchForCustomer.class.equals(clazz);
    }
 
+   /**
+    * validate the command object that will be given by Spring Framework.
+    * @see org.springframework.validation.Validator#validate(java.lang.Object, org.springframework.validation.Errors)
+    */
    public void validate(Object obj, Errors errors) {
       final FlightSearchForCustomer o = (FlightSearchForCustomer) obj;
 

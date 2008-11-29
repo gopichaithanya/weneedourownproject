@@ -5,14 +5,29 @@ import org.springframework.validation.Validator;
 import hibernate.Customer;
 import hibernate.manager.*;
 
+/**
+ * A Spring frame work validator for login page.
+ */
 @SuppressWarnings("unchecked")
 public class LoginValidator implements Validator {
 	
+   /**
+    * Supporting classes for this validator
+    * @param aClass the class that will be tested
+    * @return whether the class is supported by this validator
+    * @see org.springframework.validation.Validator#supports(java.lang.Class)
+    */
    public boolean supports(Class aClass)
 	{
 		return aClass.equals(Customer.class);
 	}
 
+	/**
+	 * Validating for login page
+	 * @param o command object
+	 * @param errors a Spring Framework error object
+	 * @see org.springframework.validation.Validator#validate(java.lang.Object, org.springframework.validation.Errors)
+	 */
 	public void validate(Object o, Errors errors)
 	{
 	   /*
