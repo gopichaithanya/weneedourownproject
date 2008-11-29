@@ -181,10 +181,10 @@ public class ItineraryManager {
    /**
     * create the ticket number
     */
-   public static String getTicketNum(Flight f, Customer c) {
+   public static String getTicketNum(Flight f, String userName) {
       final Random rand = new Random();
       final String ticketNo = f.getAirline().getCode() + "-" + f.getFlightNo() + "-"
-            + c.getUsername().toUpperCase() + "-" + (rand.nextInt(900) + 100);
+            + userName.toUpperCase() + "-" + (rand.nextInt(900) + 100);
       return ticketNo;
    }
 

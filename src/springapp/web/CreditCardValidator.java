@@ -4,8 +4,10 @@ import hibernate.Customer;
 import hibernate.Itinerary;
 
 import java.net.*;
+import java.util.Calendar;
 import java.io.*;
 
+import org.apache.log4j.Logger;
 import org.springframework.validation.Validator;
 import org.springframework.validation.Errors;
 
@@ -21,9 +23,27 @@ import org.springframework.validation.Errors;
 public class CreditCardValidator implements Validator {
 
    /**
+    * URL of Credit Card Validator
+    */
+   public static final String urlString = "http://localhost:8080/validation/ValidateCC";
+
+   /**
+    * User name for the validator
+    */
+   public static final String username = "tomcat";
+
+   /**
+    * Password for the validator
+    */
+   public static final String password = "tomcat";
+
+   private final Logger log = Logger.getLogger(getClass());
+
+   /**
     * Returns true if this Validator can validate instances of the supplied aClass, false otherwise
     * @return true if class can be validated, false otherwise
     */
+   @SuppressWarnings("unchecked")
    public boolean supports(Class aClass) {
       return aClass.equals(Itinerary.class);
    }
@@ -45,26 +65,52 @@ public class CreditCardValidator implements Validator {
 
       if (customer.getCcNo() == null) {
          errors.rejectValue("ccNo", "error.invalid.ccNo", "Credit card number is blank");
-         return;
-      } else if (((Long) customer.getCcNo()).toString().length() != 16) {
-         errors.rejectValue("ccNo", "error.invalid.ccNo", "Invalid Credit card number");
-         return;
+      } else {
+         final long cc = customer.getCcNo();
+         if (cc <= 0 || ((Long) cc).toString().length() != 16)
+            errors.rejectValue("ccNo", "error.invalid.ccNo", "Invalid Credit card number");
       }
 
       if (customer.getExpiration() == null) {
          errors.rejectValue("expiration", "error.invalid.expiration", "Expiration date is blank");
-         return;
-      } else if (((Integer) customer.getExpiration()).toString().length() != 4) {
-         errors.rejectValue("expiration", "error.invalid.expiration", "Invalid expiration date");
-         return;
+      } else {
+         final int exp = customer.getExpiration();
+         final String str = ((Integer) exp).toString();
+         final int len = str.length();
+         if (exp <= 0 || (len != 4 && len != 3))
+            errors.rejectValue("expiration", "error.invalid.expiration", "Invalid expiration date");
+
+         final Calendar calendar = Calendar.getInstance();
+         final int curYear = calendar.get(Calendar.YEAR) % 100;
+         final int curMonth = calendar.get(Calendar.MONTH) + 1;
+
+         try {
+            final int month = Integer.valueOf(str.substring(0, len - 2));
+            final int year = Integer.valueOf(str.substring(len - 2, len));
+            if (month <= 0 || month > 12)
+               errors.rejectValue("expiration", "error.outofrange.expiration.month",
+                     "Month of expiration date is out of range.");
+            if (year >= 50)
+               errors.rejectValue("expiration", "error.outofrange.expiration.year",
+                     "Year of expiration date is too big.");
+            if (year < curYear)
+               errors.rejectValue("expiration", "error.past.expiration.year",
+                     "Year of expiration date has already past.");
+            if (year == curYear && month < curMonth)
+               errors.rejectValue("expiration", "error.past.expiration.month",
+                     "Month of expiration date has already past.");
+         } catch (NumberFormatException e) {
+            errors.rejectValue("expiration", "error.invalid.expiration",
+                  "Only decimal format is allowed.");
+         }
       }
 
-      String urlString = "http://localhost:8080/validation/ValidateCC";
-      long cardNumber = customer.getCcNo();
-      //long cardNumber = Long.parseLong("1111111111111111");
-      int expDate = customer.getExpiration();
-      //int expDate = Integer.parseInt("2222");
-      String temp = "tomcat:tomcat";
+      if (errors.hasErrors())
+         return;
+
+      final long cardNumber = customer.getCcNo();
+      final int expDate = customer.getExpiration();
+      final String temp = username + ":" + password;
 
       String encodedPassword = (new sun.misc.BASE64Encoder()).encode(temp.getBytes());
 
@@ -78,7 +124,7 @@ public class CreditCardValidator implements Validator {
          connection.setDoOutput(true);
          connection.setRequestMethod("POST");
 
-         System.out.println("Send card number and exp date for validation..\n");
+         log.info("Send card number and exp date for validation..");
          DataOutputStream dataOutStream = new DataOutputStream(connection.getOutputStream());
          dataOutStream.writeLong(cardNumber);
          dataOutStream.writeInt(expDate);
@@ -86,26 +132,26 @@ public class CreditCardValidator implements Validator {
 
          BufferedReader responseReader = new BufferedReader(new InputStreamReader(connection
                .getInputStream()));
-         System.out.println("Getting HTTP response..\n");
+         log.info("Getting HTTP response..");
          String line = responseReader.readLine();
 
-         System.out.println("Response received: " + line);
+         log.info("Response received: " + line);
 
          if (line != null && line.equals("VALID"))
-            System.out.println("Valid card number " + cardNumber + " with exp date " + expDate);
+            log.info("Valid card number " + cardNumber + " with exp date " + expDate);
          else {
-            System.out.println("Invalid card number " + cardNumber + " with exp date " + expDate);
-            errors.rejectValue("ccNo", "error.invalid.ccNo",
+            log.info("Invalid card number " + cardNumber + " with exp date " + expDate);
+            errors.rejectValue("INVALID", "error.invalid.ccNo",
                   "Invalid credit card or expiration date");
          }
 
          responseReader.close();
          connection.disconnect();
       } catch (java.net.MalformedURLException e) {
-         System.err.println("java.net.MalformedURLException caught: " + e.getMessage());
+         log.error("java.net.MalformedURLException caught: " + e.getMessage());
          e.printStackTrace();
       } catch (java.io.IOException e) {
-         System.err.println("java.io.IOException caught: " + e.getMessage());
+         log.error("java.io.IOException caught: " + e.getMessage());
          e.printStackTrace();
       }
 

@@ -1,10 +1,8 @@
 package springapp.web;
 
 import static org.junit.Assert.*;
-import hibernate.Itinerary;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 
@@ -21,7 +19,6 @@ import org.springframework.mock.web.*;
 
 import springapp.manager.MockServletContextWebContextLoader;
 
-@SuppressWarnings("unchecked")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = MockServletContextWebContextLoader.class, locations = { "/xml/springapp-servlet.xml" })
 public class ItineraryForCustomerControllerTest extends AbstractJUnit4SpringContextTests {
