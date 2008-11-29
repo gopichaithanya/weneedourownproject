@@ -22,27 +22,27 @@
 <form:form commandName="itinerary" method="POST" action="enterCreditCardInfo.spring">
   <table border="1">
     <tr>
-      <th>Flight number</th>
-      <td><c:out value="${flight.flightNo}" /><form:hidden path="flight.flightNo" /></td>
+      <th align="right">Flight number</th>
+      <td><c:out value="${itinerary.flight.flightNo}" /><form:hidden path="flight.flightNo" /></td>
     </tr>
     <tr>
-      <th>Seat class</th>
-      <td><c:out value="${seatClass}" /> <form:hidden path="seatClass" /></td>
+      <th align="right">Seat class</th>
+      <td><c:out value="${itinerary.seatClass}" /> <form:hidden path="seatClass" /></td>
     </tr>
     <tr>
-      <th>Number of seats</th>
-      <td><c:out value="${numOfSeats}" /> <form:hidden path="numOfSeats" /></td>
+      <th align="right">Number of seats</th>
+      <td><c:out value="${itinerary.numOfSeats}" /> <form:hidden path="numOfSeats" /></td>
     </tr>
     <tr>
-      <th>Credit card number (16 digits)</th>
+      <th align="right">Credit card number (16 digits)</th>
       <td><form:input path="customer.ccNo" /></td>
     </tr>
     <tr>
-      <th>Credit card expiration date (mmyy)</th>
+      <th align="right">Credit card expiration date (mmyy)</th>
       <td><form:input path="customer.expiration" /></td>
     </tr>
     <tr>
-      <td><input type="submit" align="center" value="Enter"></td>
+      <td align="right"><input type="submit" align="center" value="Enter"></td>
     </tr>
   </table>
   <form:hidden path="customer.username" />
