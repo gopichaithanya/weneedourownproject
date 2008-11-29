@@ -29,10 +29,11 @@
       <web-resource-name>HTMLManger and Manager command</web-resource-name>
       <url-pattern>/addflight.spring</url-pattern>
       <url-pattern>/enterCreditCardInfo.spring</url-pattern>
+      <url-pattern>/inventory.spring</url-pattern>
     </web-resource-collection>
     <auth-constraint>
        <!-- NOTE:  This role is not present in the default users file -->
-       <role-name>tomcat</role-name>
+       <role-name>managergroup</role-name>
     </auth-constraint>
   </security-constraint>
 
