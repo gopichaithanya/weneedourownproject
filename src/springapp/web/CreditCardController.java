@@ -42,12 +42,7 @@ public class CreditCardController extends SimpleFormController {
        * The validation is done via a validation service, which will be provided by the instructor.
        */
 
-      // Check login
       final HttpSession session = request.getSession();
-      final String userName = LoginController.getUserName(session);
-      if (null == userName)
-         return LoginController.redirectToLogin(session, URL);
-
       final Integer flightNo = (Integer) session.getAttribute(SessionConstants.CREDIT_FLIGHT_NO);
       if (null == flightNo)
          return new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
@@ -70,7 +65,11 @@ public class CreditCardController extends SimpleFormController {
       final boolean bRst = ItineraryManager.book(c.getUsername(), flightNo, ticketNo);
       logger.info("Booking result: " + bRst);
 
-      session.setAttribute(SessionConstants.CREDIT_TICKET, ticketNo);
+      final String userName = LoginController.getUserName(session);
+      final List<Itinerary> bookedIts = ItineraryManager.getBooked(userName);
+      for (final Itinerary bookedIt : bookedIts)
+         if (bookedIt.getFlight().getFlightNo() == flightNo)
+            session.setAttribute(SessionConstants.BOOKED_ITINERARY, bookedIt);
 
       final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
       return mv;
