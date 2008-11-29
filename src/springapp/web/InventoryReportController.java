@@ -27,9 +27,18 @@ public class InventoryReportController extends SimpleFormController {
     throws ServletException, IOException {
 		final ModelAndView mv = new ModelAndView("inventory");
 		
-		List<Flight> flight = FlightManager.listFlights();
-		mv.addObject("flightList", flight);
+		int emptyEconomySeats = 0;
+		int emptyBusinessSeats = 0;
 		
+		List<Flight> flight = FlightManager.listFlights();
+		for (int i=0; i<flight.size(); i++) {
+			emptyEconomySeats += flight.get(i).getEconomySeats();
+			emptyBusinessSeats += flight.get(i).getBusinessSeats();
+		}
+		
+		mv.addObject("flightList", flight);
+		mv.addObject("emptyEconomySeats", emptyEconomySeats);
+		mv.addObject("emptyBusinessSeats", emptyBusinessSeats);
 		return mv;
 	}
 }
