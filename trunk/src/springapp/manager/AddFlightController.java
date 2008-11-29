@@ -5,12 +5,13 @@ import hibernate.manager.AirlineManager;
 import hibernate.manager.AirportManager;
 import hibernate.manager.FlightManager;
 
+import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
@@ -18,6 +19,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 public class AddFlightController  extends SimpleFormController 
 {
+	private Logger logger = Logger.getRootLogger();
+	
 	public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse resp)
     throws Exception 
     {
@@ -36,8 +39,36 @@ public class AddFlightController  extends SimpleFormController
 	         Object command, BindException errors) throws Exception 
 	{
 		final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
-		Flight flight = (Flight)command;
-		FlightManager.addFlight(flight);		
+		FlightAddForManager flight = (FlightAddForManager)command;
+		
+		int departYear = flight.getDepartYear();
+		int departMonth = flight.getDepartMonth();
+		int departDay = flight.getDepartDay();
+		int departHour = flight.getDepartHour();
+		
+		Date [] departDate = FlightManager.getTimeRange(departYear, departMonth, departDay, departHour, 0);
+		
+		int arrivalYear = flight.getReturnYear();
+		int arrivalMonth = flight.getReturnMonth();
+		int arrivalDay = flight.getReturnDay();
+		int arrivalHour = flight.getReturnHour();
+		
+		Date [] returnDate = FlightManager.getTimeRange(arrivalYear, arrivalMonth, arrivalDay, arrivalHour, 0);
+		
+		Flight loFlight = new Flight(flight.getFlightNo(),
+				flight.getAirline(),
+				flight.getAirportByArrivalLocation(),
+				flight.getAirportByDepartureLocation(),
+				departDate[0],
+				returnDate[0],
+				flight.getEconomySeats(),
+				flight.getEconomyPrice(),
+				flight.getBusinessSeats(),
+				flight.getBusinessPrice(),
+				null);
+		
+		FlightManager.addFlight(loFlight);		
+		
 		return mv;
 	}
 }
