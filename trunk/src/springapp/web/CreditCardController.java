@@ -4,7 +4,6 @@ import hibernate.*;
 import hibernate.manager.*;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +37,10 @@ public class CreditCardController extends SimpleFormController {
     */
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
+      /*
+       * The credit card information has to be validated first before booking.
+       * The validation is done via a validation service, which will be provided by the instructor.
+       */
 
       // Check login
       final HttpSession session = request.getSession();
@@ -60,7 +63,7 @@ public class CreditCardController extends SimpleFormController {
       logger.info("Customer with new Credit info: " + c);
 
       //book the flight once credit card is validated and a ticket is generated
-      final String ticketNo = ItineraryManager.getTicketNum(f, c);
+      final String ticketNo = ItineraryManager.getTicketNum(f, c.getUsername());
       logger.info("Ticket no: " + ticketNo);
       final boolean bRst = ItineraryManager.book(c.getUsername(), flightNo, ticketNo);
       logger.info("Booking result: " + bRst);
@@ -79,6 +82,10 @@ public class CreditCardController extends SimpleFormController {
    @Override
    protected Object formBackingObject(HttpServletRequest request) throws Exception {
       Itinerary defaultCommandObj = (Itinerary) super.formBackingObject(request);
+      final Customer dummyCustomer = new Customer();
+      final Flight dummyFlight = new Flight();
+      defaultCommandObj.setCustomer(dummyCustomer);
+      defaultCommandObj.setFlight(dummyFlight);
 
       final HttpSession session = request.getSession();
       final String userName = LoginController.getUserName(session);
@@ -121,6 +128,10 @@ public class CreditCardController extends SimpleFormController {
       final String userName = LoginController.getUserName(session);
       if (null == userName)
          return LoginController.redirectToLogin(session, URL);
+
+      final Integer flightNo = (Integer) session.getAttribute(SessionConstants.CREDIT_FLIGHT_NO);
+      if (null == flightNo)
+         return new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
 
       return super.handleRequest(request, response);
    }

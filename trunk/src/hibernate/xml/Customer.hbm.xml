@@ -29,7 +29,7 @@
         <property name="password" type="string">
             <column name="PASSWORD" length="20" />
         </property>
-        <property name="ccNo" type="java.lang.Long">
+        <property name="ccNo" type="long">
             <column name="CC_NO" />
         </property>
         <property name="expiration" type="java.lang.Integer">

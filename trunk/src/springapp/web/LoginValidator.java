@@ -15,6 +15,11 @@ public class LoginValidator implements Validator {
 
 	public void validate(Object o, Errors errors)
 	{
+	   /*
+	    * If the credit card number is invalid,
+	    * a web page with an error message will be displayed to the user
+	    * and ask the user to re-enter the credit card information.
+	    */
 		Customer customer = (Customer)o;
 		
 		String username = customer.getUsername();
