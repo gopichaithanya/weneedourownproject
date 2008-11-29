@@ -186,9 +186,8 @@
                 <include name="**/*.java"/>
                 <exclude name="**/*Test.java"/>
                 <exclude name="**/*Tests.java"/>
+                <exclude name="springapp/manager/MockServletContextWebContextLoader.java"/>
             </fileset>
-
-            <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
         </javadoc>
         <echo message="Java doc files are accessable at here: http://localhost:8080/${name}/docs/api/" />
     </target>

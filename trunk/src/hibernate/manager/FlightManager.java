@@ -18,9 +18,9 @@ import org.hibernate.HibernateException;
 public class FlightManager {
 
    /**
-    * Constructs a new FlightManager object
+    * This is not designed to be an instance.
     */
-   public FlightManager() {
+   private FlightManager() {
    }
 
    /**
@@ -43,7 +43,7 @@ public class FlightManager {
     * Removes a flight from the database
     * @param flight - the flight to be removed
     */
-   public void removeFlight(Flight flight) {
+   public static void removeFlight(Flight flight) {
 
       try {
          Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -60,7 +60,7 @@ public class FlightManager {
     * @param flight
     * @return list of flights that match the specified criteria
     */
-   public List<?> searchFlight(Flight flight) {
+   public static List<?> searchFlight(Flight flight) {
       Session session = HibernateUtil.getSessionFactory().getCurrentSession();
       session.beginTransaction();
 

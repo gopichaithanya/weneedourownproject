@@ -1,4 +1,4 @@
-package springapp.manager;
+package springapp.web;
 
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -9,6 +9,10 @@ import org.springframework.test.context.support.AbstractContextLoader;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+/**
+ * This Servlet context loader is only for testing.
+ * This loader loads up the XML settinig file of Spring Framework without Web containers.
+ */
 @SuppressWarnings("unchecked")
 public class MockServletContextWebContextLoader extends AbstractContextLoader {
 
@@ -18,9 +22,9 @@ public class MockServletContextWebContextLoader extends AbstractContextLoader {
    }
 
    public final ConfigurableApplicationContext loadContext(String... locations) throws Exception {
-//      System.out.println(System.getProperty("java.class.path"));
-//      System.out.println(System.getProperty("user.dir"));
-      ConfigurableWebApplicationContext context = new XmlWebApplicationContext();
+      //System.out.println(System.getProperty("java.class.path"));
+      //System.out.println(System.getProperty("user.dir"));
+      final ConfigurableWebApplicationContext context = new XmlWebApplicationContext();
       context.setServletContext(new MockServletContext(new FileSystemResourceLoader()));
       context.setConfigLocations(locations);
       context.refresh();

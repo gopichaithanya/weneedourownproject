@@ -32,13 +32,19 @@ public class ItineraryManager {
    public static final int reservationTimeOutSec = 2 * 60; // seconds 
 
    /**
-    * Returns true if the flight was successfully reserved for the customer, false otherwise
-    * @param userName - the customer's username
-    * @param flightNo - the flight number
-    * @param seatClass TODO
-    * @param passenger TODO
-    * @return true if the flight was successfully reserved for the customer, false otherwise
+    * This is not designed to be an instance.
     */
+   private ItineraryManager() {
+   }
+
+   /**
+       * Returns true if the flight was successfully reserved for the customer, false otherwise
+       * @param userName - the customer's username
+       * @param flightNo - the flight number
+       * @param seatClass TODO
+       * @param passenger TODO
+       * @return true if the flight was successfully reserved for the customer, false otherwise
+       */
    public static boolean reserve(final String userName, final int flightNo,
          final ESeatClass seatClass, final int passenger) {
       if (null == seatClass)

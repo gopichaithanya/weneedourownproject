@@ -146,7 +146,7 @@
                     /**
                      * Auto generated method signature
                      * 
-                     * @see edu.gmu.swe642.client.InventoryStatusService#getNumOfEmptySeats
+                     * @see edu.gmu.swe642.client.InventoryStatusServiceStub#getNumOfEmptySeats
                      * @param getNumOfEmptySeats0
                     
                      */
@@ -265,7 +265,7 @@
                 /**
                 * Auto generated method signature for Asynchronous Invocations
                 * 
-                * @see edu.gmu.swe642.client.InventoryStatusService#startgetNumOfEmptySeats
+                * @see edu.gmu.swe642.client.InventoryStatusServiceStub#startgetNumOfEmptySeats
                     * @param getNumOfEmptySeats0
                 
                 */
@@ -411,7 +411,7 @@
                     /**
                      * Auto generated method signature
                      * 
-                     * @see edu.gmu.swe642.client.InventoryStatusService#getNumOfEmptySeatsForDateRange
+                     * @see edu.gmu.swe642.client.InventoryStatusServiceStub#getNumOfEmptySeatsForDateRange
                      * @param getNumOfEmptySeatsForDateRange2
                     
                      */
@@ -530,7 +530,7 @@
                 /**
                 * Auto generated method signature for Asynchronous Invocations
                 * 
-                * @see edu.gmu.swe642.client.InventoryStatusService#startgetNumOfEmptySeatsForDateRange
+                * @see edu.gmu.swe642.client.InventoryStatusServiceStub#startgetNumOfEmptySeatsForDateRange
                     * @param getNumOfEmptySeatsForDateRange2
                 
                 */

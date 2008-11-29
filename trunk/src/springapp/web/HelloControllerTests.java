@@ -6,7 +6,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.web.servlet.ModelAndView;
 
-import springapp.manager.MockServletContextWebContextLoader;
 import springapp.web.HelloController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
