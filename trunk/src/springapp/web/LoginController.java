@@ -31,12 +31,12 @@ public class LoginController extends SimpleFormController {
       final String username = customer.getUsername();
 
       ModelAndView mv = new ModelAndView(new RedirectView(successView));
-      session.setAttribute(SessionConstants.USERNAME, username);
+      session.setAttribute(SessionConstants.LOGIN_USERNAME, username);
       return mv;
    }
 
    static public String getUserName(HttpSession session) {
-      final String userId = (String) session.getAttribute(SessionConstants.USERNAME);
+      final String userId = (String) session.getAttribute(SessionConstants.LOGIN_USERNAME);
       if (null == userId || userId.length() <= 0)
          return null;
       return userId;

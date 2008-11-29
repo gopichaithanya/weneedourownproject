@@ -34,7 +34,7 @@ public class ReserveFlightForCustomerControllerTest extends AbstractJUnit4Spring
    @Before
    public void before() throws Exception {
       beanName = applicationContext.getBeanNamesForType(ReserveFlightForCustomerController.class)[0];
-      assertEquals("/reserveFlightForCustomer.spring", beanName);
+      assertEquals("/" + ReserveFlightForCustomerController.URL, beanName);
 
       request = new MockHttpServletRequest("POST", beanName);
       assertNotNull(request);
@@ -125,7 +125,7 @@ public class ReserveFlightForCustomerControllerTest extends AbstractJUnit4Spring
    public boolean testReserveFlight(String userName, Object argReserveFlight,
          ESeatClass argSeatType, int argNumPassengers) throws Exception {
 
-      session.setAttribute(SessionConstants.USERNAME, userName);
+      session.setAttribute(SessionConstants.LOGIN_USERNAME, userName);
       session.setAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER, argReserveFlight);
       session.setAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER, argSeatType);
       session.setAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER, argNumPassengers);

@@ -13,8 +13,7 @@
 <script type="text/javascript" src="js/proj4398.js"></script>
 <script type="text/javascript" src="js/datePicker.js"></script>
 <script type="text/javascript" src="js/searchAirport.js"></script>
-<script language="JavaScript"><!--
- //
+<script language="JavaScript"><!--//
 
 google.load("maps", "2");
 

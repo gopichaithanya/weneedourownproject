@@ -74,6 +74,8 @@ public class CreditCardValidatorTest {
       invalidCC(123456789012345L, 0111, new String[] { "ccNo", "expiration" });
       invalidCC(10000000000000000L, 10, new String[] { "ccNo", "expiration" });
       invalidCC(-123456789012345L, 1309, new String[] { "ccNo", "expiration" });
+      invalidCC(1234567890123456L, 12345, new String[] { "expiration" });
+      invalidCC(1234567890123456L, 0, new String[] { "expiration" });
    }
 
 }

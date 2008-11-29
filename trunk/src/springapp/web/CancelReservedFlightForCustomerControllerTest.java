@@ -32,7 +32,7 @@ public class CancelReservedFlightForCustomerControllerTest extends AbstractJUnit
    public void before() {
       beanName = applicationContext
             .getBeanNamesForType(CancelReservedFlightForCustomerController.class)[0];
-      assertEquals("/cancelReservedFlightForCustomer.spring", beanName);
+      assertEquals("/" + CancelReservedFlightForCustomerController.URL, beanName);
 
       request = new MockHttpServletRequest("POST", beanName);
       assertNotNull(request);
@@ -49,7 +49,7 @@ public class CancelReservedFlightForCustomerControllerTest extends AbstractJUnit
 
    private boolean testCancelReservedFlight(String userName, String flightNo) throws Exception {
       request.setParameter(CancelReservedFlightForCustomerController.PARAM_FLIGHT_NO, flightNo);
-      session.setAttribute(SessionConstants.USERNAME, userName);
+      session.setAttribute(SessionConstants.LOGIN_USERNAME, userName);
 
       final ModelAndView mv = ctrl.handleRequest(request, response);
       assertNotNull(mv);

@@ -32,18 +32,18 @@ import springapp.manager.MockServletContextWebContextLoader;
 @ContextConfiguration(loader = MockServletContextWebContextLoader.class, locations = { "/xml/springapp-servlet.xml" })
 public class CreditCardControllerTest extends AbstractJUnit4SpringContextTests {
 
-   private Method formBackingObject = null;
    private String beanName = null;
    private MockHttpServletRequest request = null;
    private MockHttpServletResponse response = null;
    private MockHttpSession session = null;
    private CreditCardController ctrl = null;
+   private Method formBackingObject = null;
    private String loginViewName = null;
 
    @Before
    public void before() throws Exception {
       beanName = applicationContext.getBeanNamesForType(CreditCardController.class)[0];
-      assertEquals("/enterCreditCardInfo.spring", beanName);
+      assertEquals("/" + CreditCardController.URL, beanName);
 
       request = new MockHttpServletRequest("POST", beanName);
       assertNotNull(request);
@@ -70,7 +70,7 @@ public class CreditCardControllerTest extends AbstractJUnit4SpringContextTests {
       ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
 
       request.setParameter(CreditCardController.PARAM_FLIGHT_NO, String.valueOf(157));
-      session.setAttribute(SessionConstants.USERNAME, "jjohnson");
+      session.setAttribute(SessionConstants.LOGIN_USERNAME, "jjohnson");
 
       final Itinerary cmd = (Itinerary) formBackingObject.invoke(ctrl, new Object[] { request });
       assertEquals("jjohnson", cmd.getCustomer().getUsername());
