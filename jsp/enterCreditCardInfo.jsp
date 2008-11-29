@@ -22,6 +22,14 @@
 <form:form commandName="itinerary" method="POST" action="enterCreditCardInfo.spring">
   <table border="1">
     <tr>
+      <th align="right">Departure airport</th>
+      <td><c:out value="${flight.airportByDepartureLocation.name}" /></td>
+    </tr>
+    <tr>
+      <th align="right">Arrival airport</th>
+      <td><c:out value="${flight.airportByArrivalLocation.name}" /></td>
+    </tr>
+    <tr>
       <th align="right">Flight number</th>
       <td><c:out value="${itinerary.flight.flightNo}" /><form:hidden path="flight.flightNo" /></td>
     </tr>
@@ -32,6 +40,17 @@
     <tr>
       <th align="right">Number of seats</th>
       <td><c:out value="${itinerary.numOfSeats}" /> <form:hidden path="numOfSeats" /></td>
+    </tr>
+    <tr>
+      <th align="right">Price</th>
+      <td>$<c:choose>
+        <c:when test="${fn:startsWith(itinerary.seatClass, 'Business')}">
+          <c:out value="${itinerary.flight.businessPrice * itinerary.numOfSeats}" />
+        </c:when>
+        <c:otherwise>
+          <c:out value="${itinerary.flight.economyPrice * itinerary.numOfSeats}" />
+        </c:otherwise>
+      </c:choose></td>
     </tr>
     <tr>
       <th align="right">Credit card number (16 digits)</th>

@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@page import="java.util.List"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -74,10 +73,10 @@ function book(flightNo) {
             <div>for <c:out value="${iti.numOfSeats}" /> tickets<br />
             <c:if test="${!(empty iti.seatClass)}">$<c:choose>
                 <c:when test="${fn:startsWith(iti.seatClass, 'Business')}">
-                  <c:out value="${iti.flight.businessPrice}" />
+                  <c:out value="${iti.flight.businessPrice * iti.numOfSeats}" />
                 </c:when>
                 <c:otherwise>
-                  <c:out value="${iti.flight.economyPrice}" />
+                  <c:out value="${iti.flight.economyPrice * iti.numOfSeats}" />
                 </c:otherwise>
               </c:choose> (<c:out value="${iti.seatClass}" />)</c:if></div>
             </td>
