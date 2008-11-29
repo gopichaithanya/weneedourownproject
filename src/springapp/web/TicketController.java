@@ -15,8 +15,6 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 /**
  * TicketController is a Spring controller for the ticket page. It handles the creation of a ticket
  * to be displayed to the user as a confirmation of booking and payment 
- * 
- * @author Israa Taha
  */
 public class TicketController extends SimpleFormController {
 

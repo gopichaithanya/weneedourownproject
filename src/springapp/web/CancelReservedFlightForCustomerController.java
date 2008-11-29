@@ -19,6 +19,10 @@ public class CancelReservedFlightForCustomerController implements Controller {
     * parameter name for flight number.
     */
    public static final String PARAM_FLIGHT_NO = "flightNo";
+   
+   /**
+    * URL for bean
+    */
    public static final String URL = "cancelReservedFlightForCustomer.spring";
 
    /**

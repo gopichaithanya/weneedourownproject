@@ -6,13 +6,28 @@ import org.springframework.validation.Validator;
 import hibernate.Customer;
 import hibernate.manager.CustomerManager;
 
+/**
+ * A Spring Framework validator for customer registration
+ */
 public class RegisterValidator implements Validator {
 
+   /**
+    * Indicates whether a class will be supported by this validator
+    * @param aClass a class that will be tested
+    * @return whether the class is supported by this validator
+    * @see org.springframework.validation.Validator#supports(java.lang.Class)
+    */
    @SuppressWarnings("unchecked")
    public boolean supports(Class aClass) {
       return aClass.equals(Customer.class);
    }
 
+   /**
+    * Validating.
+    * @param o the command object that will be tested
+    * @param errors the error object that will be given by Spring Framework
+    * @see org.springframework.validation.Validator#validate(java.lang.Object, org.springframework.validation.Errors)
+    */
    public void validate(Object o, Errors errors) {
       Customer customer = (Customer) o;
 

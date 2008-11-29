@@ -11,7 +11,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 
 /**
  * This Servlet context loader is only for testing.
- * This loader loads up the XML settinig file of Spring Framework without Web containers.
+ * This loader loads up the XML setting file of Spring Framework without Web containers.
  */
 @SuppressWarnings("unchecked")
 public class MockServletContextWebContextLoader extends AbstractContextLoader {

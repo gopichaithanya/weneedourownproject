@@ -13,12 +13,19 @@ import javax.servlet.http.HttpSession;
 import hibernate.*;
 
 /**
- * Customer Registration controller
+ * A Spring framework controller for Customer Registration
  */
 public class RegisterController extends SimpleFormController {
 
+   /**
+    * bean name
+    */
    public static final String URL = "register.spring";
    
+   /**
+    * handles the submitting for user registration
+    * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.validation.BindException)
+    */
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
@@ -35,6 +42,10 @@ public class RegisterController extends SimpleFormController {
       return mv;
    }
 
+   /**
+    * generates and returns default command object that will be used for Spring Framework
+    * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+    */
    @Override
    protected Object formBackingObject(HttpServletRequest request) throws Exception {
       return super.formBackingObject(request);

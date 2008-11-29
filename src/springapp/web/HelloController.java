@@ -19,6 +19,10 @@ public class HelloController implements Controller {
 
    private Logger logger = Logger.getLogger(getClass().getName());
 
+   /**
+    * handle the requests from web browsers
+    * @see org.springframework.web.servlet.mvc.Controller#handleRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+    */
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
          throws ServletException, IOException {
 

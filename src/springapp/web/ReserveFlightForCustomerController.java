@@ -14,13 +14,21 @@ import org.springframework.web.servlet.view.RedirectView;
 import hibernate.Itinerary.ESeatClass;
 
 /**
- * A Spring controller for reserve flight. This is for customer not for manager.
+ * A Spring Framework controller for reserve flight. This is for customer not for manager.
  */
 public class ReserveFlightForCustomerController implements Controller {
 
+   /**
+    * bean name 
+    */
    public static final String URL = "reserveFlightForCustomer.spring";
+   
    private Logger logger = Logger.getLogger(getClass().getName());
 
+   /**
+    * handle the requests from web browsers
+    * @see org.springframework.web.servlet.mvc.Controller#handleRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+    */
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
          throws Exception {
 

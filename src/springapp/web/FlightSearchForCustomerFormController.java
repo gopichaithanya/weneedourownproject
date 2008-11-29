@@ -23,7 +23,11 @@ import org.springframework.web.servlet.view.RedirectView;
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerFormController extends SimpleFormController {
 
+   /**
+    * URL for bean
+    */
    public static final String URL = "flightSearchForCustomerForm.spring";
+
    /**
     * This is for debugging purpose.
     * If this is false, all of flights will be shown; this is for debugging.
@@ -50,9 +54,9 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
 
    /**
     * <UL>This method reacts in 3 steps:
-    * <LI>1. selecting airports.
-    * <LI>2. selecting departing ticket.
-    * <LI>3. selecting arrival ticket.</UL>
+    * <LI>1. selecting airports.</LI>
+    * <LI>2. selecting departing ticket.</LI>
+    * <LI>3. selecting arrival ticket.</LI></UL>
     */
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
