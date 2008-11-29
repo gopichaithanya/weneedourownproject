@@ -33,7 +33,7 @@ public class ItineraryForCustomerControllerTest extends AbstractJUnit4SpringCont
    @Before
    public void before() throws Exception {
       beanName = applicationContext.getBeanNamesForType(ItineraryForCustomerController.class)[0];
-      assertEquals("/itineraryForCustomer.spring", beanName);
+      assertEquals("/" + ItineraryForCustomerController.URL, beanName);
 
       request = new MockHttpServletRequest("POST", beanName);
       assertNotNull(request);
@@ -52,7 +52,7 @@ public class ItineraryForCustomerControllerTest extends AbstractJUnit4SpringCont
 
    @Test
    public void testHandleRequest() throws ServletException, IOException {
-      session.setAttribute(SessionConstants.USERNAME, "jjohnson");
+      session.setAttribute(SessionConstants.LOGIN_USERNAME, "jjohnson");
       final ModelAndView mv = ctrl.handleRequest(request, response);
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "reservedItinerary");
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "bookedItinerary");

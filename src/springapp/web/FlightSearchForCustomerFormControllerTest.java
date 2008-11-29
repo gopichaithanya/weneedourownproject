@@ -33,7 +33,7 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
 
       beanName = applicationContext
             .getBeanNamesForType(FlightSearchForCustomerFormController.class)[0];
-      assertEquals("/flightSearchForCustomerForm.spring", beanName);
+      assertEquals("/" + FlightSearchForCustomerFormController.URL, beanName);
 
       request = new MockHttpServletRequest("POST", beanName);
       assertNotNull(request);

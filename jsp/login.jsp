@@ -34,7 +34,7 @@
       <td>harley</td>
     </tr>
     <tr>
-      <td><input type="submit" align="center" value="Enter"></td>
+      <td><input type="submit" align="center" value="Enter"> <a href="register.spring">Register</a></td>
     </tr>
 
   </table>

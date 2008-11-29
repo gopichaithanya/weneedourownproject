@@ -79,29 +79,30 @@ public class CreditCardValidator implements Validator {
          final int len = str.length();
          if (exp <= 0 || (len != 4 && len != 3))
             errors.rejectValue("expiration", "error.invalid.expiration", "Invalid expiration date");
+         else {
+            final Calendar calendar = Calendar.getInstance();
+            final int curYear = calendar.get(Calendar.YEAR) % 100;
+            final int curMonth = calendar.get(Calendar.MONTH) + 1;
 
-         final Calendar calendar = Calendar.getInstance();
-         final int curYear = calendar.get(Calendar.YEAR) % 100;
-         final int curMonth = calendar.get(Calendar.MONTH) + 1;
-
-         try {
-            final int month = Integer.valueOf(str.substring(0, len - 2));
-            final int year = Integer.valueOf(str.substring(len - 2, len));
-            if (month <= 0 || month > 12)
-               errors.rejectValue("expiration", "error.outofrange.expiration.month",
-                     "Month of expiration date is out of range.");
-            if (year >= 50)
-               errors.rejectValue("expiration", "error.outofrange.expiration.year",
-                     "Year of expiration date is too big.");
-            if (year < curYear)
-               errors.rejectValue("expiration", "error.past.expiration.year",
-                     "Year of expiration date has already past.");
-            if (year == curYear && month < curMonth)
-               errors.rejectValue("expiration", "error.past.expiration.month",
-                     "Month of expiration date has already past.");
-         } catch (NumberFormatException e) {
-            errors.rejectValue("expiration", "error.invalid.expiration",
-                  "Only decimal format is allowed.");
+            try {
+               final int month = Integer.valueOf(str.substring(0, len - 2));
+               final int year = Integer.valueOf(str.substring(len - 2, len));
+               if (month <= 0 || month > 12)
+                  errors.rejectValue("expiration", "error.outofrange.expiration.month",
+                        "Month of expiration date is out of range.");
+               if (year >= 50)
+                  errors.rejectValue("expiration", "error.outofrange.expiration.year",
+                        "Year of expiration date is too big.");
+               if (year < curYear)
+                  errors.rejectValue("expiration", "error.past.expiration.year",
+                        "Year of expiration date has already past.");
+               if (year == curYear && month < curMonth)
+                  errors.rejectValue("expiration", "error.past.expiration.month",
+                        "Month of expiration date has already past.");
+            } catch (NumberFormatException e) {
+               errors.rejectValue("expiration", "error.invalid.expiration",
+                     "Only decimal format is allowed.");
+            }
          }
       }
 
