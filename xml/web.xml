@@ -46,7 +46,7 @@
     <description>
       The role that is required to log in to the Manager Application
     </description>
-    <role-name>tomcat</role-name>
+    <role-name>managergroup</role-name>
   </security-role>
 
 
