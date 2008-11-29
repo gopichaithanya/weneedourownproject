@@ -30,9 +30,9 @@ public class CreditCardController extends SimpleFormController {
    /**
     * Submit callback with all parameters.
     * @param request - current servlet request
-     * @param response - current servlet response
-     * @param command - form object with request parameters bound onto it
-     * @param errors - Errors instance without errors (subclass can add errors if it wants to) 
+    * @param response - current servlet response
+    * @param command - form object with request parameters bound onto it
+    * @param errors - Errors instance without errors (subclass can add errors if it wants to) 
     * @return the ModelAndView object
     */
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
@@ -93,21 +93,9 @@ public class CreditCardController extends SimpleFormController {
       final String userName = LoginController.getUserName(session);
       final List<Itinerary> its = ItineraryManager.getReserved(userName);
 
-      //get the flight number of flight to be booked
-      Integer flightNo = null;
-      final String param = request.getParameter("flightNo");
-      logger.info("Parameter for flightNo: " + param);
-
-      if (null == param) {
-         flightNo = (Integer) session.getAttribute(SessionConstants.CREDIT_FLIGHT_NO);
-      } else {
-         try {
-            flightNo = Integer.valueOf(param);
-         } catch (NumberFormatException e) {
-            logger.info("No flightNo is found.");
-         }
-         session.setAttribute(SessionConstants.CREDIT_FLIGHT_NO, flightNo);
-      }
+      final Integer flightNo = getFlightNoFromParam(request);
+      if (null == flightNo)
+         logger.info("No flightNo is found.");
 
       if (null != flightNo)
          for (final Itinerary it : its) {
@@ -121,6 +109,29 @@ public class CreditCardController extends SimpleFormController {
       return defaultCommandObj;
    }
 
+   /**
+    * get the flight number of flight to be booked
+    * @param request Http servlet request object
+    * @return flight number
+    */
+   private static Integer getFlightNoFromParam(HttpServletRequest request) {
+      final HttpSession session = request.getSession();
+      final String param = request.getParameter("flightNo");
+
+      Integer flightNo = null;
+      if (null == param) {
+         flightNo = (Integer) session.getAttribute(SessionConstants.CREDIT_FLIGHT_NO);
+      } else {
+         try {
+            flightNo = Integer.valueOf(param);
+         } catch (NumberFormatException e) {
+         }
+         if (null != flightNo)
+            session.setAttribute(SessionConstants.CREDIT_FLIGHT_NO, flightNo);
+      }
+      return flightNo;
+   }
+
    @Override
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
          throws Exception {
@@ -131,6 +142,12 @@ public class CreditCardController extends SimpleFormController {
       if (null == userName)
          return LoginController.redirectToLogin(session, URL);
 
-      return super.handleRequest(request, response);
+      final Integer flightNo = getFlightNoFromParam(request);
+      if (null == flightNo)
+         return new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
+
+      final ModelAndView mv = super.handleRequest(request, response);
+      mv.addObject("flight", FlightManager.getFlight(flightNo));
+      return mv;
    }
 }
