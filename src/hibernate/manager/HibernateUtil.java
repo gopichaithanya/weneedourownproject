@@ -11,63 +11,69 @@ import org.hibernate.cfg.*;
  */
 class HibernateUtil {
 
-	/**
-	 * The session factory
-	 */
-	private static final SessionFactory sessionFactory;
+   /**
+    * This is not designed to be an instance.
+    */
+   private HibernateUtil() {
+   }
 
-	static {
-		final String catalBase = findCatalinaBase();
+   /**
+    * The session factory
+    */
+   private static final SessionFactory sessionFactory;
 
-		try {
-			// Create the SessionFactory from hibernate.cfg.xml
-			final Configuration cfg = new Configuration().configure();
-			final String url = cfg.getProperty("connection.url");
-			if (null != catalBase && null != url) {
-				final String url2 = url.replaceFirst("${catalina.base}", catalBase);
-				cfg.setProperty("connection.url", url2);
-			}
+   static {
+      final String catalBase = findCatalinaBase();
 
-			sessionFactory = cfg.buildSessionFactory();
-		} catch (Throwable ex) {
-			// Make sure you log the exception, as it might be swallowed
-			System.err.println("Initial SessionFactory creation failed: " + ex);
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+      try {
+         // Create the SessionFactory from hibernate.cfg.xml
+         final Configuration cfg = new Configuration().configure();
+         final String url = cfg.getProperty("connection.url");
+         if (null != catalBase && null != url) {
+            final String url2 = url.replaceFirst("${catalina.base}", catalBase);
+            cfg.setProperty("connection.url", url2);
+         }
 
-	/**
-	 * Return the catalina base
-	 * @return the catalina base
-	 */
-	private static String findCatalinaBase() {
-		final String classPath = System.getProperty("java.class.path", ".");
-		final String sep = String.valueOf(File.pathSeparatorChar);
+         sessionFactory = cfg.buildSessionFactory();
+      } catch (Throwable ex) {
+         // Make sure you log the exception, as it might be swallowed
+         System.err.println("Initial SessionFactory creation failed: " + ex);
+         throw new ExceptionInInitializerError(ex);
+      }
+   }
 
-		final String[] classPaths = Pattern.compile(String.valueOf(sep)).split(classPath);
-		for (final String cp : classPaths) { // cp will be "catalina.base/webapps/proj4398/WEB-INF/classes
-			final File fileWebInf = new File(cp).getParentFile();
-			if (null == fileWebInf)
-				continue;
-			if (false == fileWebInf.getName().equals("WEB-INF"))
-				continue;
-			return fileWebInf.getParentFile().getParentFile().getParentFile().getAbsolutePath();
-		}
-		return null;
-	}
+   /**
+    * Return the catalina base
+    * @return the catalina base
+    */
+   private static String findCatalinaBase() {
+      final String classPath = System.getProperty("java.class.path", ".");
+      final String sep = String.valueOf(File.pathSeparatorChar);
 
-	/**
-	 * Returns the session factory
-	 * @return the session factory
-	 */
-	public static SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-	
-	public static void doTransaction(IHibernateTransaction trans) {
+      final String[] classPaths = Pattern.compile(String.valueOf(sep)).split(classPath);
+      for (final String cp : classPaths) { // cp will be "catalina.base/webapps/proj4398/WEB-INF/classes
+         final File fileWebInf = new File(cp).getParentFile();
+         if (null == fileWebInf)
+            continue;
+         if (false == fileWebInf.getName().equals("WEB-INF"))
+            continue;
+         return fileWebInf.getParentFile().getParentFile().getParentFile().getAbsolutePath();
+      }
+      return null;
+   }
+
+   /**
+    * Returns the session factory
+    * @return the session factory
+    */
+   public static SessionFactory getSessionFactory() {
+      return sessionFactory;
+   }
+
+   public static void doTransaction(IHibernateTransaction trans) {
       final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
       session.beginTransaction();
-	   trans.transaction(session);
+      trans.transaction(session);
       session.getTransaction().commit();
-	}
+   }
 }

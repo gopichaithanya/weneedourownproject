@@ -2,6 +2,15 @@ package hibernate.manager;
 
 import org.hibernate.Session;
 
-public interface IHibernateTransaction {
+/**
+ * Hibernate trasaction interface.
+ * @see HibernateUtil#doTransaction(IHibernateTransaction)
+ */
+interface IHibernateTransaction {
+   
+   /**
+    * interface for a transaction
+    * @param session Hibernate session object for the transaction
+    */
    public void transaction(Session session);
 }

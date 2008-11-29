@@ -120,7 +120,7 @@ public class Itinerary implements java.io.Serializable {
     * @param customer - the customer 
     * @param flight - the flight 
     * @param seatClass - Seat class : ECONOCY, BUSINESS
-    * @param numPassenger - the number of passenger or number of tickets
+    * @param numPassengers - the number of passenger or number of tickets
     */
    public Itinerary(ItineraryId id, Customer customer, Flight flight, ESeatClass seatClass,
          Integer numPassengers) {
@@ -162,6 +162,12 @@ public class Itinerary implements java.io.Serializable {
       this.ticketNo = ticketNo;
    }
 
+   /**
+    * Constructs a new itinerary object
+    * @param id
+    * @param customer
+    * @param flight
+    */
    public Itinerary(ItineraryId id, Customer customer, Flight flight) {
       this.id = id;
       this.customer = customer;
@@ -277,6 +283,10 @@ public class Itinerary implements java.io.Serializable {
       this.seatClass = seatClass;
    }
 
+   /**
+    * Sets the seat class
+    * @param seatClass
+    */
    public void setSeatClass(String seatClass) {
       this.seatClass = (null == seatClass) ? null : ESeatClass.get(seatClass);
    }
@@ -314,6 +324,7 @@ public class Itinerary implements java.io.Serializable {
    }
 
    /**
+    * Sets the reservation time
     * @param reservedTime the reservedTime to set
     */
    public void setReservedTime(Date reservedTime) {
@@ -321,6 +332,7 @@ public class Itinerary implements java.io.Serializable {
    }
 
    /**
+    * Returns the reserved time
     * @return the reservedTime
     */
    public Date getReservedTime() {

@@ -3,7 +3,6 @@ package hibernate.manager;
 import hibernate.Customer;
 
 import org.hibernate.Session;
-import org.hibernate.HibernateException;
 
 /**
  * CustomerManager contains functions to access and maintain customer objects
@@ -11,9 +10,9 @@ import org.hibernate.HibernateException;
 public class CustomerManager {
 
    /**
-    * Constructors a new CustomerManager object
+    * This is not designed to be an instance.
     */
-   public CustomerManager() {
+   private CustomerManager() {
    }
 
    /**
