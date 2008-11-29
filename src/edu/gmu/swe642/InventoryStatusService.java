@@ -187,61 +187,49 @@ public class InventoryStatusService {
 	 */
     public int getNumOfEmptySeatsForDateRange(Date date) 
     {
-        int totalSeats = 0;
-        //System.out.println("Date entered by user in function() " + date.toString());
+        int totalSeats = 0;                     // Total seats for flights on given date
         try
         {
+            boolean PM = false;                 // Check whether system time is AM or PM
+            Calendar calendar = new GregorianCalendar();
+            if(calendar.get(Calendar.AM_PM) == 0)
+              PM = false;
+            else
+              PM = true;
+    
             Date currDate = new Date();
+            
+            System.out.println("Current date: " + currDate);
+            System.out.println("Input date: " + date);
+           
+            // Converting Date to Calendar type in order to increment date
             DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy/hh/mm/ss");
             String currStr = formatter.format(currDate);
-            String dateStr = formatter.format(date);
-            
             String[] currParts = currStr.split("/");
             int currMonth = Integer.parseInt(currParts[0]) - 1;
             int currDay = Integer.parseInt(currParts[1]);
             int currYear = Integer.parseInt(currParts[2]);
-            int currHrs = Integer.parseInt(currParts[3]) - 12;
+            int currHrs = Integer.parseInt(currParts[3]);
+            if(PM)
+                currHrs = currHrs + 12;
             int currMins = Integer.parseInt(currParts[4]);
             int currSecs = Integer.parseInt(currParts[5]);
-            
-            String[] dateParts = dateStr.split("/");
-            int month = Integer.parseInt(dateParts[0]);
-            int day = Integer.parseInt(dateParts[1]);
-            int year = Integer.parseInt(dateParts[2]);
-            int hrs = Integer.parseInt(dateParts[3]);
-            int mins = Integer.parseInt(dateParts[4]);
-            int secs = Integer.parseInt(dateParts[5]);
-            
-            //System.out.println("Current date: " + currDate);
-            //System.out.println("Input date: " + date);
+   
             Calendar currCal = Calendar.getInstance();
             currCal.set(currYear, currMonth, currDay, currHrs, currMins, currSecs);
+            currDate = currCal.getTime();
+            System.out.println("Today's date using Calendar: " + currDate);  
             
-            Calendar inputCal = Calendar.getInstance();
-            inputCal.set(year, month, day, hrs, mins, secs);
-            
-            //System.out.println("Current cal: " + currCal.toString());
-            //System.out.println("Input cal: " + inputCal.toString());
-            if(date.before(currDate))
-                return 0;
-            else 
+            // Fetch the total seats for date range ---> today, date input by user
+            while(currDate.before(date))
             {
-                //System.out.println("Today's date part 1: " + currDate);
                 totalSeats = totalSeats + getNumOfEmptySeats(currDate);
-                currCal.add(Calendar.DATE,2);
+                System.out.println("Total seats inside while loop for date " + totalSeats + " " + currDate);
+                currCal.add(Calendar.DATE, 1);
                 currDate = currCal.getTime();   
-                
-                while(date.after(currDate))
-                {
-                    //System.out.println("Today's date part 2: " + currDate);
-                    totalSeats = totalSeats + getNumOfEmptySeats(currDate);
-                    currCal.add(Calendar.DATE,1);
-                    currDate = currCal.getTime();                 
-                }
-                //System.out.println("Today's date part 3: " + currDate + " " + totalSeats);
-                totalSeats = totalSeats + getNumOfEmptySeats(currDate);
-                //System.out.println("Today's date part 4: " + currDate + " " + totalSeats);
             }
+            if(PM)
+                totalSeats = totalSeats + getNumOfEmptySeats(date);
        }
        catch(Exception E)
        {
