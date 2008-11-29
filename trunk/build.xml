@@ -179,7 +179,6 @@
             Overview="${src.dir}/overview.html"
             version="true"
             use="true"
-            linksource="true"
             windowtitle="Project 4398">
 			<classpath refid="master-classpath" />
 
