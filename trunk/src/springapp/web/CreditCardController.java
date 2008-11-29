@@ -49,6 +49,8 @@ public class CreditCardController extends SimpleFormController {
          return LoginController.redirectToLogin(session, URL);
 
       final Integer flightNo = (Integer) session.getAttribute(SessionConstants.CREDIT_FLIGHT_NO);
+      if (null == flightNo)
+         return new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
       session.removeAttribute(SessionConstants.CREDIT_FLIGHT_NO);
       logger.info("flightNo: " + flightNo);
 
@@ -128,10 +130,6 @@ public class CreditCardController extends SimpleFormController {
       final String userName = LoginController.getUserName(session);
       if (null == userName)
          return LoginController.redirectToLogin(session, URL);
-
-      final Integer flightNo = (Integer) session.getAttribute(SessionConstants.CREDIT_FLIGHT_NO);
-      if (null == flightNo)
-         return new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
 
       return super.handleRequest(request, response);
    }

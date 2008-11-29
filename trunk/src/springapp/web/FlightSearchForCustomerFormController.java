@@ -23,6 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @SuppressWarnings("unchecked")
 public class FlightSearchForCustomerFormController extends SimpleFormController {
 
+   public static final String URL = "flightSearchForCustomerForm.spring";
    /**
     * This is for debugging purpose.
     * If this is false, all of flights will be shown; this is for debugging.
