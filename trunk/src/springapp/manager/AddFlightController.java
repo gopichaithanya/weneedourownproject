@@ -35,6 +35,8 @@ public class AddFlightController extends SimpleFormController {
 
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
+
+      log.info("start onSubmit");
       final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
       FlightAddForManager flight = (FlightAddForManager) command;
 
@@ -54,12 +56,12 @@ public class AddFlightController extends SimpleFormController {
       Date[] returnDate = FlightManager.getTimeRange(arrivalYear, arrivalMonth, arrivalDay,
             arrivalHour, 0);
 
-      Flight loFlight = new Flight(flight.getFlightNo(), flight.getAirline(), flight
-            .getAirportByArrivalLocation(), flight.getAirportByDepartureLocation(), departDate[0],
-            returnDate[0], flight.getEconomySeats(), flight.getEconomyPrice(), flight
-                  .getBusinessSeats(), flight.getBusinessPrice(), null);
+//      Flight loFlight = new Flight(flight.getFlightNo(), flight.getAirline(), flight
+//            .getAirportByArrivalLocation(), flight.getAirportByDepartureLocation(), departDate[0],
+//            returnDate[0], flight.getEconomySeats(), flight.getEconomyPrice(), flight
+//                  .getBusinessSeats(), flight.getBusinessPrice(), null);
 
-      FlightManager.addFlight(loFlight);
+//      FlightManager.addFlight(loFlight);
 
       return mv;
    }

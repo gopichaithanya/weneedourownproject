@@ -25,6 +25,9 @@
     <property name="formView" value="addflight"/>
     <property name="commandName" value="flight"/>
     <property name="commandClass" value="springapp.manager.FlightAddForManager"/>	
+    <property name="validator">
+  		<bean class="springapp.manager.AddFlightValidator"/>
+  	</property>
   </bean>
   
     <bean name="/login.spring" class="springapp.web.LoginController">

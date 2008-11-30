@@ -62,7 +62,7 @@ function initEvent() {
     <tr>
       <td>Flight number<br />
       (3 digits)</td>
-      <td><form:input path="flightNo" /></td>
+      <td><form:input path="flightNo" /> <form:errors path="flightNo" cssClass="error" /></td>
     </tr>
     <tr>
       <td>Airline<br />
@@ -71,7 +71,7 @@ function initEvent() {
         <c:forEach items="${airlines}" var="airline">
           <form:option value="${airline[0]}" label="${airline[0]}: ${airline[1]}" />
         </c:forEach>
-      </form:select> <img id="airlineIcon"/></td>
+      </form:select> <img id="airlineIcon" /> <form:errors path="airline" cssClass="error" /></td>
     </tr>
     <tr>
       <td>Departure airport</td>
@@ -80,8 +80,10 @@ function initEvent() {
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
       </form:select> <input type="button" value="Search"
-        onClick="displayAirport('airportByArrivalLocation', 'airportByArrivalLocation')" /></td>
+        onClick="displayAirport('airportByArrivalLocation', 'airportByArrivalLocation')" /> <form:errors
+        path="airportByArrivalLocation" cssClass="error" /></td>
     </tr>
+
     <tr>
       <td>Departing Date</td>
       <td><form:select path="departMonth">
@@ -107,8 +109,10 @@ function initEvent() {
         </c:forEach>
       </form:select> <input type="button"
         onClick="displayDatePicker('departYear','departMonth','departDay', 'departMonth');"
-        value="Calendar" /></td>
+        value="Calendar" /> <form:errors path="departMonth" cssClass="error" /> <form:errors
+        path="departDay" cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
     </tr>
+
     <tr>
       <td>Departure time</td>
       <td><form:select path="departHour">
@@ -118,8 +122,9 @@ function initEvent() {
         <c:forEach var="hour" begin="12" end="23" step="1">
           <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
         </c:forEach>
-      </form:select></td>
+      </form:select> <form:errors path="departHour" cssClass="error" /></td>
     </tr>
+
     <tr>
       <td>Arrival airport</td>
       <td><form:select path="airportByDepartureLocation">
@@ -127,8 +132,10 @@ function initEvent() {
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
       </form:select> <input type="button" value="Search"
-        onClick="displayAirport('airportByDepartureLocation', 'airportByDepartureLocation')" /></td>
+        onClick="displayAirport('airportByDepartureLocation', 'airportByDepartureLocation')" /> <form:errors
+        path="airportByDepartureLocation" cssClass="error" /></td>
     </tr>
+
     <tr>
       <td>Arrival day</td>
       <td><form:select path="returnMonth">
@@ -154,8 +161,10 @@ function initEvent() {
         </c:forEach>
       </form:select> <input type="button"
         onClick="displayDatePicker('returnYear','returnMonth','returnDay', 'returnMonth');"
-        value="Calendar" /></td>
+        value="Calendar" /> <form:errors path="returnMonth" cssClass="error" /> <form:errors
+        path="returnDay" cssClass="error" /> <form:errors path="returnYear" cssClass="error" /></td>
     </tr>
+
     <tr>
       <td>Arrival time</td>
       <td><form:select path="returnHour">
@@ -165,8 +174,9 @@ function initEvent() {
         <c:forEach var="hour" begin="12" end="23" step="1">
           <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
         </c:forEach>
-      </form:select></td>
+      </form:select> <form:errors path="returnHour" cssClass="error" /></td>
     </tr>
+
     <tr>
       <td>Ecomomy Seats</td>
       <td><form:select path="economySeats">
@@ -175,13 +185,15 @@ function initEvent() {
         <form:option value="30" label="30" />
         <form:option value="40" label="40" />
         <form:option value="50" label="50" />
-      </form:select> seats</td>
+      </form:select> seats <form:errors path="economySeats" cssClass="error" /></td>
     </tr>
+    
     <tr>
       <td>Economy Price<br />
       (dollar)</td>
-      <td>$<form:input path="economyPrice" /></td>
+      <td>$<form:input path="economyPrice" /> <form:errors path="economyPrice" cssClass="error" /></td>
     </tr>
+    
     <tr>
       <td>Business Seats</td>
       <td><form:select path="businessSeats">
@@ -190,12 +202,13 @@ function initEvent() {
         <form:option value="30" label="30" />
         <form:option value="40" label="40" />
         <form:option value="50" label="50" />
-      </form:select> seats</td>
+      </form:select> seats <form:errors path="businessSeats" cssClass="error" /></td>
     </tr>
+    
     <tr>
       <td>Business Prices<br />
       (dollar)</td>
-      <td>$<form:input path="businessPrice" /></td>
+      <td>$<form:input path="businessPrice" /> <form:errors path="businessPrice" cssClass="error" /></td>
     </tr>
 
     <tr>
