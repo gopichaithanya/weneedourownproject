@@ -11,6 +11,19 @@
 <script type="text/javascript" src="js/searchAirport.js"></script>
 </head>
 <script language="JavaScript"><!--//
+
+function updateAirlineIcon() {
+  var airline = document.getElementById('airline');
+  var icon = document.getElementById('airlineIcon');
+  if (null == airline || null == icon) return;
+
+  var os = airline.options;
+  var idx = os.selectedIndex;
+  var code = os[idx].value;
+  var url = "http://www.expedia.com/pubspec/images/airlines/sm" + code + ".gif";
+  icon.setAttribute('src', url);
+}
+
 function onlyNumbers(e) {
   var keynum;
   var keychar;
@@ -33,6 +46,8 @@ function checkFlightNo(e) {
 function initEvent() {
   document.getElementById('flightNo').addEventListener( "keydown", checkFlightNo, false );
   document.getElementById('flightNo').setAttribute('maxlength', 3);
+  document.getElementById('airline').addEventListener( "change", updateAirlineIcon, false );
+  updateAirlineIcon();
 }
 //-->
 </script>
@@ -56,7 +71,7 @@ function initEvent() {
         <c:forEach items="${airlines}" var="airline">
           <form:option value="${airline[0]}" label="${airline[0]}: ${airline[1]}" />
         </c:forEach>
-      </form:select></td>
+      </form:select> <img id="airlineIcon"/></td>
     </tr>
     <tr>
       <td>Departure airport</td>
@@ -111,7 +126,7 @@ function initEvent() {
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
-      </form:select><input type="button" value="Search"
+      </form:select> <input type="button" value="Search"
         onClick="displayAirport('airportByDepartureLocation', 'airportByDepartureLocation')" /></td>
     </tr>
     <tr>
@@ -154,19 +169,33 @@ function initEvent() {
     </tr>
     <tr>
       <td>Ecomomy Seats</td>
-      <td><form:input path="economySeats" /></td>
+      <td><form:select path="economySeats">
+        <form:option value="10" label="10" />
+        <form:option value="20" label="20" />
+        <form:option value="30" label="30" />
+        <form:option value="40" label="40" />
+        <form:option value="50" label="50" />
+      </form:select> seats</td>
     </tr>
     <tr>
-      <td>Economy Price<br/>(dollar)</td>
-      <td><form:input path="economyPrice" /></td>
+      <td>Economy Price<br />
+      (dollar)</td>
+      <td>$<form:input path="economyPrice" /></td>
     </tr>
     <tr>
       <td>Business Seats</td>
-      <td><form:input path="businessSeats" /></td>
+      <td><form:select path="businessSeats">
+        <form:option value="10" label="10" />
+        <form:option value="20" label="20" />
+        <form:option value="30" label="30" />
+        <form:option value="40" label="40" />
+        <form:option value="50" label="50" />
+      </form:select> seats</td>
     </tr>
     <tr>
-      <td>Business Prices<br/>(dollar)</td>
-      <td><form:input path="businessPrice" /></td>
+      <td>Business Prices<br />
+      (dollar)</td>
+      <td>$<form:input path="businessPrice" /></td>
     </tr>
 
     <tr>
