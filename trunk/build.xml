@@ -56,7 +56,7 @@
 		<echo />
 		<echo message="deploy      ==> Deploy application as directory" />
 		<echo message="undeploy    ==> Delete deploied application" />
-		<!--echo message="install     ==> Install application in Tomcat"/-->
+		<echo message="install     ==> Deploy application in Tomcat"/>
 		<echo message="reload      ==> Reload application in Tomcat" />
 		<echo message="start       ==> Start Tomcat application" />
 		<echo message="stop        ==> Stop Tomcat application" />
@@ -233,7 +233,8 @@
         </fail>
 	</target>
 
-	<target name="deploy" depends="buildWar, undeploy" description="Deploy application">
+	<target name="deploy" depends="buildWar" description="Deploy application">
+		<!--antcall target="undeploy" /-->
 		<!--copy todir="${deploy.path}/${name}" preservelastmodified="true">
 			<fileset dir="${build.war.dir}">
 				<include name="**/*" />
@@ -246,7 +247,7 @@
 				<include name="*.war" />
 			</fileset>
 		</copy>
-		<antcall target="start" />
+		<!--antcall target="start" /-->
 	</target>
 
 	<target name="undeploy" depends="stop" description="Un-Deploy application">
@@ -290,9 +291,9 @@
         <classpath path="${lib.dir}/hibernate-tools.jar" />
     </taskdef>
 
-	<target name="install" description="Install application in Tomcat">
-		<undeploy url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" failOnError="false" />
+	<target name="install" depends="buildWar, undeploy" description="Install application in Tomcat">
 		<deploy url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" war="${dist.dir}/${name}.war" />
+		<-antcall target="start" />
 	</target>
 
 	<target name="reload" description="Reload application in Tomcat">
@@ -300,7 +301,7 @@
 	</target>
 
 	<target name="start" description="Start Tomcat application">
-		<start url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" />
+		<start url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" failOnError="false" />
 	</target>
 
 	<target name="stop" description="Stop Tomcat application">
