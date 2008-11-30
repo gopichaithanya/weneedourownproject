@@ -34,7 +34,7 @@ public class CreditCardValidatorTest {
       err = new MapBindingResult(new HashMap<Object, Object>(), "foo");
    }
 
-   private void validCC(long cc, int exp) {
+   private void validCC(Long cc, Integer exp) {
       init();
       c.setCcNo(cc);
       c.setExpiration(exp);
@@ -46,7 +46,7 @@ public class CreditCardValidatorTest {
                + err.getFieldError("expiration").getDefaultMessage());
    }
 
-   private void invalidCC(long cc, int exp, String[] expectedErrorFields) {
+   private void invalidCC(Long cc, Integer exp, String[] expectedErrorFields) {
       init();
       try {
          c.setCcNo(cc);
@@ -59,6 +59,7 @@ public class CreditCardValidatorTest {
       assertTrue(err.hasErrors());
       for (final String f : expectedErrorFields)
          assertNotNull("Problem is not detected. (Field:" + f + ")", err.getFieldError(f));
+      assertEquals(expectedErrorFields.length, err.getAllErrors().size());
    }
 
    @Test
@@ -76,6 +77,7 @@ public class CreditCardValidatorTest {
       invalidCC(-123456789012345L, 1309, new String[] { "ccNo", "expiration" });
       invalidCC(1234567890123456L, 12345, new String[] { "expiration" });
       invalidCC(1234567890123456L, 0, new String[] { "expiration" });
+      invalidCC(null, null, new String[] { "ccNo", "expiration" });
    }
 
 }

@@ -60,24 +60,34 @@ public class CreditCardValidator implements Validator {
    public void validate(Object obj, Errors errors) {
 
       final Itinerary it = (Itinerary) obj;
+      if (null == it) {
+         errors.reject("error.command.nullPointer");
+         return;
+      }
       final Customer customer = it.getCustomer();
+      if (null == customer) {
+         errors.reject("error.command.customer.nullPointer");
+         return;
+      }
 
-      if (customer.getCcNo() == null) {
-         errors.rejectValue("ccNo", "error.invalid.ccNo", "Credit card number is blank");
+      if (null == customer || customer.getCcNo() == null) {
+         errors.rejectValue("customer.ccNo", "error.invalid.ccNo", "Credit card number is blank");
       } else {
          final long cc = customer.getCcNo();
          if (cc <= 0 || ((Long) cc).toString().length() != 16)
-            errors.rejectValue("ccNo", "error.invalid.ccNo", "Invalid Credit card number");
+            errors.rejectValue("customer.ccNo", "error.invalid.ccNo", "Invalid Credit card number");
       }
 
-      if (customer.getExpiration() == null) {
-         errors.rejectValue("expiration", "error.invalid.expiration", "Expiration date is blank");
+      if (null == customer || customer.getExpiration() == null) {
+         errors.rejectValue("customer.expiration", "error.invalid.expiration",
+               "Expiration date is blank");
       } else {
          final int exp = customer.getExpiration();
          final String str = ((Integer) exp).toString();
          final int len = str.length();
          if (exp <= 0 || (len != 4 && len != 3))
-            errors.rejectValue("expiration", "error.invalid.expiration", "Invalid expiration date");
+            errors.rejectValue("customer.expiration", "error.invalid.expiration",
+                  "Invalid expiration date");
          else {
             final Calendar calendar = Calendar.getInstance();
             final int curYear = calendar.get(Calendar.YEAR) % 100;
@@ -87,19 +97,19 @@ public class CreditCardValidator implements Validator {
                final int month = Integer.valueOf(str.substring(0, len - 2));
                final int year = Integer.valueOf(str.substring(len - 2, len));
                if (month <= 0 || month > 12)
-                  errors.rejectValue("expiration", "error.outofrange.expiration.month",
+                  errors.rejectValue("customer.expiration", "error.outofrange.expiration.month",
                         "Month of expiration date is out of range.");
                if (year >= 50)
-                  errors.rejectValue("expiration", "error.outofrange.expiration.year",
+                  errors.rejectValue("ecustomer.xpiration", "error.outofrange.expiration.year",
                         "Year of expiration date is too big.");
                if (year < curYear)
-                  errors.rejectValue("expiration", "error.past.expiration.year",
+                  errors.rejectValue("customer.expiration", "error.past.expiration.year",
                         "Year of expiration date has already past.");
                if (year == curYear && month < curMonth)
-                  errors.rejectValue("expiration", "error.past.expiration.month",
+                  errors.rejectValue("customer.expiration", "error.past.expiration.month",
                         "Month of expiration date has already past.");
             } catch (NumberFormatException e) {
-               errors.rejectValue("expiration", "error.invalid.expiration",
+               errors.rejectValue("customer.expiration", "error.invalid.expiration",
                      "Only decimal format is allowed.");
             }
          }
@@ -141,8 +151,7 @@ public class CreditCardValidator implements Validator {
             log.info("Valid card number " + cardNumber + " with exp date " + expDate);
          else {
             log.info("Invalid card number " + cardNumber + " with exp date " + expDate);
-            errors.rejectValue("INVALID", "error.invalid.ccNo",
-                  "Invalid credit card or expiration date");
+            errors.reject("error.invalid.ccNo", "Invalid credit card or expiration date");
          }
 
          responseReader.close();

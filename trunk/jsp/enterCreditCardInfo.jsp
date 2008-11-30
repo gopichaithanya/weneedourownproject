@@ -5,9 +5,39 @@
 <head>
 <title>Enter Credit Card Information</title>
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
+<script language="JavaScript"><!--//
+
+function onlyNumbers(e) {
+  var keynum;
+  var keychar;
+  var numcheck;
+
+  if(window.event) // IE
+    keynum = e.keyCode;
+  else if(e.which) // Netscape/Firefox/Opera
+    keynum = e.which;
+
+  keychar = String.fromCharCode(keynum);
+  numcheck = /\d/;
+  var bRst = numcheck.test(keychar);
+  if(false == bRst) e.stopPropagation();
+}
+
+function initEvent() {
+  document.getElementById('customer.ccNo').addEventListener( "keydown", onlyNumbers, false );
+  document.getElementById('customer.ccNo').setAttribute('maxlength', 16);
+  document.getElementById('customer.expiration').addEventListener( "keydown", onlyNumbers, false );
+  document.getElementById('customer.expiration').setAttribute('maxlength', 4);
+}
+
+function focusOn() {
+  document.getElementById('customer.ccNo').focus();
+}
+//-->
+</script>
 </head>
 
-<body>
+<body onLoad="initEvent(); focusOn();">
 <jsp:include page="/WEB-INF/jsp/header1.jsp">
   <jsp:param name="title2" value="Home > Payment" />
 </jsp:include>
