@@ -21,7 +21,7 @@ import java.util.Calendar;
  * <LI> return flight number (optional)</LI>
  * <LI> departing flight number (optional)</LI></UL>
  */
-public class FlightSearchForCustomer {
+public class FlightSearchForCustomerCommand {
 
    /**
     * Trip type:
@@ -67,7 +67,7 @@ public class FlightSearchForCustomer {
    /**
     * Constructs default object with date of today.
     */
-   public FlightSearchForCustomer() {
+   public FlightSearchForCustomerCommand() {
       final Calendar calendar = Calendar.getInstance();
       final int curMonth = calendar.get(Calendar.MONTH) + 1; // 0-based.
       final int curDay = calendar.get(Calendar.DAY_OF_MONTH);

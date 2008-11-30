@@ -70,14 +70,14 @@ public class CreditCardValidatorTest {
 
    @Test
    public void testEmptyCC() {
-      invalidCC(0L, 131, new String[] { "ccNo" });
-      invalidCC(1234567890123456L, -131, new String[] { "expiration" });
-      invalidCC(123456789012345L, 0111, new String[] { "ccNo", "expiration" });
-      invalidCC(10000000000000000L, 10, new String[] { "ccNo", "expiration" });
-      invalidCC(-123456789012345L, 1309, new String[] { "ccNo", "expiration" });
-      invalidCC(1234567890123456L, 12345, new String[] { "expiration" });
-      invalidCC(1234567890123456L, 0, new String[] { "expiration" });
-      invalidCC(null, null, new String[] { "ccNo", "expiration" });
+      invalidCC(0L, 131, new String[] { "customer.ccNo" });
+      invalidCC(1234567890123456L, -131, new String[] { "customer.expiration" });
+      invalidCC(123456789012345L, 0111, new String[] { "customer.ccNo", "customer.expiration" });
+      invalidCC(10000000000000000L, 10, new String[] { "customer.ccNo", "customer.expiration" });
+      invalidCC(-123456789012345L, 1309, new String[] { "customer.ccNo", "customer.expiration" });
+      invalidCC(1234567890123456L, 12345, new String[] { "customer.expiration" });
+      invalidCC(1234567890123456L, 0, new String[] { "customer.expiration" });
+      invalidCC(null, null, new String[] { "customer.ccNo", "customer.expiration" });
    }
 
 }
