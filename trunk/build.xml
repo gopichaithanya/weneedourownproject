@@ -293,7 +293,7 @@
 
 	<target name="install" depends="buildWar, undeploy" description="Install application in Tomcat">
 		<deploy url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" war="${dist.dir}/${name}.war" />
-		<-antcall target="start" />
+		<antcall target="start" />
 	</target>
 
 	<target name="reload" description="Reload application in Tomcat">
