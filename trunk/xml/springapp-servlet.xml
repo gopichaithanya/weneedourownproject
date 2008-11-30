@@ -60,7 +60,7 @@
   		<bean class="springapp.manager.FlightSearchForManagerValidator"/>
   	</property>
   	<property name="formView" value="flightSearchForManagerForm"/>
-  	<property name="successView" value="flightSearchForManagerForm.spring"/>
+  	<property name="successView" value="flightSearchForManagerForm"/>
   </bean>
 
   <bean name="/enterCreditCardInfo.spring" class="springapp.web.CreditCardController">

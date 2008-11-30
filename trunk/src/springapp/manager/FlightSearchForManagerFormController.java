@@ -30,4 +30,13 @@ public class FlightSearchForManagerFormController extends SimpleFormController {
       mv.addObject("airports", airports);
       return mv;
    }
+
+   @Override
+   protected Object formBackingObject(HttpServletRequest request) throws Exception {
+      final FlightSearchForManagerCommand cmd = (FlightSearchForManagerCommand) super
+            .formBackingObject(request);
+      cmd.setOptArriveDate(false);
+      cmd.setOptDepartDate(false);
+      return cmd;
+   }
 }
