@@ -1,10 +1,13 @@
 package springapp.manager;
 
+import hibernate.Airline;
+import hibernate.Airport;
 import hibernate.Flight;
 import hibernate.manager.AirlineManager;
 import hibernate.manager.AirportManager;
 import hibernate.manager.FlightManager;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,32 +39,35 @@ public class AddFlightController extends SimpleFormController {
          Object command, BindException errors) throws Exception {
 
       log.info("start onSubmit");
+      final FlightAddForManager f = (FlightAddForManager) command;
+
+      final int departYear = f.getDepartYear();
+      final int departMonth = f.getDepartMonth();
+      final int departDay = f.getDepartDay();
+      final int departHour = f.getDepartHour();
+      final Calendar departCalendar = Calendar.getInstance();
+      departCalendar.set(departYear, departMonth, departDay, departHour, 0);
+      final Date departDate = departCalendar.getTime();
+
+      final int arrivalYear = f.getReturnYear();
+      final int arrivalMonth = f.getReturnMonth();
+      final int arrivalDay = f.getReturnDay();
+      final int arrivalHour = f.getReturnHour();
+      final Calendar arrivalCalendar = Calendar.getInstance();
+      arrivalCalendar.set(arrivalYear, arrivalMonth, arrivalDay, arrivalHour, 0);
+      final Date arrivalDate = arrivalCalendar.getTime();
+
+      final Airline airline = AirlineManager.getAirline(f.getAirline());
+      final Airport arrival = AirportManager.getAirport(f.getAirportByArrivalLocation());
+      final Airport departure = AirportManager.getAirport(f.getAirportByDepartureLocation());
+
+      final Flight newFlight = new Flight(f.getFlightNo(), airline, arrival, departure, departDate,
+            arrivalDate, f.getEconomySeats(), f.getEconomyPrice(), f.getBusinessSeats(), f
+                  .getBusinessPrice(), null);
+      FlightManager.addFlight(newFlight);
+      log.info("end onSubmit");
+
       final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
-      FlightAddForManager flight = (FlightAddForManager) command;
-
-      int departYear = flight.getDepartYear();
-      int departMonth = flight.getDepartMonth();
-      int departDay = flight.getDepartDay();
-      int departHour = flight.getDepartHour();
-
-      Date[] departDate = FlightManager.getTimeRange(departYear, departMonth, departDay,
-            departHour, 0);
-
-      int arrivalYear = flight.getReturnYear();
-      int arrivalMonth = flight.getReturnMonth();
-      int arrivalDay = flight.getReturnDay();
-      int arrivalHour = flight.getReturnHour();
-
-      Date[] returnDate = FlightManager.getTimeRange(arrivalYear, arrivalMonth, arrivalDay,
-            arrivalHour, 0);
-
-//      Flight loFlight = new Flight(flight.getFlightNo(), flight.getAirline(), flight
-//            .getAirportByArrivalLocation(), flight.getAirportByDepartureLocation(), departDate[0],
-//            returnDate[0], flight.getEconomySeats(), flight.getEconomyPrice(), flight
-//                  .getBusinessSeats(), flight.getBusinessPrice(), null);
-
-//      FlightManager.addFlight(loFlight);
-
       return mv;
    }
 
@@ -75,5 +81,5 @@ public class AddFlightController extends SimpleFormController {
       cmd.setBusinessPrice(1500f);
       return cmd;
    }
-   
+
 }

@@ -67,7 +67,7 @@ public class Flight implements java.io.Serializable {
     /**
      * The set of itineraries
      */
-    private Set<Itinerary> itineraries = new HashSet<Itinerary>(0);
+    private Set<Itinerary> itineraries = new HashSet<Itinerary>();
 
     /**
      * The data format

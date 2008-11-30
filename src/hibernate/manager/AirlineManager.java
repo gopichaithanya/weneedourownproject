@@ -1,5 +1,7 @@
 package hibernate.manager;
 
+import hibernate.Airline;
+
 import java.util.List;
 
 import org.hibernate.Session;
@@ -28,6 +30,7 @@ public class AirlineManager {
       session.close();
       return airports;
    }
+
    /**
     * Returns a list of airline codes and names from the airline table
     * @return a list of airline codes and names
@@ -39,5 +42,16 @@ public class AirlineManager {
             "SELECT code, name FROM Airline as airline").list();
       session.close();
       return airlines;
+   }
+
+   public static Airline getAirline(final String code) {
+      final Airline[] rst = new Airline[] { null };
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+
+            rst[0] = (Airline) session.get(Airline.class, code);
+         }
+      });
+      return rst[0];
    }
 }
