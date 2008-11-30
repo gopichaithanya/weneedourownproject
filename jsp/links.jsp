@@ -15,4 +15,10 @@
     <LI><a href="inventory.spring">Inventory</a></LI>
   </UL>
   </LI>
+
+  <LI>Etc
+  <UL>
+    <LI><a href="http://localhost:8080/proj4398/docs/api">JavaDoc</a></LI>
+  </UL>
+  </LI>
 </UL>
