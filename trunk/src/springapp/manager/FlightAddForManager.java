@@ -1,5 +1,7 @@
 package springapp.manager;
 
+import java.util.Calendar;
+
 /**
  * This class is used for command object on flight add page.
  * This class will contain these information:
@@ -40,6 +42,18 @@ public class FlightAddForManager {
    private int returnDay;
    private int returnYear;
    private int returnHour = -1;
+
+   
+   public FlightAddForManager() {
+      final Calendar calendar = Calendar.getInstance();
+      final int curMonth = calendar.get(Calendar.MONTH) + 1; // 0-based.
+      final int curDay = calendar.get(Calendar.DAY_OF_MONTH);
+      final int curYear = calendar.get(Calendar.YEAR);
+
+      returnMonth = departMonth = curMonth;
+      returnDay = departDay = curDay;
+      returnYear = departYear = curYear;
+   }
 
    public int getFlightNo() {
       return flightNo;
