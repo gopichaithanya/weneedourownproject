@@ -10,8 +10,6 @@ import java.util.List;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import springapp.web.FlightSearchForCustomer;
-
 public class AddFlightValidator implements Validator {
 
    /**
@@ -67,6 +65,10 @@ public class AddFlightValidator implements Validator {
       if (!airportCodes.contains(cmd.getAirportByArrivalLocation()))
          err.rejectValue("arrivalLocation", "error.addFlight.arrivalLocation.notExist",
                "Airport code, " + cmd.getAirportByArrivalLocation() + ", does not exist.");
+      if (cmd.getAirportByArrivalLocation().equals(cmd.getAirportByDepartureLocation()))
+         err.rejectValue("arrivalLocation",
+               "error.FlightSearchForCustomer.arrivalLocation.sameWithDeparture",
+               "Destination is same with departure.");
 
       // Checking: economySeats
       try {

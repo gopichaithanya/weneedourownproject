@@ -74,6 +74,8 @@ public class AddFlightController extends SimpleFormController {
    @Override
    protected Object formBackingObject(HttpServletRequest request) throws Exception {
       final FlightAddForManager cmd = (FlightAddForManager) super.formBackingObject(request);
+      cmd.setAirportByDepartureLocation("IAD");
+      cmd.setAirportByArrivalLocation("JFK");
       cmd.setFlightNo(100);
       cmd.setEconomySeats(30);
       cmd.setBusinessSeats(10);

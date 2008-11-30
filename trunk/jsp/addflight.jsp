@@ -69,6 +69,7 @@ function focusOn() {
       (3 digits)</td>
       <td><form:input path="flightNo" /> <form:errors path="flightNo" cssClass="error" /></td>
     </tr>
+    
     <tr>
       <td>Airline<br />
       (code: name)</td>
@@ -78,15 +79,16 @@ function focusOn() {
         </c:forEach>
       </form:select> <img id="airlineIcon" /> <form:errors path="airline" cssClass="error" /></td>
     </tr>
+    
     <tr>
       <td>Departure airport</td>
-      <td><form:select path="airportByArrivalLocation">
+      <td><form:select path="airportByDepartureLocation">
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
       </form:select> <input type="button" value="Search"
-        onClick="displayAirport('airportByArrivalLocation', 'airportByArrivalLocation')" /> <form:errors
-        path="airportByArrivalLocation" cssClass="error" /></td>
+        onClick="displayAirport('airportByDepartureLocation', 'airportByDepartureLocation')" /> <form:errors
+        path="airportByDepartureLocation" cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -132,13 +134,13 @@ function focusOn() {
 
     <tr>
       <td>Arrival airport</td>
-      <td><form:select path="airportByDepartureLocation">
+      <td><form:select path="airportByArrivalLocation">
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
         </c:forEach>
       </form:select> <input type="button" value="Search"
-        onClick="displayAirport('airportByDepartureLocation', 'airportByDepartureLocation')" /> <form:errors
-        path="airportByDepartureLocation" cssClass="error" /></td>
+        onClick="displayAirport('airportByArrivalLocation', 'airportByArrivalLocation')" /> <form:errors
+        path="airportByArrivalLocation" cssClass="error" /></td>
     </tr>
 
     <tr>

@@ -92,6 +92,10 @@ public class FlightSearchForCustomerValidator implements Validator {
          errors.rejectValue("arrivalLocation",
                "error.FlightSearchForCustomer.arrivalLocation.notExist", "Airport code, "
                      + o.getArrivalLocation() + ", does not exist.");
+      if (o.getArrivalLocation().equals(o.getDepartLocation()))
+         errors.rejectValue("arrivalLocation",
+               "error.FlightSearchForCustomer.arrivalLocation.sameWithDeparture",
+               "Destination is same with departure.");
 
       // Checking: tripType
       final boolean bOneWayTrip = o.isOneWayTrip();
