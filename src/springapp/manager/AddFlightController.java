@@ -20,9 +20,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.springframework.web.servlet.view.RedirectView;
 
+/**
+ * A Spring Framework Controller for add flight. This is for manager not for customers.
+ */
 public class AddFlightController extends SimpleFormController {
    private Logger log = Logger.getLogger(getClass());
 
+   /**
+    * handles the requests from web browsers
+    * @see org.springframework.web.servlet.mvc.AbstractController#handleRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+    */
    public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse resp)
          throws Exception {
 
@@ -35,6 +42,10 @@ public class AddFlightController extends SimpleFormController {
       return mv;
    }
 
+   /**
+    * handles submitting action from web browsers.
+    * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.validation.BindException)
+    */
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
@@ -61,7 +72,7 @@ public class AddFlightController extends SimpleFormController {
       final Airport arrival = AirportManager.getAirport(f.getAirportByArrivalLocation());
       final Airport departure = AirportManager.getAirport(f.getAirportByDepartureLocation());
 
-      final Flight newFlight = new Flight(f.getFlightNo(), airline, arrival, departure, departDate,
+      final Flight newFlight = new Flight(f.getFlightNo(), airline, departure, arrival, departDate,
             arrivalDate, f.getEconomySeats(), f.getEconomyPrice(), f.getBusinessSeats(), f
                   .getBusinessPrice(), null);
       final boolean bRst = FlightManager.addFlight(newFlight);
@@ -71,6 +82,10 @@ public class AddFlightController extends SimpleFormController {
       return mv;
    }
 
+   /**
+    * generates and returns a default command object
+    * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+    */
    @Override
    protected Object formBackingObject(HttpServletRequest request) throws Exception {
       final FlightAddForManager cmd = (FlightAddForManager) super.formBackingObject(request);
