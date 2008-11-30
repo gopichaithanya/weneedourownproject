@@ -50,11 +50,57 @@ function updateAirlineIcon() {
     if(false == onlyNumbers(e)) e.stopPropagation();
   }
 
+  function disableArriveDate(e) {
+    var val = document.flightSearchForManagerForm.optArriveDate.checked;
+    var f = document.flightSearchForManagerForm;
+    var y = f.arriveYear;
+    var m = f.arriveMonth;
+    var d = f.arriveDay;
+    var h = f.arriveHour;
+
+    if(val) {
+      y.removeAttribute('disabled');
+      m.removeAttribute('disabled');
+      d.removeAttribute('disabled');
+      h.removeAttribute('disabled');
+    } else {
+      y.setAttribute('disabled',true);
+      m.setAttribute('disabled',true);
+      d.setAttribute('disabled',true);
+      h.setAttribute('disabled',true);
+    }    
+  }
+
+  function disableDepartDate(e) {
+    var val = document.flightSearchForManagerForm.optDepartDate.checked;
+    var f = document.flightSearchForManagerForm;
+    var y = f.departYear;
+    var m = f.departMonth;
+    var d = f.departDay;
+    var h = f.departHour;
+
+    if(val) {
+      y.removeAttribute('disabled');
+      m.removeAttribute('disabled');
+      d.removeAttribute('disabled');
+      h.removeAttribute('disabled');
+    } else {
+      y.setAttribute('disabled',true);
+      m.setAttribute('disabled',true);
+      d.setAttribute('disabled',true);
+      h.setAttribute('disabled',true);
+    }    
+  }
+  
   function initEvent() {
     document.getElementById('flightNo').addEventListener( "keydown", checkFlightNo, false );
     document.getElementById('flightNo').setAttribute('maxlength', 3);
     document.getElementById('airline').addEventListener( "change", updateAirlineIcon, false );
     updateAirlineIcon();
+    document.flightSearchForManagerForm.optArriveDate.addEventListener( "change", disableArriveDate, false);
+    document.flightSearchForManagerForm.optDepartDate.addEventListener( "change", disableDepartDate, false);
+    disableArriveDate();
+    disableDepartDate();
   }
 
   function focusOn() {
@@ -139,7 +185,7 @@ function updateAirlineIcon() {
           </c:forEach>
         </form:select> <input type="button"
           onClick="displayDatePicker('departYear','departMonth','departDay', 'departMonth');"
-          value="Calendar" /></div>
+          value="Calendar" /> <form:checkbox path="optDepartDate" /></div>
         <form:errors path="departMonth" cssClass="error" /> <form:errors path="departDay"
           cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
       </tr>
@@ -185,7 +231,7 @@ function updateAirlineIcon() {
           </c:forEach>
         </form:select> <input type="button"
           onClick="displayDatePicker('arriveYear','arriveMonth','arriveDay', 'arriveMonth');"
-          value="Calendar" /></div>
+          value="Calendar" /> <form:checkbox path="optArriveDate" /></div>
         <form:errors path="arriveMonth" cssClass="error" /> <form:errors path="arriveDay"
           cssClass="error" /> <form:errors path="arriveYear" cssClass="error" /></td>
       </tr>

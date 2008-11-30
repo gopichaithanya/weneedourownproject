@@ -11,11 +11,13 @@ public class FlightSearchForManagerCommand {
    private String departLocation;
    private String arrivalLocation;
 
+   private Boolean optDepartDate;
    private Integer departYear;
    private Integer departMonth;
    private Integer departDay;
    private Integer departHour;
 
+   private Boolean optArriveDate;
    private Integer arriveYear;
    private Integer arriveMonth;
    private Integer arriveDay;
@@ -187,5 +189,33 @@ public class FlightSearchForManagerCommand {
     */
    public Integer getArriveHour() {
       return arriveHour;
+   }
+
+   /**
+    * @param optArriveDate the optArriveDate to set
+    */
+   public void setOptArriveDate(Boolean optArriveDate) {
+      this.optArriveDate = optArriveDate;
+   }
+
+   /**
+    * @return the optArriveDate
+    */
+   public Boolean getOptArriveDate() {
+      return optArriveDate;
+   }
+
+   /**
+    * @param optDepartDate the optDepartDate to set
+    */
+   public void setOptDepartDate(Boolean optDepartDate) {
+      this.optDepartDate = optDepartDate;
+   }
+
+   /**
+    * @return the optDepartDate
+    */
+   public Boolean getOptDepartDate() {
+      return optDepartDate;
    }
 }
