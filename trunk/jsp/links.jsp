@@ -12,6 +12,7 @@
   <LI>Manager
   <UL>
     <LI><a href="addflight.spring">Add flight</a></LI>
+    <LI><a href="flightSearchForManagerForm.spring">Flight Search</a></LI>
     <LI><a href="inventory.spring">Inventory</a></LI>
   </UL>
   </LI>
