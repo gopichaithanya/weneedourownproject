@@ -10,6 +10,9 @@ import java.util.List;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * A Spring Framework Validator for AddFlightController
+ */
 public class AddFlightValidator implements Validator {
 
    /**

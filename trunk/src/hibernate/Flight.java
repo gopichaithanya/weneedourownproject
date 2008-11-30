@@ -91,18 +91,18 @@ public class Flight implements java.io.Serializable {
     /**
      * Constructs a new flight object with the given parameters
      * @param flightNo
-     * @param airline
-     * @param airportByArrivalLocation
-     * @param airportByDepartureLocation
-     * @param departureTime
-     * @param arrivalTime
-     * @param economySeats
-     * @param economyPrice
-     * @param businessSeats
-     * @param businessPrice
-     * @param itineraries
+    * @param airline
+    * @param airportByDepartureLocation
+    * @param airportByArrivalLocation
+    * @param departureTime
+    * @param arrivalTime
+    * @param economySeats
+    * @param economyPrice
+    * @param businessSeats
+    * @param businessPrice
+    * @param itineraries
      */
-    public Flight(int flightNo, Airline airline, Airport airportByArrivalLocation, Airport airportByDepartureLocation, Date departureTime, Date arrivalTime, Integer economySeats, Float economyPrice, Integer businessSeats, Float businessPrice, Set<Itinerary> itineraries) {
+    public Flight(int flightNo, Airline airline, Airport airportByDepartureLocation, Airport airportByArrivalLocation, Date departureTime, Date arrivalTime, Integer economySeats, Float economyPrice, Integer businessSeats, Float businessPrice, Set<Itinerary> itineraries) {
        this.flightNo = flightNo;
        this.airline = airline;
        this.airportByArrivalLocation = airportByArrivalLocation;

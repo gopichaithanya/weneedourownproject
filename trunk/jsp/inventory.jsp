@@ -21,7 +21,7 @@
 						<div>Flight #</div>
 					</th>
 					<th width="100">Date</th>
-					<th width="130">Departure
+					<th width="130">Departure /
 						<div>Arrival</div>
 					</th>
 					<th width="100">Economy seats</th>
@@ -36,10 +36,10 @@
 		      				<div><c:out value="${flight.flightNo}"/></div>
 		      			<br/></td>
 		      			<td width="100"><c:out value="${flight.departureTime}"/><br/></td>
-		      			<td width="130"><c:out value="${flight.airportByArrivalLocation.city}"/>
-		      				(<c:out value="${flight.airportByArrivalLocation.code}"/>)
-		      				<div><c:out value="${flight.airportByDepartureLocation.city}"/>
-		      					(<c:out value="${flight.airportByDepartureLocation.code}" />)
+		      			<td width="130"><c:out value="${flight.airportByDepartureLocation.city}"/>
+		      				(<c:out value="${flight.airportByDepartureLocation.code}"/>)
+		      				<div><c:out value="${flight.airportByArrivalLocation.city}"/>
+		      					(<c:out value="${flight.airportByArrivalLocation.code}" />)
 		      				</div>
 		      			<br/></td>
 			  			<td width="100"><c:out value="${flight.economySeats}"/><br/></td>
