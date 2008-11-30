@@ -35,6 +35,7 @@
 		</fileset>
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
+            <exclude name="hibernate-tools.jar" />
 		</fileset>
 		<pathelement path="${build.classes.dir}" />
 	</path>
@@ -119,6 +120,7 @@
 				<include name="**/*.hbm.xml" />
 			</fileset>
 			<fileset file="${xml.dir}/hibernate.cfg.xml"/>
+            <fileset file="${xml.dir}/log4j.properties"/>
 		</copy>
 
 		<copy todir="${build.war.dir}/WEB-INF/jsp" preservelastmodified="true">
@@ -130,6 +132,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="**/*.*" />
                 <exclude name="servlet-api.jar" />
+                <exclude name="hibernate-tools.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${build.war.dir}/WEB-INF/tld" preservelastmodified="true">
@@ -281,6 +284,7 @@
 	</taskdef>
     <taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask">
         <classpath refid="master-classpath" />
+        <classpath path="${lib.dir}/hibernate-tools.jar" />
     </taskdef>
 
 	<target name="install" description="Install application in Tomcat">
