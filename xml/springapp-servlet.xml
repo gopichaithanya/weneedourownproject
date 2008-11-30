@@ -57,9 +57,9 @@
   	<property name="successView" value="ticket.spring"/>
   	<property name="commandName" value="itinerary"/>
     <property name="commandClass" value="hibernate.Itinerary"/>
-  	<!--property name="validator">
+  	<property name="validator">
   		<bean class="springapp.web.CreditCardValidator"/>
-  	</property-->
+  	</property>
   </bean>
   
   <bean name="/inventory.spring" class="springapp.web.InventoryReportController">

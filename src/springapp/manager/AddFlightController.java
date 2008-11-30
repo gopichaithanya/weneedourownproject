@@ -57,7 +57,7 @@ public class AddFlightController extends SimpleFormController {
       final int departDay = f.getDepartDay();
       final int departHour = f.getDepartHour();
       final Calendar departCalendar = Calendar.getInstance();
-      departCalendar.set(departYear, departMonth, departDay, departHour, 0);
+      departCalendar.set(departYear, departMonth -1, departDay, departHour, 0);
       final Date departDate = departCalendar.getTime();
 
       final int arrivalYear = f.getReturnYear();
@@ -65,7 +65,7 @@ public class AddFlightController extends SimpleFormController {
       final int arrivalDay = f.getReturnDay();
       final int arrivalHour = f.getReturnHour();
       final Calendar arrivalCalendar = Calendar.getInstance();
-      arrivalCalendar.set(arrivalYear, arrivalMonth, arrivalDay, arrivalHour, 0);
+      arrivalCalendar.set(arrivalYear, arrivalMonth -1, arrivalDay, arrivalHour, 0);
       final Date arrivalDate = arrivalCalendar.getTime();
 
       final Airline airline = AirlineManager.getAirline(f.getAirline());
