@@ -22,14 +22,13 @@ public class AddFlightController extends SimpleFormController {
 
    public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse resp)
          throws Exception {
-      final ModelAndView mv = super.handleRequest(req, resp);
 
       final List<String[]> airlines = AirlineManager.getAirlineCodeAndName();
-      mv.addObject("airlines", airlines);
-
       final List<String[]> airports = AirportManager.getAirportCodeAndName();
-      mv.addObject("airports", airports);
 
+      final ModelAndView mv = super.handleRequest(req, resp);
+      mv.addObject("airlines", airlines);
+      mv.addObject("airports", airports);
       return mv;
    }
 

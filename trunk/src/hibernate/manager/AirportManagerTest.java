@@ -13,15 +13,25 @@ public class AirportManagerTest {
       final List<String[]> airports = AirportManager.getAirportCodeAndName();
       assertNotNull(airports);
       assertEquals(567, airports.size());
-      assertEquals(2, ((Object[]) airports.get(0)).length);
+      
+      final Object[] sample = airports.get(0);
+      assertEquals(2, sample.length);
+      assertTrue(sample[0] instanceof String);
+      assertTrue(sample[1] instanceof String);
+      
+      final String code = (String) sample[0];
+      final String name = (String) sample[1];
+      assertEquals("1G4", code);
+      assertEquals("GRAND CANYON WEST", name);
    }
 
    @Test
    public void testGetAirportCode() {
-      final List<String[]> airports = AirportManager.getAirportCode();
+      final List<String> airports = AirportManager.getAirportCode();
       assertNotNull(airports);
       assertEquals(567, airports.size());
-      assertTrue(airports.get(0) instanceof Object);
+      assertTrue(airports.get(0) instanceof String);
+      assertEquals("1G4", airports.get(0));
    }
 
    @Test
