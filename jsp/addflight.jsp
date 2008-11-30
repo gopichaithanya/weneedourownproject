@@ -49,9 +49,14 @@ function initEvent() {
   document.getElementById('airline').addEventListener( "change", updateAirlineIcon, false );
   updateAirlineIcon();
 }
+
+function focusOn() {
+  document.getElementById('flightNo').focuse();
+}
+
 //-->
 </script>
-<body onLoad="initEvent();">
+<body onLoad="initEvent(); focusOn();">
 <jsp:include page="/WEB-INF/jsp/header2.jsp">
   <jsp:param name="title2" value="Flight Search" />
 </jsp:include>
