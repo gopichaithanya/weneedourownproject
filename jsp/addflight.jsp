@@ -51,7 +51,7 @@ function initEvent() {
 }
 
 function focusOn() {
-  document.getElementById('flightNo').focuse();
+  document.getElementById('flightNo').focus();
 }
 
 //-->
