@@ -33,7 +33,7 @@ public class FlightManager {
       try {
          Session session = HibernateUtil.getSessionFactory().getCurrentSession();
          session.beginTransaction();
-         final boolean bAlreadyExist = (null == session.get(Flight.class, flight.getFlightNo()));
+         final boolean bAlreadyExist = (null != session.get(Flight.class, flight.getFlightNo()));
          if (false == bAlreadyExist) {
             session.save(flight);
             bRst = true;

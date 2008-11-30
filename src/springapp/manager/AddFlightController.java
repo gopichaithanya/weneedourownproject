@@ -64,8 +64,8 @@ public class AddFlightController extends SimpleFormController {
       final Flight newFlight = new Flight(f.getFlightNo(), airline, arrival, departure, departDate,
             arrivalDate, f.getEconomySeats(), f.getEconomyPrice(), f.getBusinessSeats(), f
                   .getBusinessPrice(), null);
-      FlightManager.addFlight(newFlight);
-      log.info("end onSubmit");
+      final boolean bRst = FlightManager.addFlight(newFlight);
+      log.info("end onSubmit: " + bRst);
 
       final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
       return mv;
