@@ -14,7 +14,6 @@ import org.springframework.validation.Validator;
  * This validator checkes whether or not the command object is valid.
  * @see FlightSearchForCustomer
  */
-@SuppressWarnings("unchecked")
 public class FlightSearchForCustomerValidator implements Validator {
 
    /**
@@ -33,6 +32,7 @@ public class FlightSearchForCustomerValidator implements Validator {
     * supporting classes for validation.
     * @see org.springframework.validation.Validator#supports(java.lang.Class)
     */
+   @SuppressWarnings("unchecked")
    public boolean supports(Class clazz) {
       return springapp.web.FlightSearchForCustomer.class.equals(clazz);
    }
@@ -79,7 +79,7 @@ public class FlightSearchForCustomerValidator implements Validator {
          return;
       }
 
-      final List airportCodes = AirportManager.getAirportCode();
+      final List<String> airportCodes = AirportManager.getAirportCode();
 
       // Checking: departLocation
       if (!airportCodes.contains(o.getDepartLocation()))

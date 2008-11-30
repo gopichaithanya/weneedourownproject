@@ -21,10 +21,10 @@ public class AirportManager {
     * Returns a list of airport codes from the airport table
     * @return a list of airport codes
     */
-   public static List<String[]> getAirportCode() {
+   public static List<String> getAirportCode() {
       final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
       session.beginTransaction();
-      final List<String[]> airports = session.createQuery("SELECT code FROM Airport as airport")
+      final List<String> airports = session.createQuery("SELECT code FROM Airport as airport")
             .list();
       session.close();
       return airports;

@@ -17,6 +17,18 @@ public class AirlineManager {
    }
 
    /**
+    * Returns a list of airport codes from the airport table
+    * @return a list of airport codes
+    */
+   public static List<String> getAirlineCode() {
+      final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+      session.beginTransaction();
+      final List<String> airports = session.createQuery("SELECT code FROM Airline as airline")
+            .list();
+      session.close();
+      return airports;
+   }
+   /**
     * Returns a list of airline codes and names from the airline table
     * @return a list of airline codes and names
     */
