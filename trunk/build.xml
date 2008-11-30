@@ -233,7 +233,7 @@
         </fail>
 	</target>
 
-	<target name="deploy" depends="buildWar" description="Deploy application">
+	<target name="deploy" depends="buildWar, undeploy" description="Deploy application">
 		<!--copy todir="${deploy.path}/${name}" preservelastmodified="true">
 			<fileset dir="${build.war.dir}">
 				<include name="**/*" />
@@ -250,9 +250,9 @@
 	</target>
 
 	<target name="undeploy" description="Un-Deploy application">
-		<delete dir="${deploy.path}/${name}" />
-		<delete file="${deploy.path}/${name}.war" />
-		<!--antcall target="reload"/-->
+		<undeploy url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" failOnError="false" />
+		<!--delete dir="${deploy.path}/${name}" />
+		<delete file="${deploy.path}/${name}.war" /-->
 	</target>
 
 	<!-- ============================================================== -->
@@ -267,9 +267,12 @@
 		</fileset>
 	</path>
 
-	<!--taskdef name="install" classname="org.apache.catalina.ant.InstallTask">
+	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask">
         <classpath refid="catalina-ant-classpath"/>
-    </taskdef-->
+    </taskdef>
+	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask">
+        <classpath refid="catalina-ant-classpath"/>
+    </taskdef>
 	<taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask">
 		<classpath refid="catalina-ant-classpath" />
 	</taskdef>
@@ -288,7 +291,8 @@
     </taskdef>
 
 	<target name="install" description="Install application in Tomcat">
-		<install url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" war="${name}" />
+		<undeploy url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" failOnError="false" />
+		<deploy url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${name}" war="${dist.dir}/${name}.war" />
 	</target>
 
 	<target name="reload" description="Reload application in Tomcat">
