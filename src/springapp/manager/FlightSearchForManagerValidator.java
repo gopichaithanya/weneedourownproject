@@ -5,11 +5,12 @@ import org.springframework.validation.Validator;
 
 public class FlightSearchForManagerValidator implements Validator {
 
+   @SuppressWarnings("unchecked")
    public boolean supports(Class aClass) {
       return aClass == FlightSearchForManagerCommand.class;
    }
 
-   public void validate(Object arg0, Errors arg1) {
+   public void validate(Object cmdObj, Errors e) {
       // TODO Auto-generated method stub
       
    }

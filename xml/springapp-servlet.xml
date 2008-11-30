@@ -51,8 +51,8 @@
   	<property name="formView" value="flightSearchForCustomerForm"/>
   	<property name="successView" value="reserveFlightForCustomer.spring"/>
   </bean>
-  
-  <!--bean name="/flightSearchForManagerForm.spring" class="springapp.manager.FlightSearchForManagerFormController">
+
+  <bean name="/flightSearchForManagerForm.spring" class="springapp.manager.FlightSearchForManagerFormController">
   	<property name="sessionForm" value="true"/>
   	<property name="commandName" value="flightSearchForManagerCMD"/>
   	<property name="commandClass" value="springapp.manager.FlightSearchForManagerCommand"/>
@@ -60,7 +60,8 @@
   		<bean class="springapp.manager.FlightSearchForManagerValidator"/>
   	</property>
   	<property name="formView" value="flightSearchForManagerForm"/>
-  </bean-->
+  	<property name="successView" value="flightSearchForManagerForm.spring"/>
+  </bean>
 
   <bean name="/enterCreditCardInfo.spring" class="springapp.web.CreditCardController">
   	<property name="formView" value="enterCreditCardInfo"/>

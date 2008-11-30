@@ -58,30 +58,30 @@ function focusOn() {
 </script>
 <body onLoad="initEvent(); focusOn();">
 <jsp:include page="/WEB-INF/jsp/header2.jsp">
-  <jsp:param name="title2" value="Flight Search" />
+  <jsp:param name="title2" value="Add Flight" />
 </jsp:include>
 
 <form:form commandName="flight" method="POST" name="flight">
 
-  <table border="1">
+  <table border="1" class="searchFlightForCustomer1step">
     <tr>
-      <td>Flight number<br />
-      (3 digits)</td>
+      <th>Flight number<br />
+      (3 digits)</th>
       <td><form:input path="flightNo" /> <form:errors path="flightNo" cssClass="error" /></td>
     </tr>
-    
+
     <tr>
-      <td>Airline<br />
-      (code: name)</td>
+      <th>Airline<br />
+      (code: name)</th>
       <td><form:select path="airline">
         <c:forEach items="${airlines}" var="airline">
           <form:option value="${airline[0]}" label="${airline[0]}: ${airline[1]}" />
         </c:forEach>
       </form:select> <img id="airlineIcon" /> <form:errors path="airline" cssClass="error" /></td>
     </tr>
-    
+
     <tr>
-      <td>Departure airport</td>
+      <th>Departure airport</th>
       <td><form:select path="airportByDepartureLocation">
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
@@ -92,7 +92,7 @@ function focusOn() {
     </tr>
 
     <tr>
-      <td>Departing Date</td>
+      <th>Departing Date</th>
       <td><form:select path="departMonth">
         <form:option value="1" label="Jan" />
         <form:option value="2" label="Feb" />
@@ -121,7 +121,7 @@ function focusOn() {
     </tr>
 
     <tr>
-      <td>Departure time</td>
+      <th>Departure time</th>
       <td><form:select path="departHour">
         <c:forEach var="hour" begin="0" end="11" step="1">
           <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
@@ -133,7 +133,7 @@ function focusOn() {
     </tr>
 
     <tr>
-      <td>Arrival airport</td>
+      <th>Arrival airport</th>
       <td><form:select path="airportByArrivalLocation">
         <c:forEach items="${airports}" var="airport">
           <form:option value="${airport[0]}" label="${airport[0]}: ${airport[1]}" />
@@ -144,7 +144,7 @@ function focusOn() {
     </tr>
 
     <tr>
-      <td>Arrival day</td>
+      <th>Arrival day</th>
       <td><form:select path="returnMonth">
         <form:option value="1" label="Jan" />
         <form:option value="2" label="Feb" />
@@ -173,7 +173,7 @@ function focusOn() {
     </tr>
 
     <tr>
-      <td>Arrival time</td>
+      <th>Arrival time</th>
       <td><form:select path="returnHour">
         <c:forEach var="hour" begin="0" end="11" step="1">
           <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
@@ -185,7 +185,7 @@ function focusOn() {
     </tr>
 
     <tr>
-      <td>Ecomomy Seats</td>
+      <th>Ecomomy Seats</th>
       <td><form:select path="economySeats">
         <form:option value="10" label="10" />
         <form:option value="20" label="20" />
@@ -194,15 +194,16 @@ function focusOn() {
         <form:option value="50" label="50" />
       </form:select> seats <form:errors path="economySeats" cssClass="error" /></td>
     </tr>
-    
+
     <tr>
-      <td>Economy Price<br />
-      (dollar)</td>
-      <td>$<form:input path="economyPrice" /> <form:errors path="economyPrice" cssClass="error" /></td>
+      <th>Economy Price<br />
+      (dollar)</th>
+      <td>$<form:input path="economyPrice" /> <form:errors path="economyPrice"
+        cssClass="error" /></td>
     </tr>
-    
+
     <tr>
-      <td>Business Seats</td>
+      <th>Business Seats</th>
       <td><form:select path="businessSeats">
         <form:option value="10" label="10" />
         <form:option value="20" label="20" />
@@ -211,11 +212,12 @@ function focusOn() {
         <form:option value="50" label="50" />
       </form:select> seats <form:errors path="businessSeats" cssClass="error" /></td>
     </tr>
-    
+
     <tr>
-      <td>Business Prices<br />
-      (dollar)</td>
-      <td>$<form:input path="businessPrice" /> <form:errors path="businessPrice" cssClass="error" /></td>
+      <th>Business Prices<br />
+      (dollar)</th>
+      <td>$<form:input path="businessPrice" /> <form:errors path="businessPrice"
+        cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -223,5 +225,8 @@ function focusOn() {
     </tr>
   </table>
 </form:form>
+
+<%@ include file="/WEB-INF/jsp/footer.jsp"%>
+
 </body>
 </html>
