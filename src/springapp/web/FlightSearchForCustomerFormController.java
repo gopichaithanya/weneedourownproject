@@ -46,7 +46,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
 
       final List<String[]> airports = AirportManager.getAirportCodeAndName();
       mv.addObject("airports", airports);
-      mv.addObject("tripTypes", FlightSearchForCustomer.ETripType.values());
+      mv.addObject("tripTypes", FlightSearchForCustomerCommand.ETripType.values());
       mv.addObject("seatClass", ESeatClass.values());
 
       return mv;
@@ -66,7 +66,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
 
       ModelAndView mv = null;
       {
-         final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
+         final FlightSearchForCustomerCommand cmd = ((FlightSearchForCustomerCommand) command);
          if (false == cmd.isNullDepartFlightNo()
                && (cmd.isOneWayTrip() || false == cmd.isNullReturnFlightNo())) {
             // after step 3 with round trip or after step 2 with one way trip
@@ -97,7 +97,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
    private ModelAndView onSubmit1(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
-      final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
+      final FlightSearchForCustomerCommand cmd = ((FlightSearchForCustomerCommand) command);
       List flights;
       if (bFlagSearch)
          flights = FlightManager.getFlightList(cmd.getDepartLocation(), cmd.getArrivalLocation(),
@@ -134,7 +134,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
    private ModelAndView onSubmit2(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
-      final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
+      final FlightSearchForCustomerCommand cmd = ((FlightSearchForCustomerCommand) command);
       List flights;
       if (bFlagSearch)
          flights = FlightManager.getFlightList(cmd.getArrivalLocation(), cmd.getDepartLocation(),
@@ -172,7 +172,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
          Object command, BindException errors) throws Exception {
 
       final HttpSession session = request.getSession();
-      final FlightSearchForCustomer cmd = ((FlightSearchForCustomer) command);
+      final FlightSearchForCustomerCommand cmd = ((FlightSearchForCustomerCommand) command);
 
       Integer[] flights = null;
       if (cmd.isOneWayTrip())

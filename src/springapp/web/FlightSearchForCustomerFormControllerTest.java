@@ -24,7 +24,7 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
    private MockHttpServletResponse response = null;
    private MockHttpSession session = null;
    private FlightSearchForCustomerFormController ctrl = null;
-   private FlightSearchForCustomer cmd = null;
+   private FlightSearchForCustomerCommand cmd = null;
 
    @Before
    public void before() throws Exception {
@@ -46,7 +46,7 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
       ctrl = (FlightSearchForCustomerFormController) this.applicationContext.getBean(beanName);
       assertNotNull(ctrl);
 
-      cmd = (FlightSearchForCustomer) ctrl.getCommandClass().getConstructor(new Class[] {})
+      cmd = (FlightSearchForCustomerCommand) ctrl.getCommandClass().getConstructor(new Class[] {})
             .newInstance(new Object[] {});
       assertNotNull(cmd);
 
@@ -70,7 +70,7 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
 
    @Test
    public void testOnSubmitAfterStepFirst() throws Exception {
-      cmd.setTripType(FlightSearchForCustomer.ETripType.ROUND_TRIP);
+      cmd.setTripType(FlightSearchForCustomerCommand.ETripType.ROUND_TRIP);
       cmd.setDepartLocation("YNG");
       cmd.setArrivalLocation("SGH");
 
@@ -85,7 +85,7 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
    @Test
    public void testOnSubmitAfterStepSecondWithRoundTrip() throws Exception {
       cmd.setDepartFlightNo(157);
-      cmd.setTripType(FlightSearchForCustomer.ETripType.ROUND_TRIP);
+      cmd.setTripType(FlightSearchForCustomerCommand.ETripType.ROUND_TRIP);
 
       final ModelAndView mv = ctrl.onSubmit(null, null, cmd, null);
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "selectedDepartFlight");
@@ -94,7 +94,7 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
 
    @Test
    public void testOnSubmitAfterStepSecondWithOneWayTrip() throws Exception {
-      cmd.setTripType(FlightSearchForCustomer.ETripType.ONEWAY_TRIP);
+      cmd.setTripType(FlightSearchForCustomerCommand.ETripType.ONEWAY_TRIP);
       cmd.setDepartFlightNo(157);
 
       assertNull(session.getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER));
@@ -104,7 +104,7 @@ public class FlightSearchForCustomerFormControllerTest extends AbstractJUnit4Spr
 
    @Test
    public void testOnSubmitAfterStepThird() throws Exception {
-      cmd.setTripType(FlightSearchForCustomer.ETripType.ROUND_TRIP);
+      cmd.setTripType(FlightSearchForCustomerCommand.ETripType.ROUND_TRIP);
       cmd.setDepartFlightNo(157);
       cmd.setReturnFlightNo(157);
 

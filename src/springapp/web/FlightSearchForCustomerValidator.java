@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
 /**
  * A validator for flight search. This validator is from Spring framework.
  * This validator checkes whether or not the command object is valid.
- * @see FlightSearchForCustomer
+ * @see FlightSearchForCustomerCommand
  */
 public class FlightSearchForCustomerValidator implements Validator {
 
@@ -34,7 +34,7 @@ public class FlightSearchForCustomerValidator implements Validator {
     */
    @SuppressWarnings("unchecked")
    public boolean supports(Class clazz) {
-      return springapp.web.FlightSearchForCustomer.class.equals(clazz);
+      return springapp.web.FlightSearchForCustomerCommand.class.equals(clazz);
    }
 
    /**
@@ -42,7 +42,7 @@ public class FlightSearchForCustomerValidator implements Validator {
     * @see org.springframework.validation.Validator#validate(java.lang.Object, org.springframework.validation.Errors)
     */
    public void validate(Object obj, Errors errors) {
-      final FlightSearchForCustomer o = (FlightSearchForCustomer) obj;
+      final FlightSearchForCustomerCommand o = (FlightSearchForCustomerCommand) obj;
 
       // Checking: departYear
       if (null == o) {
@@ -71,8 +71,8 @@ public class FlightSearchForCustomerValidator implements Validator {
 
          errors.rejectValue("tripType", "error.FlightSearchForCustomer.tripType.not-specified",
                "Trip type is not specified. It can be either "
-                     + FlightSearchForCustomer.ETripType.ONEWAY_TRIP.name() + " or "
-                     + FlightSearchForCustomer.ETripType.ROUND_TRIP.name() + ".");
+                     + FlightSearchForCustomerCommand.ETripType.ONEWAY_TRIP.name() + " or "
+                     + FlightSearchForCustomerCommand.ETripType.ROUND_TRIP.name() + ".");
          errors.rejectValue("numPassengers",
                "error.FlightSearchForCustomer.numPassengers.not-specified",
                "The number of passengers is not specified.");
@@ -88,11 +88,12 @@ public class FlightSearchForCustomerValidator implements Validator {
                      + o.getDepartLocation() + ", does not exist.");
 
       // Checking: arrivalLocation
-      if (!airportCodes.contains(o.getArrivalLocation()))
+      final String arrival = o.getArrivalLocation();
+      if (!airportCodes.contains(arrival))
          errors.rejectValue("arrivalLocation",
                "error.FlightSearchForCustomer.arrivalLocation.notExist", "Airport code, "
                      + o.getArrivalLocation() + ", does not exist.");
-      if (o.getArrivalLocation().equals(o.getDepartLocation()))
+      if (null != arrival && arrival.equals(o.getDepartLocation()))
          errors.rejectValue("arrivalLocation",
                "error.FlightSearchForCustomer.arrivalLocation.sameWithDeparture",
                "Destination is same with departure.");
@@ -102,8 +103,9 @@ public class FlightSearchForCustomerValidator implements Validator {
       final boolean bRoundTrip = o.isRoundTrip();
       if (!bOneWayTrip && !bRoundTrip)
          errors.rejectValue("tripType", "error.FlightSearchForCustomer.tripType.outOfBound",
-               "Trip type must be either " + FlightSearchForCustomer.ETripType.ROUND_TRIP.name()
-                     + " or " + FlightSearchForCustomer.ETripType.ONEWAY_TRIP.name() + ".");
+               "Trip type must be either "
+                     + FlightSearchForCustomerCommand.ETripType.ROUND_TRIP.name() + " or "
+                     + FlightSearchForCustomerCommand.ETripType.ONEWAY_TRIP.name() + ".");
 
       // Checking: seatClass
       final boolean bBuzSeat = o.isBusinessSeat();
