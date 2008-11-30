@@ -23,6 +23,7 @@
 
   <bean name="/addflight.spring" class="springapp.manager.AddFlightController"> 
     <property name="formView" value="addflight"/>
+    <property name="successView" value="inventory.spring"/>
     <property name="commandName" value="flight"/>
     <property name="commandClass" value="springapp.manager.FlightAddForManager"/>	
     <property name="validator">

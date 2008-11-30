@@ -1,5 +1,7 @@
 package hibernate.manager;
 
+import hibernate.Airport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,5 +76,16 @@ public class AirportManager {
          rst.add(absNum);
       }
       return rst;
+   }
+
+   public static Airport getAirport(final String code) {
+      final Airport[] rst = new Airport[] { null };
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+
+            rst[0] = (Airport) session.get(Airport.class, code);
+         }
+      });
+      return rst[0];
    }
 }

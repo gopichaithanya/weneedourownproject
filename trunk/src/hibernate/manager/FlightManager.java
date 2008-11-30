@@ -27,16 +27,22 @@ public class FlightManager {
     * Adds a flight to the database
     * @param flight - the flight to be added
     */
-   public static void addFlight(Flight flight) {
+   public static boolean addFlight(Flight flight) {
 
+      boolean bRst = false;
       try {
          Session session = HibernateUtil.getSessionFactory().getCurrentSession();
          session.beginTransaction();
-         session.save(flight);
+         final boolean bAlreadyExist = (null == session.get(Flight.class, flight.getFlightNo()));
+         if (false == bAlreadyExist) {
+            session.save(flight);
+            bRst = true;
+         }
          session.getTransaction().commit();
       } catch (HibernateException e) {
          e.printStackTrace();
       }
+      return bRst;
    }
 
    /**

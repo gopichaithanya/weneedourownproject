@@ -2,6 +2,7 @@ package springapp.manager;
 
 import hibernate.manager.AirlineManager;
 import hibernate.manager.AirportManager;
+import hibernate.manager.FlightManager;
 
 import java.util.Calendar;
 import java.util.List;
@@ -38,11 +39,15 @@ public class AddFlightValidator implements Validator {
                "Null value as command object is not allowed.");
          return;
       }
-      
+
       // Checking: flight number
       final int flightNo = cmd.getFlightNo();
-      if(flightNo < 100 || flightNo > 999)
-         err.rejectValue("flightNo", "error.addFlight.flightNo.not3Digits", "Flight number is not 3 digits.");
+      if (flightNo < 100 || flightNo > 999)
+         err.rejectValue("flightNo", "error.addFlight.flightNo.not3Digits",
+               "Flight number is not 3 digits.");
+      if (null != FlightManager.getFlight(flightNo))
+         err.rejectValue("flightNo", "error.addFlight.flightNo.alreadyExist",
+               "Flight number is already exist");
 
       final List<String> airlineCodes = AirlineManager.getAirlineCode();
 
@@ -84,7 +89,7 @@ public class AddFlightValidator implements Validator {
          err.rejectValue("businessSeats", "error.addFlight.businessSeats.notInteger",
                "The number of business seats is not integer.");
       }
-      
+
       // Checking: price of economy
       try {
          final float ecoPrice = Float.valueOf(cmd.getEconomyPrice());
@@ -233,5 +238,4 @@ public class AddFlightValidator implements Validator {
                   "Returning day should be later than departing day.");
       }
    }
-
 }
