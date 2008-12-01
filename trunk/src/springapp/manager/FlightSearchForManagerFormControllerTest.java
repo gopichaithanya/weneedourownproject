@@ -1,5 +1,6 @@
 package springapp.manager;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -15,8 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.web.servlet.ModelAndView;
 
-import springapp.web.FlightSearchForCustomerCommand;
-import springapp.web.FlightSearchForCustomerFormController;
 import springapp.web.MockServletContextWebContextLoader;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,6 +28,7 @@ public class FlightSearchForManagerFormControllerTest extends AbstractJUnit4Spri
    private MockHttpSession session = null;
    private FlightSearchForManagerFormController ctrl = null;
    private FlightSearchForManagerCommand cmd = null;
+   private String formView = null;
 
    @Before
    public void before() throws Exception {
@@ -51,12 +51,22 @@ public class FlightSearchForManagerFormControllerTest extends AbstractJUnit4Spri
             .newInstance(new Object[] {});
       assertNotNull(cmd);
 
+      formView = ctrl.getFormView();
    }
 
    @Test
-   public void testHandleRequest() throws Exception {
+   public void testNormal1() throws Exception {
       final ModelAndView mv = ctrl.handleRequest(request, response);
+      ModelAndViewAssert.assertViewName(mv, formView);
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "airlines");
       ModelAndViewAssert.assertModelAttributeAvailable(mv, "airports");
+      //assertFalse(mv.getModel().containsKey("flights"));
+   }
+
+   @Test
+   public void testNormal2() throws Exception {
+      final ModelAndView mv = ctrl.handleRequest(request, response);
+      ModelAndViewAssert.assertModelAttributeAvailable(mv, "flights");
+      ModelAndViewAssert.assertModelAttributeAvailable(mv, "seats");
    }
 }

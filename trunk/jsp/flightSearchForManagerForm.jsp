@@ -57,17 +57,20 @@ function updateAirlineIcon() {
     var m = f.arriveMonth;
     var d = f.arriveDay;
     var h = f.arriveHour;
+    var r = f.arriveHourRange;
 
     if(val) {
       y.removeAttribute('disabled');
       m.removeAttribute('disabled');
       d.removeAttribute('disabled');
       h.removeAttribute('disabled');
+      r.removeAttribute('disabled');
     } else {
       y.setAttribute('disabled',true);
       m.setAttribute('disabled',true);
       d.setAttribute('disabled',true);
       h.setAttribute('disabled',true);
+      r.setAttribute('disabled',true);
     }    
   }
 
@@ -78,17 +81,20 @@ function updateAirlineIcon() {
     var m = f.departMonth;
     var d = f.departDay;
     var h = f.departHour;
+    var r = f.departHourRange;
 
     if(val) {
       y.removeAttribute('disabled');
       m.removeAttribute('disabled');
       d.removeAttribute('disabled');
       h.removeAttribute('disabled');
+      r.removeAttribute('disabled');
     } else {
       y.setAttribute('disabled',true);
       m.setAttribute('disabled',true);
       d.setAttribute('disabled',true);
       h.setAttribute('disabled',true);
+      r.setAttribute('disabled',true);
     }    
   }
   
@@ -121,6 +127,10 @@ function updateAirlineIcon() {
         <th>Flight number</th>
         <td><form:input path="flightNo" /> (3-digits)<form:errors path="flightNo"
           cssClass="error" /></td>
+      </tr>
+
+      <tr>
+        <td colspan="2" align="center">============== OR =====================</td>
       </tr>
 
       <tr>
@@ -185,7 +195,7 @@ function updateAirlineIcon() {
           </c:forEach>
         </form:select> <input type="button"
           onClick="displayDatePicker('departYear','departMonth','departDay', 'departMonth');"
-          value="Calendar" /> <form:checkbox path="optDepartDate" /></div>
+          value="Calendar" /> <form:checkbox path="optDepartDate" /> <label for="optDepartDate1">Enable</label></div>
         <form:errors path="departMonth" cssClass="error" /> <form:errors path="departDay"
           cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
       </tr>
@@ -200,6 +210,11 @@ function updateAirlineIcon() {
           </c:forEach>
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
+          </c:forEach>
+        </form:select> <form:select path="departHourRange">
+          <form:option value="1" label="1 hour" />
+          <c:forEach var="hour" begin="2" end="23" step="1">
+            <form:option value="${hour}" label="${hour} hours" />
           </c:forEach>
         </form:select></div>
         </td>
@@ -231,7 +246,7 @@ function updateAirlineIcon() {
           </c:forEach>
         </form:select> <input type="button"
           onClick="displayDatePicker('arriveYear','arriveMonth','arriveDay', 'arriveMonth');"
-          value="Calendar" /> <form:checkbox path="optArriveDate" /></div>
+          value="Calendar" /> <form:checkbox path="optArriveDate" /> <label for="optArriveDate1">Enable</label></div>
         <form:errors path="arriveMonth" cssClass="error" /> <form:errors path="arriveDay"
           cssClass="error" /> <form:errors path="arriveYear" cssClass="error" /></td>
       </tr>
@@ -247,6 +262,11 @@ function updateAirlineIcon() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
+        </form:select> <form:select path="arriveHourRange">
+          <form:option value="1" label="1 hour" />
+          <c:forEach var="hour" begin="2" end="23" step="1">
+            <form:option value="${hour}" label="${hour} hours" />
+          </c:forEach>
         </form:select></div>
         </td>
       </tr>
@@ -259,6 +279,81 @@ function updateAirlineIcon() {
     </tbody>
   </table>
 </form:form>
+
+<table border="1" class="searchFlightForCustomer2step">
+  <caption class="searchFlightForCustomer2StepTitle">Searched flights</caption>
+  <c:choose>
+    <c:when test="${empty flights}">
+      <tr>
+        <td>No flight is found.</td>
+      </tr>
+    </c:when>
+    <c:otherwise>
+      <thead>
+        <tr>
+          <th rowspan="2"><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline<br />
+          name</a></th>
+          <th rowspan="2">Departure location (<a
+            href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+          and time</th>
+          <th rowspan="2">Arrival location (<a
+            href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
+          and time</th>
+          <th># of left economy seats</th>
+          <th>Flight number</th>
+        </tr>
+        <tr>
+          <th># of left business seats</th>
+          <th><b>Cancel<br />
+          Flight</b></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <c:forEach items="${flights}" var="flight">
+
+          <tr>
+            <td rowspan="2">
+            <table border="0">
+              <tr>
+                <td><img
+                  src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline.code}.gif"
+                  alt="${flight.airline.code}" /></td>
+              </tr>
+              <tr>
+                <td><c:out value="${flight.airline.name}" /></td>
+              </tr>
+            </table>
+            </td>
+
+            <td rowspan="2"><c:out value="${flight.airportByDepartureLocation.name}" /> (<c:out
+              value="${flight.airportByDepartureLocation.code}" />)<br />
+            <c:out value="${flight.departureTime}" /></td>
+
+            <td rowspan="2"><c:out value="${flight.airportByArrivalLocation.name}" /> (<c:out
+              value="${flight.airportByArrivalLocation.code}" />)<br />
+            <c:out value="${flight.arrivalTime}" />
+            <div>(<c:out value="${flight.durationHours}" /> hours)</div>
+            </td>
+
+            <%--td><c:out value="${seats[flight.flightNo][0]}" /> / <c:out
+              value="${flight.economySeats}" /> seats</td--%>
+            <td><c:out value="${flight.economySeats}" /> seats</td>
+
+            <td>#<c:out value="${flight.flightNo}" /></td>
+          </tr>
+
+          <tr>
+            <%--td><c:out value="${seats[flight.flightNo][2]}" /> / <c:out
+              value="${flight.businessSeats}" /> seats</td--%>
+            <td><c:out value="${flight.businessSeats}" /> seats</td>
+            <td><input type="button" value="Cancel" /></td>
+          </tr>
+        </c:forEach>
+      </tbody>
+    </c:otherwise>
+  </c:choose>
+</table>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>
 

@@ -100,11 +100,11 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final FlightSearchForCustomerCommand cmd = ((FlightSearchForCustomerCommand) command);
       List flights;
       if (bFlagSearch)
-         flights = FlightManager.getFlightList(cmd.getDepartLocation(), cmd.getArrivalLocation(),
+         flights = FlightManager.getFlightList(null, cmd.getDepartLocation(), cmd.getArrivalLocation(),
                cmd.getDepartYear(), cmd.getDepartMonth(), cmd.getDepartDay(), cmd.getDepartHour(),
-               cmd.getSearchingHourRange());
+               cmd.getSearchingHourRange(), null, null, null, null, null);
       else
-         flights = FlightManager.getFlightList(null, null, 0, 0, 0, 0, 0);
+         flights = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null, null, null, null, null);
 
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedDepartFlights", flights);
@@ -137,11 +137,11 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final FlightSearchForCustomerCommand cmd = ((FlightSearchForCustomerCommand) command);
       List flights;
       if (bFlagSearch)
-         flights = FlightManager.getFlightList(cmd.getArrivalLocation(), cmd.getDepartLocation(),
+         flights = FlightManager.getFlightList(null, cmd.getArrivalLocation(), cmd.getDepartLocation(),
                cmd.getReturnYear(), cmd.getReturnMonth(), cmd.getReturnDay(), cmd.getReturnHour(),
-               cmd.getSearchingHourRange());
+               cmd.getSearchingHourRange(), null, null, null, null, null);
       else
-         flights = FlightManager.getFlightList(null, null, 0, 0, 0, 0, 0);
+         flights = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null, null, null, null, null);
 
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedReturnFlights", flights);
