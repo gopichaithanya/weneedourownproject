@@ -1,5 +1,7 @@
 package springapp.manager;
 
+import java.util.Calendar;
+
 /**
  * A Spring Framework Command class for FlightSearchForManager
  */
@@ -16,12 +18,28 @@ public class FlightSearchForManagerCommand {
    private Integer departMonth;
    private Integer departDay;
    private Integer departHour;
+   private Integer departHourRange;
 
    private Boolean optArriveDate;
    private Integer arriveYear;
    private Integer arriveMonth;
    private Integer arriveDay;
    private Integer arriveHour;
+   private Integer arriveHourRange;
+
+   /**
+    * Constructor for FlightSearchForManager
+    */
+   public FlightSearchForManagerCommand() {
+      final Calendar calendar = Calendar.getInstance();
+      final int curMonth = calendar.get(Calendar.MONTH) + 1; // 0-based.
+      final int curDay = calendar.get(Calendar.DAY_OF_MONTH);
+      final int curYear = calendar.get(Calendar.YEAR);
+
+      arriveYear = departYear = curYear;
+      arriveMonth = departMonth = curMonth;
+      arriveDay = departDay = curDay;
+   }
 
    /**
     * @param flightNo the flightNo to set
@@ -217,5 +235,33 @@ public class FlightSearchForManagerCommand {
     */
    public Boolean getOptDepartDate() {
       return optDepartDate;
+   }
+
+   /**
+    * @param departHourRange the departHourRange to set
+    */
+   public void setDepartHourRange(Integer departHourRange) {
+      this.departHourRange = departHourRange;
+   }
+
+   /**
+    * @return the departHourRange
+    */
+   public Integer getDepartHourRange() {
+      return departHourRange;
+   }
+
+   /**
+    * @param arriveHourRange the arriveHourRange to set
+    */
+   public void setArriveHourRange(Integer arriveHourRange) {
+      this.arriveHourRange = arriveHourRange;
+   }
+
+   /**
+    * @return the arriveHourRange
+    */
+   public Integer getArriveHourRange() {
+      return arriveHourRange;
    }
 }
