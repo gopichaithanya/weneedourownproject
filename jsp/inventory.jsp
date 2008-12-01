@@ -31,7 +31,14 @@
 			
 			<tbody>
 				<c:forEach items="${flightList}" var="flight">
-					<tr align="center">
+                  <c:choose>
+                  <c:when test="${!empty newFlight && flight.flightNo == newFlight.flightNo}">
+					<tr align="center" class="newFlight">
+                  </c:when>
+                  <c:otherwise>
+                    <tr align="center">
+                  </c:otherwise>
+                  </c:choose>
 		      			<td width="80"><c:out value="${flight.airline.code}"/>
 		      				<div><c:out value="${flight.flightNo}"/></div>
 		      			<br/></td>

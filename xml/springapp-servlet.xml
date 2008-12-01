@@ -22,10 +22,11 @@
   </bean>
 
   <bean name="/addflight.spring" class="springapp.manager.AddFlightController"> 
+  	<property name="sessionForm" value="true"/>
     <property name="formView" value="addflight"/>
     <property name="successView" value="inventory.spring"/>
     <property name="commandName" value="flight"/>
-    <property name="commandClass" value="springapp.manager.FlightAddForManager"/>	
+    <property name="commandClass" value="springapp.manager.AddFlightCommand"/>	
     <property name="validator">
   		<bean class="springapp.manager.AddFlightValidator"/>
   	</property>

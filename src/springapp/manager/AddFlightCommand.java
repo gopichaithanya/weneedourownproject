@@ -23,7 +23,7 @@ import java.util.Calendar;
  * <LI> the number of business seats</LI>
  * <LI> price of each business seat</LI>
  */
-public class FlightAddForManager {
+public class AddFlightCommand {
    private int flightNo;
    private String airline;
    private String airportByArrivalLocation;
@@ -44,7 +44,7 @@ public class FlightAddForManager {
    private int returnHour = -1;
 
    
-   public FlightAddForManager() {
+   public AddFlightCommand() {
       final Calendar calendar = Calendar.getInstance();
       final int curMonth = calendar.get(Calendar.MONTH) + 1; // 0-based.
       final int curDay = calendar.get(Calendar.DAY_OF_MONTH);

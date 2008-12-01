@@ -42,4 +42,6 @@ public abstract class SessionConstants {
     * this data will be used for result page.
     */
    public static final String BOOKED_ITINERARY = "credit.booked.itinerary";
+
+   public static final String ADDED_NEW_FLIGHT = "addFlight.new.flight";
 }
