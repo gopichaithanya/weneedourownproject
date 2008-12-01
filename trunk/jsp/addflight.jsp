@@ -65,9 +65,9 @@ function focusOn() {
 
   <table border="1" class="searchFlightForCustomer1step">
     <tr>
-      <th>Flight number<br />
-      (3 digits)</th>
-      <td><form:input path="flightNo" /> <form:errors path="flightNo" cssClass="error" /></td>
+      <th>Flight number</th>
+      <td><form:input path="flightNo" /> (3 digits) <form:errors path="flightNo"
+        cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -196,9 +196,8 @@ function focusOn() {
     </tr>
 
     <tr>
-      <th>Economy Price<br />
-      (dollar)</th>
-      <td>$<form:input path="economyPrice" /> <form:errors path="economyPrice"
+      <th>Economy Price</th>
+      <td>$<form:input path="economyPrice" /> (dollar) <form:errors path="economyPrice"
         cssClass="error" /></td>
     </tr>
 
@@ -214,14 +213,14 @@ function focusOn() {
     </tr>
 
     <tr>
-      <th>Business Prices<br />
-      (dollar)</th>
-      <td>$<form:input path="businessPrice" /> <form:errors path="businessPrice"
+      <th>Business Prices</th>
+      <td>$<form:input path="businessPrice" /> (dollar) <form:errors path="businessPrice"
         cssClass="error" /></td>
     </tr>
 
     <tr>
-      <td colspan="2"><input type="submit" value="Add Flight" /></td>
+      <td></td>
+      <td><input type="submit" value="======== Add Flight =========" /></td>
     </tr>
   </table>
 </form:form>

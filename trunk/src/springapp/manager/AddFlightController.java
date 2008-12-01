@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -20,10 +21,18 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import springapp.web.SessionConstants;
+
 /**
  * A Spring Framework Controller for add flight. This is for manager not for customers.
  */
 public class AddFlightController extends SimpleFormController {
+   /**
+    * bean name
+    */
+   public static final String URL = "addflight.spring";
+
+   @SuppressWarnings("unused")
    private Logger log = Logger.getLogger(getClass());
 
    /**
@@ -49,15 +58,15 @@ public class AddFlightController extends SimpleFormController {
    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response,
          Object command, BindException errors) throws Exception {
 
-      log.info("start onSubmit");
-      final FlightAddForManager f = (FlightAddForManager) command;
+      final HttpSession session = request.getSession();
+      final AddFlightCommand f = (AddFlightCommand) command;
 
       final int departYear = f.getDepartYear();
       final int departMonth = f.getDepartMonth();
       final int departDay = f.getDepartDay();
       final int departHour = f.getDepartHour();
       final Calendar departCalendar = Calendar.getInstance();
-      departCalendar.set(departYear, departMonth -1, departDay, departHour, 0);
+      departCalendar.set(departYear, departMonth - 1, departDay, departHour, 0);
       final Date departDate = departCalendar.getTime();
 
       final int arrivalYear = f.getReturnYear();
@@ -65,7 +74,7 @@ public class AddFlightController extends SimpleFormController {
       final int arrivalDay = f.getReturnDay();
       final int arrivalHour = f.getReturnHour();
       final Calendar arrivalCalendar = Calendar.getInstance();
-      arrivalCalendar.set(arrivalYear, arrivalMonth -1, arrivalDay, arrivalHour, 0);
+      arrivalCalendar.set(arrivalYear, arrivalMonth - 1, arrivalDay, arrivalHour, 0);
       final Date arrivalDate = arrivalCalendar.getTime();
 
       final Airline airline = AirlineManager.getAirline(f.getAirline());
@@ -76,7 +85,8 @@ public class AddFlightController extends SimpleFormController {
             arrivalDate, f.getEconomySeats(), f.getEconomyPrice(), f.getBusinessSeats(), f
                   .getBusinessPrice(), null);
       final boolean bRst = FlightManager.addFlight(newFlight);
-      log.info("end onSubmit: " + bRst);
+      if (bRst)
+         session.setAttribute(SessionConstants.ADDED_NEW_FLIGHT, newFlight);
 
       final ModelAndView mv = new ModelAndView(new RedirectView(getSuccessView()));
       return mv;
@@ -88,7 +98,7 @@ public class AddFlightController extends SimpleFormController {
     */
    @Override
    protected Object formBackingObject(HttpServletRequest request) throws Exception {
-      final FlightAddForManager cmd = (FlightAddForManager) super.formBackingObject(request);
+      final AddFlightCommand cmd = (AddFlightCommand) super.formBackingObject(request);
       cmd.setAirportByDepartureLocation("IAD");
       cmd.setAirportByArrivalLocation("JFK");
       cmd.setFlightNo(100);

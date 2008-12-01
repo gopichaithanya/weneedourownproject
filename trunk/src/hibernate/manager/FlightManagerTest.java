@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Session;
 import org.junit.Test;
 
 @SuppressWarnings("unchecked")
@@ -25,21 +26,24 @@ public class FlightManagerTest {
 
    @Test
    public void testListFlightsNull() {
-      final List flightList = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null, null, null, null, null);
+      final List flightList = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null,
+            null, null, null, null);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }
 
    @Test
    public void testListFlightsAnytime() {
-      final List flightList = FlightManager.getFlightList(null, "DEN", "BWI", 2009, 1, 4, -99, -99, null, null, null, null, null);
+      final List flightList = FlightManager.getFlightList(null, "DEN", "BWI", 2009, 1, 4, -99, -99,
+            null, null, null, null, null);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }
 
    @Test
    public void testListFlightsCertainTime() {
-      final List flightList = FlightManager.getFlightList(null, "DEN", "BWI", 2009, 1, 4, 10, 2, null, null, null, null, null);
+      final List flightList = FlightManager.getFlightList(null, "DEN", "BWI", 2009, 1, 4, 10, 2,
+            null, null, null, null, null);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }
@@ -135,7 +139,7 @@ public class FlightManagerTest {
    public void testDecreaseSeat() {
       final int orgSeat = FlightManager.getFlight(157).getEconomySeats();
       assertTrue(orgSeat > 0);
-      
+
       final boolean bRst1 = FlightManager.decreaseSeats(157, 1, ESeatClass.ECONOMY);
       assertTrue(bRst1);
       final int newSeat1 = FlightManager.getFlight(157).getEconomySeats();
@@ -145,6 +149,23 @@ public class FlightManagerTest {
       assertTrue(bRst2);
       final int newSeat2 = FlightManager.getFlight(157).getEconomySeats();
       assertEquals(orgSeat, newSeat2);
+   }
+
+   public static boolean deleteFlight(final int flightNo) {
+      final Boolean[] bRst = new Boolean[] { false };
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+
+            final Flight f = (Flight) session.get(Flight.class, flightNo);
+            final boolean bNotExist = (null == f);
+            if (bNotExist)
+               return;
+
+            session.delete(f);
+            bRst[0] = true;
+         }
+      });
+      return bRst[0];
    }
 
 }

@@ -26,7 +26,7 @@ public class AddFlightValidator implements Validator {
     */
    @SuppressWarnings("unchecked")
    public boolean supports(Class aClass) {
-      return aClass.equals(FlightAddForManager.class);
+      return aClass.equals(AddFlightCommand.class);
    }
 
    /**
@@ -34,7 +34,7 @@ public class AddFlightValidator implements Validator {
     * @see org.springframework.validation.Validator#validate(java.lang.Object, org.springframework.validation.Errors)
     */
    public void validate(Object cmdObj, Errors err) {
-      final FlightAddForManager cmd = (FlightAddForManager) cmdObj;
+      final AddFlightCommand cmd = (AddFlightCommand) cmdObj;
       if (null == cmd) {
          err.reject("error.addFlight.command.nullPointer",
                "Null value as command object is not allowed.");
