@@ -211,7 +211,7 @@ function updateAirlineIcon() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select> <form:select path="departHourRange">
+        </form:select> Searching Range: <form:select path="departHourRange">
           <form:option value="1" label="1 hour" />
           <c:forEach var="hour" begin="2" end="23" step="1">
             <form:option value="${hour}" label="${hour} hours" />
@@ -262,7 +262,7 @@ function updateAirlineIcon() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select> <form:select path="arriveHourRange">
+        </form:select> Searching Range: <form:select path="arriveHourRange">
           <form:option value="1" label="1 hour" />
           <c:forEach var="hour" begin="2" end="23" step="1">
             <form:option value="${hour}" label="${hour} hours" />
