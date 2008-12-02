@@ -250,9 +250,7 @@ function initEvents() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select> Search range: &#177;<img height="10" width="10"
-          src="http://www.fileformat.info/info/unicode/char/00b1/plusminus_sign.png"><form:select
-          path="departHourRange">
+        </form:select> Search range: &#177;<form:select path="departHourRange">
           <form:option value="1" label="1 hour" />
           <c:forEach var="hour" begin="2" end="24" step="1">
             <form:option value="${hour}" label="${hour} hours" />
