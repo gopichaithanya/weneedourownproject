@@ -2,6 +2,7 @@ package springapp.manager;
 
 import static org.junit.Assert.*;
 
+import hibernate.Flight;
 import hibernate.manager.FlightManagerTest;
 
 import java.lang.reflect.Method;
@@ -23,6 +24,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import springapp.web.MockServletContextWebContextLoader;
 import springapp.web.SessionConstants;
@@ -88,20 +90,25 @@ public class AddFlightControllerTest extends AbstractJUnit4SpringContextTests {
 
    @Test
    public void testSubmitting() throws Exception {
-      final int flightNo = 911;
+      final int flightNo = 91;
       FlightManagerTest.deleteFlight(flightNo);
       cmd.setFlightNo(flightNo);
       cmd.setAirline("AA");
       cmd.setAirportByDepartureLocation("IAD");
       cmd.setAirportByArrivalLocation("JFK");
+      cmd.setBusinessPriceFormatted("1500.00");
+      cmd.setEconomyPriceFormatted("300.00");
+
       session.setAttribute(formSessionAttributeName, cmd);
       validator.validate(cmd, err);
       assertFalse(err.hasErrors());
 
       assertNull(session.getAttribute(SessionConstants.ADDED_NEW_FLIGHT));
       final ModelAndView mv = ctrl.handleRequest(request, response);
-      assertNotNull(mv);
-      assertNotNull(session.getAttribute(SessionConstants.ADDED_NEW_FLIGHT));
+      assertEquals("inventory.spring", ((RedirectView) mv.getView()).getUrl());
+      
+      final Flight newFlight = (Flight) session.getAttribute(SessionConstants.ADDED_NEW_FLIGHT);
+      assertEquals(flightNo, newFlight.getFlightNo());
       FlightManagerTest.deleteFlight(flightNo);
    }
 }

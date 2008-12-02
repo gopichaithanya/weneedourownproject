@@ -2,6 +2,7 @@ package hibernate;
 // Generated Oct 15, 2008 10:13:30 PM by Hibernate Tools 3.2.2.GA
 
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -306,6 +307,21 @@ public class Flight implements java.io.Serializable {
              / (1000 * 60 * 60)));
        return durationHours;
     }
+    
+    /**
+    * @param flightNoFormatted the flightNoFormatted to set
+    */
+   public void setFlightNoFormatted(String flightNoFormatted) {
+      setFlightNo(Integer.valueOf(flightNoFormatted));
+   }
+
+   /**
+    * @return the flightNoFormatted
+    */
+   public String getFlightNoFormatted() {
+      final DecimalFormat df = new DecimalFormat("000");
+      return df.format(getFlightNo());
+   }
 }
 
 

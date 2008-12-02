@@ -1,5 +1,6 @@
 package springapp.manager;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 /**
@@ -43,7 +44,6 @@ public class AddFlightCommand {
    private int returnYear;
    private int returnHour = -1;
 
-   
    public AddFlightCommand() {
       final Calendar calendar = Calendar.getInstance();
       final int curMonth = calendar.get(Calendar.MONTH) + 1; // 0-based.
@@ -103,6 +103,15 @@ public class AddFlightCommand {
       this.economyPrice = economyPrice;
    }
 
+   public String getEconomyPriceFormatted() {
+      final DecimalFormat df = new DecimalFormat("############0.00");
+      return df.format(getEconomyPrice());
+   }
+
+   public void setEconomyPriceFormatted(String economyPrice) {
+      setEconomyPrice(Float.valueOf(economyPrice));
+   }
+
    public int getBusinessSeats() {
       return businessSeats;
    }
@@ -117,6 +126,15 @@ public class AddFlightCommand {
 
    public void setBusinessPrice(float businessPrice) {
       this.businessPrice = businessPrice;
+   }
+
+   public String getBusinessPriceFormatted() {
+      final DecimalFormat df = new DecimalFormat("############0.00");
+      return df.format(getBusinessPrice());
+   }
+
+   public void setBusinessPriceFormatted(String businessPrice) {
+      setBusinessPrice(Float.valueOf(businessPrice));
    }
 
    public int getDepartMonth() {

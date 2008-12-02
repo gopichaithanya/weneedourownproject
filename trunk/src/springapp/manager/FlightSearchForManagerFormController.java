@@ -104,7 +104,7 @@ public class FlightSearchForManagerFormController extends SimpleFormController {
 
       final Map<Integer, Integer[]> seats = new HashMap<Integer, Integer[]>();
       for (final Flight f : flights) {
-         final int flightNo = Integer.valueOf(f.getFlightNo());
+         final int flightNo = f.getFlightNo();
          final Integer[] leftSeats = FlightManager.getLeftSeats(flightNo);
          seats.put(flightNo, leftSeats);
       }

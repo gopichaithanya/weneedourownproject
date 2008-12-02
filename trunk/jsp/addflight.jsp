@@ -197,7 +197,7 @@ function focusOn() {
 
     <tr>
       <th>Economy Price</th>
-      <td>$<form:input path="economyPrice" /> (dollar) <form:errors path="economyPrice"
+      <td>$<form:input path="economyPriceFormatted" /> (dollar) <form:errors path="economyPrice"
         cssClass="error" /></td>
     </tr>
 
@@ -214,7 +214,7 @@ function focusOn() {
 
     <tr>
       <th>Business Prices</th>
-      <td>$<form:input path="businessPrice" /> (dollar) <form:errors path="businessPrice"
+      <td>$<form:input path="businessPriceFormatted" /> (dollar) <form:errors path="businessPrice"
         cssClass="error" /></td>
     </tr>
 

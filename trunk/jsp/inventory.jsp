@@ -40,7 +40,7 @@
                   </c:otherwise>
                   </c:choose>
 		      			<td width="80"><c:out value="${flight.airline.code}"/>
-		      				<div><c:out value="${flight.flightNo}"/></div>
+		      				<div><c:out value="${flight.flightNoFormatted}"/></div>
 		      			<br/></td>
 		      			<td width="100"><c:out value="${flight.departureTime}"/><br/></td>
 		      			<td width="130"><c:out value="${flight.airportByDepartureLocation.city}"/>
