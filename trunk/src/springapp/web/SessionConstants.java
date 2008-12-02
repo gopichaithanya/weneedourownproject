@@ -44,4 +44,6 @@ public abstract class SessionConstants {
    public static final String BOOKED_ITINERARY = "credit.booked.itinerary";
 
    public static final String ADDED_NEW_FLIGHT = "addFlight.new.flight";
+
+   public static final String CANCELED_FLIGHT_NO = "canceled.flightNo";
 }

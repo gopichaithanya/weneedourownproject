@@ -78,3 +78,7 @@ td.noFlight {
 .newFlight {
 	background: yellow
 }
+
+.canceledFlight {
+	background: red
+}

@@ -19,7 +19,7 @@ public class CancelReservedFlightForCustomerController implements Controller {
     * parameter name for flight number.
     */
    public static final String PARAM_FLIGHT_NO = "flightNo";
-   
+
    /**
     * URL for bean
     */
@@ -38,19 +38,18 @@ public class CancelReservedFlightForCustomerController implements Controller {
       if (null == userName)
          return LoginController.redirectToLogin(session, URL);
 
-      final ModelAndView mv = new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
-      {
-         Integer flightNo = null;
-         try {
-            flightNo = Integer.valueOf(request.getParameter(PARAM_FLIGHT_NO));
-         } catch (NumberFormatException e) {
-         }
-
-         boolean bRst = false;
-         if (null != flightNo)
-            bRst = ItineraryManager.cancelReserved(userName, flightNo);
-         mv.addObject("result", bRst);
+      Integer flightNo = null;
+      try {
+         flightNo = Integer.valueOf(request.getParameter(PARAM_FLIGHT_NO));
+      } catch (NumberFormatException e) {
       }
+
+      boolean bRst = false;
+      if (null != flightNo)
+         bRst = ItineraryManager.cancelReserved(userName, flightNo);
+
+      final ModelAndView mv = new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
+      mv.addObject("result", bRst);
       return mv;
    }
 }

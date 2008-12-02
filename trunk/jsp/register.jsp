@@ -25,10 +25,15 @@ function checkPwdAndSubmit() {
   document.forms[0].password2.value = "";
   document.forms[0].password.focus();
 }
+
+function initEvent() {
+  document.getElementById('ccNo').setAttribute('maxlength', 16);
+  document.getElementById('expiration').setAttribute('maxlength', 4);
+}
 -->
 </script>
 </head>
-<body>
+<body onLoad="initEvent();">
 <jsp:include page="/WEB-INF/jsp/header1.jsp">
   <jsp:param name="title2" value="Home > Register" />
 </jsp:include>

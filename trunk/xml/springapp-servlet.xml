@@ -84,6 +84,7 @@
   <bean name="/cancelReservedFlightForCustomer.spring" class="springapp.web.CancelReservedFlightForCustomerController" />
   <bean name="/itineraryForCustomer.spring" class="springapp.web.ItineraryForCustomerController" />
   <bean name="/ticket.spring" class="springapp.web.TicketController"/>
+  <bean name="/cancelFlightForManager.spring" class="springapp.manager.CancelFlightForManagerController" />
   
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>

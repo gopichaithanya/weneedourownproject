@@ -149,13 +149,13 @@ public class FlightManager {
     * @param departDay - depart day
     * @param departHour - depart hour
     * @param departHourRange - the hour range
-    * @param departWeek TODO
+    * @param departWeek depart week
     * @param arriveYear arrive year
     * @param arriveMonth arrive month
     * @param arriveDay arrive day
     * @param arriveHour arrive hour
-    * @param arriveHourRange TODO
-    * @param arriveWeek TODO
+    * @param arriveHourRange arrive hour range
+    * @param arriveWeek arrive wekk
     * @return the list of flights
     */
    public static List<Flight> getFlightList(String airline, String departLoc, String arriveLoc,
@@ -167,6 +167,14 @@ public class FlightManager {
          departHourRange = defaultHourRange;
       if (null == arriveHourRange)
          arriveHourRange = defaultHourRange;
+      if (null == departHour) {
+         departHour = 12;
+         departHourRange = 12;
+      }
+      if (null == arriveHour) {
+         arriveHour = 12;
+         arriveHourRange = 12;
+      }
 
       Date[] departTimeRange = null;
       if (null == departWeek) {
@@ -190,12 +198,12 @@ public class FlightManager {
       if (null != arriveLoc)
          whereClause.add("ARRIVAL_LOCATION = ?");
       if (null != departTimeRange) {
-         whereClause.add("DEPARTURE_TIME > ?");
-         whereClause.add("DEPARTURE_TIME < ?");
+         whereClause.add("DEPARTURE_TIME >= ?");
+         whereClause.add("DEPARTURE_TIME <= ?");
       }
       if (null != arriveTimeRange) {
-         whereClause.add("ARRIVAL_TIME > ?");
-         whereClause.add("ARRIVAL_TIME < ?");
+         whereClause.add("ARRIVAL_TIME >= ?");
+         whereClause.add("ARRIVAL_TIME <= ?");
       }
 
       String query = "FROM Flight";
@@ -212,18 +220,20 @@ public class FlightManager {
       for (int i = 0; i < whereClause.size(); ++i) {
          if (whereClause.get(i).startsWith("AIRLINE_CODE"))
             q = q.setString(i, airline);
-         if (whereClause.get(i).startsWith("DEPARTURE_LOCATION"))
+         else if (whereClause.get(i).startsWith("DEPARTURE_LOCATION"))
             q = q.setString(i, departLoc);
-         if (whereClause.get(i).startsWith("ARRIVAL_LOCATION"))
+         else if (whereClause.get(i).startsWith("ARRIVAL_LOCATION"))
             q = q.setString(i, arriveLoc);
-         if (whereClause.get(i).startsWith("DEPARTURE_TIME >"))
+         else if (whereClause.get(i).startsWith("DEPARTURE_TIME >"))
             q = q.setTimestamp(i, departTimeRange[0]);
-         if (whereClause.get(i).startsWith("DEPARTURE_TIME <"))
+         else if (whereClause.get(i).startsWith("DEPARTURE_TIME <"))
             q = q.setTimestamp(i, departTimeRange[1]);
-         if (whereClause.get(i).startsWith("ARRIVAL_TIME >"))
+         else if (whereClause.get(i).startsWith("ARRIVAL_TIME >"))
             q = q.setTimestamp(i, arriveTimeRange[0]);
-         if (whereClause.get(i).startsWith("ARRIVAL_TIME <"))
+         else if (whereClause.get(i).startsWith("ARRIVAL_TIME <"))
             q = q.setTimestamp(i, arriveTimeRange[1]);
+         else
+            throw new UnsupportedOperationException();
       }
 
       final List<Flight> flights = q.list();
@@ -335,9 +345,9 @@ public class FlightManager {
          endCalendar.set(y, m, d, 23, 59, 0);
       } else {
          startCalendar.set(y, m, d, h, 0, 0);
-         startCalendar.add(Calendar.HOUR, -searchHour);
+         startCalendar.add(Calendar.HOUR_OF_DAY, -searchHour);
          endCalendar.set(y, m, d, h, 0, 0);
-         endCalendar.add(Calendar.HOUR, searchHour);
+         endCalendar.add(Calendar.HOUR_OF_DAY, searchHour);
       }
 
       final Date startDate = startCalendar.getTime();
@@ -393,7 +403,7 @@ public class FlightManager {
     * @param flightNo flight number
     * @return whether it succeed or not
     */
-   public boolean cancelFlight(final int flightNo) {
+   public static boolean cancelFlight(final int flightNo) {
       final Boolean[] bRst = new Boolean[] { false };
       HibernateUtil.doTransaction(new IHibernateTransaction() {
          public void transaction(Session session) {
@@ -406,7 +416,7 @@ public class FlightManager {
 
             f.setStatus(EFlightStatus.CANCELED.toString());
             bRst[0] = true;
-            
+
          }
       });
 

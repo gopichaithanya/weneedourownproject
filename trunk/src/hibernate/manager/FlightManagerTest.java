@@ -23,7 +23,7 @@ public class FlightManagerTest {
       final Flight f = FlightManager.getFlight(157);
       f.getAirline().getName();
    }
-   
+
    @Test
    public void testFlightNoFormatted() {
       final Flight f = new Flight(2);
@@ -40,8 +40,21 @@ public class FlightManagerTest {
 
    @Test
    public void testListFlightsAnytime() {
-      final List flightList = FlightManager.getFlightList(null, "DEN", "BWI", 2009, 1, 4, -99, -99,
-            null, null, null, null, null, null, null);
+      final Flight f = FlightManager.getFlight(154);
+      assertNotNull(f);
+      final Date departDate = f.getDepartureTime();
+      assertNotNull(departDate);
+
+      final Calendar c = Calendar.getInstance();
+      c.setTime(departDate);
+
+      final String departCode = f.getAirportByDepartureLocation().getCode();
+      final String arriveCode = f.getAirportByArrivalLocation().getCode();
+      final int departYear = c.get(Calendar.YEAR);
+      final int departMonth = c.get(Calendar.MONTH) + 1;
+      final int departDay = c.get(Calendar.DAY_OF_MONTH);
+      final List flightList = FlightManager.getFlightList(null, departCode, arriveCode, departYear,
+            departMonth, departDay, -99, -99, null, null, null, null, null, null, null);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }

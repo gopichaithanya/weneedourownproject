@@ -9,6 +9,14 @@
 <head>
 <title>Inventory Report</title>
 <link rel="stylesheet" type="text/css" href="css/proj4398.css" />
+<script language="JavaScript"><!--//
+
+function cancelFlight(flightNo) {
+  location.href="cancelFlightForManager.spring?flightNo=" + flightNo;
+}
+
+//->
+</script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/jsp/header1.jsp">
@@ -19,7 +27,7 @@
   <thead>
     <tr>
       <th width="80">Airline
-      <div>Flight #</div>
+      <div>(Flight #)</div>
       </th>
       <th width="100">Date</th>
       <th width="130">Departure /
@@ -41,9 +49,15 @@
           <tr align="center">
         </c:otherwise>
       </c:choose>
-      <td width="80"><c:out value="${flight.airline.code}" />
-      <div><c:out value="${flight.flightNoFormatted}" /></div>
-      <br />
+      <td width="80">
+      <table>
+        <tr>
+          <td><c:out value="${flight.airline.code}" /><br />
+          (#<c:out value="${flight.flightNoFormatted}" />)</td>
+          <td><img
+            src="http://www.expedia.com/pubspec/images/airlines/sm<c:out value="${flight.airline.code}"/>.gif" /></td>
+        </tr>
+      </table>
       </td>
       <td width="100"><c:out value="${flight.departureTime}" /><br />
       </td>
@@ -57,7 +71,22 @@
       </td>
       <td width="100"><c:out value="${flight.businessSeats}" /><br />
       </td>
-      <td><c:out value="${flight.status}" /></td>
+      <c:choose>
+        <c:when test="${!empty canceledFlightNo && flight.flightNo == canceledFlightNo}">
+          <td class="canceledFlight">
+        </c:when>
+        <c:otherwise>
+          <td>
+        </c:otherwise>
+      </c:choose>
+      <c:choose>
+        <c:when test="${fn:startsWith(flight.status, 'CANCELED')}">Canceled</c:when>
+        <c:otherwise>Available<br />
+          <input type="button" value="Cancel"
+            onClick="cancelFlight(<c:out value="${flight.flightNo}" />);" />
+        </c:otherwise>
+      </c:choose>
+      </td>
       </tr>
     </c:forEach>
     <br>

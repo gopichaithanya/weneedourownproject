@@ -12,6 +12,10 @@
 <script type="text/javascript" src="js/searchAirport.js"></script>
 <script language="JavaScript"><!--//
 
+function cancelFlight(flightNo) {
+  location.href="cancelFlightForManager.spring?flightNo=" + flightNo;
+}
+
 function submitSearch() {
   document.flightSearchForManagerForm.submit();
 }
@@ -402,7 +406,8 @@ function focusOn() {
             <td><c:choose>
               <c:when test="${fn:startsWith(flight.status, 'CANCELED')}">Canceled</c:when>
               <c:otherwise>
-                <input type="button" value="Cancel" />
+                <input type="button" value="Cancel"
+                  onClick="cancelFlight(<c:out value="${flight.flightNo}"/>);" />
               </c:otherwise>
             </c:choose></td>
           </tr>
