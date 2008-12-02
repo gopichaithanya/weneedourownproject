@@ -27,91 +27,98 @@ function updateAirlineIcon() {
     if(code.length > 0) {
       var url = "http://www.expedia.com/pubspec/images/airlines/sm" + code + ".gif";
       icon.setAttribute('src', url);
-    } else
+    } else {
         icon.removeAttribute('src');
-  }
+      }
+}
 
-  function onlyNumbers(e) {
-    var keynum;
-    var keychar;
-    var numcheck;
+function onlyNumbers(e) {
+  var keynum;
+  var keychar;
+  var numcheck;
 
-    if(window.event) // IE
-      keynum = e.keyCode;
-    else if(e.which) // Netscape/Firefox/Opera
-      keynum = e.which;
+  if(window.event) // IE
+    keynum = e.keyCode;
+  else if(e.which) // Netscape/Firefox/Opera
+    keynum = e.which;
 
-    keychar = String.fromCharCode(keynum);
-    numcheck = /\d/;
-    return numcheck.test(keychar);
-  }
+  keychar = String.fromCharCode(keynum);
+  numcheck = /\d/;
+  return numcheck.test(keychar);
+}
 
-  function checkFlightNo(e) {
-    if(false == onlyNumbers(e)) e.stopPropagation();
-  }
+function checkFlightNo(e) {
+  if(false == onlyNumbers(e)) e.stopPropagation();
+}
 
-  function disableArriveDate(e) {
-    var val = document.flightSearchForManagerForm.optArriveDate.checked;
-    var f = document.flightSearchForManagerForm;
-    var y = f.arriveYear;
-    var m = f.arriveMonth;
-    var d = f.arriveDay;
-    var h = f.arriveHour;
-    var r = f.arriveHourRange;
+function disableArriveDate(e) {
+  var val = document.flightSearchForManagerForm.optArriveDate.checked;
+  var f = document.flightSearchForManagerForm;
+  var y = f.arriveYear;
+  var m = f.arriveMonth;
+  var d = f.arriveDay;
+  var h = f.arriveHour;
+  var r = f.arriveHourRange;
+  var c = document.getElementById('returnCalendar');
 
-    if(val) {
-      y.removeAttribute('disabled');
-      m.removeAttribute('disabled');
-      d.removeAttribute('disabled');
-      h.removeAttribute('disabled');
-      r.removeAttribute('disabled');
-    } else {
-      y.setAttribute('disabled',true);
-      m.setAttribute('disabled',true);
-      d.setAttribute('disabled',true);
-      h.setAttribute('disabled',true);
-      r.setAttribute('disabled',true);
-    }    
-  }
+  if(val) {
+    y.removeAttribute('disabled');
+    m.removeAttribute('disabled');
+    d.removeAttribute('disabled');
+    h.removeAttribute('disabled');
+    r.removeAttribute('disabled');
+    c.removeAttribute('disabled');
+  } else {
+    y.setAttribute('disabled',true);
+    m.setAttribute('disabled',true);
+    d.setAttribute('disabled',true);
+    h.setAttribute('disabled',true);
+    r.setAttribute('disabled',true);
+    c.setAttribute('disabled',true);
+  }    
+}
 
-  function disableDepartDate(e) {
-    var val = document.flightSearchForManagerForm.optDepartDate.checked;
-    var f = document.flightSearchForManagerForm;
-    var y = f.departYear;
-    var m = f.departMonth;
-    var d = f.departDay;
-    var h = f.departHour;
-    var r = f.departHourRange;
+function disableDepartDate(e) {
+  var val = document.flightSearchForManagerForm.optDepartDate.checked;
+  var f = document.flightSearchForManagerForm;
+  var y = f.departYear;
+  var m = f.departMonth;
+  var d = f.departDay;
+  var h = f.departHour;
+  var r = f.departHourRange;
+  var c = document.getElementById('departCalendar');
 
-    if(val) {
-      y.removeAttribute('disabled');
-      m.removeAttribute('disabled');
-      d.removeAttribute('disabled');
-      h.removeAttribute('disabled');
-      r.removeAttribute('disabled');
-    } else {
-      y.setAttribute('disabled',true);
-      m.setAttribute('disabled',true);
-      d.setAttribute('disabled',true);
-      h.setAttribute('disabled',true);
-      r.setAttribute('disabled',true);
-    }    
-  }
-  
-  function initEvent() {
-    document.getElementById('flightNo').addEventListener( "keydown", checkFlightNo, false );
-    document.getElementById('flightNo').setAttribute('maxlength', 3);
-    document.getElementById('airline').addEventListener( "change", updateAirlineIcon, false );
-    updateAirlineIcon();
-    document.flightSearchForManagerForm.optArriveDate.addEventListener( "change", disableArriveDate, false);
-    document.flightSearchForManagerForm.optDepartDate.addEventListener( "change", disableDepartDate, false);
-    disableArriveDate();
-    disableDepartDate();
-  }
+  if(val) {
+    y.removeAttribute('disabled');
+    m.removeAttribute('disabled');
+    d.removeAttribute('disabled');
+    h.removeAttribute('disabled');
+    r.removeAttribute('disabled');
+    c.removeAttribute('disabled');
+  } else {
+    y.setAttribute('disabled',true);
+    m.setAttribute('disabled',true);
+    d.setAttribute('disabled',true);
+    h.setAttribute('disabled',true);
+    r.setAttribute('disabled',true);
+    c.setAttribute('disabled',true);
+  }    
+}
 
-  function focusOn() {
-    document.getElementById('flightNo').focus();
-  }
+function initEvent() {
+  document.getElementById('flightNo').addEventListener( "keydown", checkFlightNo, false );
+  document.getElementById('flightNo').setAttribute('maxlength', 3);
+  document.getElementById('airline').addEventListener( "change", updateAirlineIcon, false );
+  updateAirlineIcon();
+  document.flightSearchForManagerForm.optArriveDate.addEventListener( "change", disableArriveDate, false);
+  document.flightSearchForManagerForm.optDepartDate.addEventListener( "change", disableDepartDate, false);
+  disableArriveDate();
+  disableDepartDate();
+}
+
+function focusOn() {
+  document.getElementById('flightNo').focus();
+}
 
 --></script>
 </head>
@@ -195,7 +202,8 @@ function updateAirlineIcon() {
           </c:forEach>
         </form:select> <input type="button"
           onClick="displayDatePicker('departYear','departMonth','departDay', 'departMonth');"
-          value="Calendar" /> <form:checkbox path="optDepartDate" /> <label for="optDepartDate1">Enable</label></div>
+          value="Calendar" id="departCalendar" /> <form:checkbox path="optDepartDate" /> <label
+          for="optDepartDate1">Enable</label></div>
         <form:errors path="departMonth" cssClass="error" /> <form:errors path="departDay"
           cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
       </tr>
@@ -246,7 +254,8 @@ function updateAirlineIcon() {
           </c:forEach>
         </form:select> <input type="button"
           onClick="displayDatePicker('arriveYear','arriveMonth','arriveDay', 'arriveMonth');"
-          value="Calendar" /> <form:checkbox path="optArriveDate" /> <label for="optArriveDate1">Enable</label></div>
+          value="Calendar" id="returnCalendar" /> <form:checkbox path="optArriveDate" /> <label
+          for="optArriveDate1">Enable</label></div>
         <form:errors path="arriveMonth" cssClass="error" /> <form:errors path="arriveDay"
           cssClass="error" /> <form:errors path="arriveYear" cssClass="error" /></td>
       </tr>

@@ -86,25 +86,72 @@ function submitWithReturnFlightNo(no) {
   document.flightSearchForCustomerForm.submit();
 }
 
-function clickOnTripType(tripType) {
+function updateTripType() {
   var m = returnObjById('returnMonth');
   var d = returnObjById('returnDay');
   var y = returnObjById('returnYear');
   var h = returnObjById('returnHour');
-  
-  if( tripType == "ONEWAY_TRIP" )
-    m.disabled = d.disabled = y.disabled = h.disabled = "true";
+  var c = returnObjById('returnCalendar');
+  var w = returnObjById('returnWeek');
+  var roundTrip = returnObjById('ROUND_TRIP');
+  var oneWayTrip = returnObjById('ONEWAY_TRIP');
+
+  if (oneWayTrip.checked)
+    m.disabled = d.disabled = y.disabled = h.disabled = c.disabled = w.disabled = "true";
   else {
-      m.removeAttribute('disabled');
-      d.removeAttribute('disabled');
-      y.removeAttribute('disabled');
-      h.removeAttribute('disabled');
+    m.removeAttribute('disabled');
+    d.removeAttribute('disabled');
+    y.removeAttribute('disabled');
+    h.removeAttribute('disabled');
+    c.removeAttribute('disabled');
+    w.removeAttribute('disabled');
+
+    var wOs = w.options;
+    wOs.selectedIndex = 0;
   }
 }
 
+function disableDates(idYear, idMonth, idDay, idWeek, idCalendar) {
+  var dy = returnObjById (idYear);
+  var dm = returnObjById (idMonth);
+  var dd = returnObjById (idDay);
+  var dw = returnObjById (idWeek);
+  var dc = returnObjById (idCalendar);
+
+  var dwOs = dw.options;
+  var dwIdx = dwOs.selectedIndex;
+  var dwVal = dwOs[dwIdx].value;
+
+  if ("" == dwVal) {
+    dy.removeAttribute('disabled');
+    dm.removeAttribute('disabled');
+    dd.removeAttribute('disabled');
+    dc.removeAttribute('disabled');
+  } else {
+    dy.setAttribute('disabled', true);
+    dm.setAttribute('disabled', true);
+    dd.setAttribute('disabled', true);
+    dc.setAttribute('disabled', true);
+  } 
+}
+
+function disableDepartDate() {
+ disableDates('departYear', 'departMonth', 'departDay', 'departWeek', 'departCalendar' ); 
+}
+
+function disableReturnDate() {
+ disableDates('returnYear', 'returnMonth', 'returnDay', 'returnWeek', 'returnCalendar' ); 
+}
+
 function initEvents() {
-  returnObjById('ROUND_TRIP').addEventListener( 'click', function() { clickOnTripType('ROUND_TRIP'); }, false );
-  returnObjById('ONEWAY_TRIP').addEventListener( 'click', function() { clickOnTripType('ONEWAY_TRIP'); }, false );
+  returnObjById('departWeek').addEventListener( 'change', disableDepartDate, false );
+  returnObjById('returnWeek').addEventListener( 'change', disableReturnDate, false );
+  disableDepartDate();
+  disableReturnDate();
+
+  returnObjById('ROUND_TRIP').addEventListener( 'click', updateTripType, false );
+  returnObjById('ONEWAY_TRIP').addEventListener( 'click', updateTripType, false );
+  updateTripType();
 }
 
 --></script>
@@ -154,7 +201,12 @@ function initEvents() {
       <tr>
         <th>Departing Date</th>
         <td>
-        <div><form:select path="departMonth">
+        <div><form:select path="departWeek">
+          <form:option value="">Any week</form:option>
+          <c:forEach items="${weeks}" var="week">
+            <form:option value="${week}">${week.description}</form:option>
+          </c:forEach>
+        </form:select> or <form:select path="departMonth">
           <form:option value="1" label="Jan" />
           <form:option value="2" label="Feb" />
           <form:option value="3" label="Mar" />
@@ -177,20 +229,29 @@ function initEvents() {
           </c:forEach>
         </form:select> <input type="button"
           onClick="displayDatePicker('departYear','departMonth','departDay', 'departMonth');"
-          value="Calendar" /></div>
-        <form:errors path="departMonth" cssClass="error" /> <form:errors path="departDay"
-          cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
+          value="Calendar" id="departCalendar" /></div>
+
+        <div><form:errors path="departMonth" cssClass="error" /> <form:errors
+          path="departDay" cssClass="error" /> <form:errors path="departYear" cssClass="error" />
+        <form:errors path="departWeek" cssClass="error" /></div>
+        </td>
       </tr>
+
       <tr>
         <th>Departing Time</th>
         <td>
         <div><form:select path="departHour">
-          <form:option value="-1" label="Anytime" />
+          <form:option value="" label="Anytime" />
           <c:forEach var="hour" begin="0" end="11" step="1">
             <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
           </c:forEach>
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
+          </c:forEach>
+        </form:select> <form:select path="departHourRange">
+          <form:option value="1" label="1 hour" />
+          <c:forEach var="hour" begin="2" end="24" step="1">
+            <form:option value="${hour}" label="${hour} hours" />
           </c:forEach>
         </form:select></div>
         </td>
@@ -215,7 +276,12 @@ function initEvents() {
       <tr>
         <th>Returning Date</th>
         <td>
-        <div><form:select path="returnMonth">
+        <div><form:select path="returnWeek">
+          <form:option value="">Any week</form:option>
+          <c:forEach items="${weeks}" var="week">
+            <form:option value="${week}">${week.description}</form:option>
+          </c:forEach>
+        </form:select> or <form:select path="returnMonth">
           <form:option value="1" label="Jan" />
           <form:option value="2" label="Feb" />
           <form:option value="3" label="Mar" />
@@ -238,20 +304,29 @@ function initEvents() {
           </c:forEach>
         </form:select> <input type="button"
           onClick="displayDatePicker('returnYear','returnMonth','returnDay', 'returnMonth');"
-          value="Calendar" /></div>
-        <form:errors path="returnMonth" cssClass="error" /> <form:errors path="returnDay"
-          cssClass="error" /> <form:errors path="returnYear" cssClass="error" /></td>
+          value="Calendar" id="returnCalendar" /></div>
+
+        <div><form:errors path="returnMonth" cssClass="error" /> <form:errors
+          path="returnDay" cssClass="error" /> <form:errors path="returnYear" cssClass="error" />
+        <form:errors path="returnWeek" cssClass="error" /></div>
+        </td>
       </tr>
+
       <tr>
         <th>Returning Time</th>
         <td>
         <div><form:select path="returnHour">
-          <form:option value="-1" label="Anytime" />
+          <form:option value="" label="Anytime" />
           <c:forEach var="hour" begin="0" end="11" step="1">
             <form:option value="${hour}" label="${((hour + 11) % 12) +1} AM" />
           </c:forEach>
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
+          </c:forEach>
+        </form:select> <form:select path="returnHourRange">
+          <form:option value="1" label="1 hour" />
+          <c:forEach var="hour" begin="2" end="24" step="1">
+            <form:option value="${hour}" label="${hour} hours" />
           </c:forEach>
         </form:select></div>
         </td>
