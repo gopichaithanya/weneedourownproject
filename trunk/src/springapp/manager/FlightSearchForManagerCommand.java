@@ -1,5 +1,7 @@
 package springapp.manager;
 
+import hibernate.manager.FlightManager.EWeek;
+
 import java.util.Calendar;
 
 /**
@@ -19,6 +21,7 @@ public class FlightSearchForManagerCommand {
    private Integer departDay;
    private Integer departHour;
    private Integer departHourRange;
+   private EWeek departWeek;
 
    private Boolean optArriveDate;
    private Integer arriveYear;
@@ -26,6 +29,7 @@ public class FlightSearchForManagerCommand {
    private Integer arriveDay;
    private Integer arriveHour;
    private Integer arriveHourRange;
+   private EWeek arriveWeek;
 
    /**
     * Constructor for FlightSearchForManager
@@ -263,5 +267,33 @@ public class FlightSearchForManagerCommand {
     */
    public Integer getArriveHourRange() {
       return arriveHourRange;
+   }
+
+   /**
+    * @param arriveWeek the arriveWeek to set
+    */
+   public void setArriveWeek(EWeek arriveWeek) {
+      this.arriveWeek = arriveWeek;
+   }
+
+   /**
+    * @return the arriveWeek
+    */
+   public EWeek getArriveWeek() {
+      return arriveWeek;
+   }
+
+   /**
+    * @param departWeek the departWeek to set
+    */
+   public void setDepartWeek(EWeek departWeek) {
+      this.departWeek = departWeek;
+   }
+
+   /**
+    * @return the departWeek
+    */
+   public EWeek getDepartWeek() {
+      return departWeek;
    }
 }

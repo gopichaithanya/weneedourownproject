@@ -116,8 +116,8 @@ function focusOn() {
         </c:forEach>
       </form:select> <input type="button"
         onClick="displayDatePicker('departYear','departMonth','departDay', 'departMonth');"
-        value="Calendar" /> <form:errors path="departMonth" cssClass="error" /> <form:errors path="departDay"
-        cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
+        value="Calendar" /> <form:errors path="departMonth" cssClass="error" /> <form:errors
+        path="departDay" cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -129,7 +129,13 @@ function focusOn() {
         <c:forEach var="hour" begin="12" end="23" step="1">
           <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
         </c:forEach>
-      </form:select> <form:errors path="departHour" cssClass="error" /></td>
+      </form:select> : <form:select path="departMin">
+        <form:option value="0" label="00" />
+        <c:forEach var="min" begin="10" end="50" step="10">
+          <form:option value="${min}" label="${min}" />
+        </c:forEach>
+      </form:select> min <form:errors path="departHour" cssClass="error" /> <form:errors path="departMin"
+        cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -168,8 +174,8 @@ function focusOn() {
         </c:forEach>
       </form:select> <input type="button"
         onClick="displayDatePicker('returnYear','returnMonth','returnDay', 'returnMonth');"
-        value="Calendar" /> <form:errors path="returnMonth" cssClass="error" /> <form:errors path="returnDay"
-        cssClass="error" /> <form:errors path="returnYear" cssClass="error" /></td>
+        value="Calendar" /> <form:errors path="returnMonth" cssClass="error" /> <form:errors
+        path="returnDay" cssClass="error" /> <form:errors path="returnYear" cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -181,7 +187,13 @@ function focusOn() {
         <c:forEach var="hour" begin="12" end="23" step="1">
           <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
         </c:forEach>
-      </form:select> <form:errors path="returnHour" cssClass="error" /></td>
+      </form:select> : <form:select path="returnMin">
+        <form:option value="0" label="00" />
+        <c:forEach var="min" begin="10" end="50" step="10">
+          <form:option value="${min}" label="${min}" />
+        </c:forEach>
+      </form:select> min <form:errors path="returnHour" cssClass="error" /> <form:errors path="returnMin"
+        cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -197,8 +209,8 @@ function focusOn() {
 
     <tr>
       <th>Economy Price</th>
-      <td>$<form:input path="economyPriceFormatted" /> (dollar) <form:errors path="economyPrice"
-        cssClass="error" /></td>
+      <td>$<form:input path="economyPriceFormatted" /> (dollar) <form:errors
+        path="economyPrice" cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -214,8 +226,8 @@ function focusOn() {
 
     <tr>
       <th>Business Prices</th>
-      <td>$<form:input path="businessPriceFormatted" /> (dollar) <form:errors path="businessPrice"
-        cssClass="error" /></td>
+      <td>$<form:input path="businessPriceFormatted" /> (dollar) <form:errors
+        path="businessPrice" cssClass="error" /></td>
     </tr>
 
     <tr>

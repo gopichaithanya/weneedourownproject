@@ -51,35 +51,7 @@ function checkFlightNo(e) {
   if(false == onlyNumbers(e)) e.stopPropagation();
 }
 
-function disableArriveDate(e) {
-  var val = document.flightSearchForManagerForm.optArriveDate.checked;
-  var f = document.flightSearchForManagerForm;
-  var y = f.arriveYear;
-  var m = f.arriveMonth;
-  var d = f.arriveDay;
-  var h = f.arriveHour;
-  var r = f.arriveHourRange;
-  var c = document.getElementById('returnCalendar');
-
-  if(val) {
-    y.removeAttribute('disabled');
-    m.removeAttribute('disabled');
-    d.removeAttribute('disabled');
-    h.removeAttribute('disabled');
-    r.removeAttribute('disabled');
-    c.removeAttribute('disabled');
-  } else {
-    y.setAttribute('disabled',true);
-    m.setAttribute('disabled',true);
-    d.setAttribute('disabled',true);
-    h.setAttribute('disabled',true);
-    r.setAttribute('disabled',true);
-    c.setAttribute('disabled',true);
-  }    
-}
-
 function disableDepartDate(e) {
-  var val = document.flightSearchForManagerForm.optDepartDate.checked;
   var f = document.flightSearchForManagerForm;
   var y = f.departYear;
   var m = f.departMonth;
@@ -87,21 +59,73 @@ function disableDepartDate(e) {
   var h = f.departHour;
   var r = f.departHourRange;
   var c = document.getElementById('departCalendar');
+  var w = f.departWeek;
+  var anyday = document.flightSearchForManagerForm.optDepartDate.checked;
 
-  if(val) {
-    y.removeAttribute('disabled');
-    m.removeAttribute('disabled');
-    d.removeAttribute('disabled');
-    h.removeAttribute('disabled');
-    r.removeAttribute('disabled');
-    c.removeAttribute('disabled');
-  } else {
+  if(anyday) {
     y.setAttribute('disabled',true);
     m.setAttribute('disabled',true);
     d.setAttribute('disabled',true);
     h.setAttribute('disabled',true);
     r.setAttribute('disabled',true);
     c.setAttribute('disabled',true);
+    w.setAttribute('disabled',true);
+  } else {
+    w.removeAttribute('disabled');
+    var wOs = w.options;
+    var wIdx = wOs.selectedIndex;
+    var anyweek = (0 == wIdx);
+    y.removeAttribute('disabled');
+    m.removeAttribute('disabled');
+    d.removeAttribute('disabled');
+    h.removeAttribute('disabled');
+    r.removeAttribute('disabled');
+    c.removeAttribute('disabled');
+    if(!anyweek) {
+      y.setAttribute('disabled',true);
+      m.setAttribute('disabled',true);
+      d.setAttribute('disabled',true);
+      c.setAttribute('disabled',true);
+    }
+  }    
+}
+
+function disableArriveDate(e) {
+  var f = document.flightSearchForManagerForm;
+  var y = f.arriveYear;
+  var m = f.arriveMonth;
+  var d = f.arriveDay;
+  var h = f.arriveHour;
+  var r = f.arriveHourRange;
+  var c = document.getElementById('returnCalendar');
+  var w = f.arriveWeek;
+  var anyday = document.flightSearchForManagerForm.optArriveDate.checked;
+
+  if(anyday) {
+    y.setAttribute('disabled',true);
+    m.setAttribute('disabled',true);
+    d.setAttribute('disabled',true);
+    h.setAttribute('disabled',true);
+    r.setAttribute('disabled',true);
+    c.setAttribute('disabled',true);
+    w.setAttribute('disabled',true);
+  } else {
+    w.removeAttribute('disabled');
+    var wOs = w.options;
+    var wIdx = wOs.selectedIndex;
+    var anyweek = (0 == wIdx);
+    y.removeAttribute('disabled');
+    m.removeAttribute('disabled');
+    d.removeAttribute('disabled');
+    h.removeAttribute('disabled');
+    r.removeAttribute('disabled');
+    c.removeAttribute('disabled');
+    if(!anyweek) {
+      y.setAttribute('disabled',true);
+      m.setAttribute('disabled',true);
+      d.setAttribute('disabled',true);
+      c.setAttribute('disabled',true);
+    }
   }    
 }
 
@@ -110,8 +134,11 @@ function initEvent() {
   document.getElementById('flightNo').setAttribute('maxlength', 3);
   document.getElementById('airline').addEventListener( "change", updateAirlineIcon, false );
   updateAirlineIcon();
-  document.flightSearchForManagerForm.optArriveDate.addEventListener( "change", disableArriveDate, false);
+  
   document.flightSearchForManagerForm.optDepartDate.addEventListener( "change", disableDepartDate, false);
+  document.flightSearchForManagerForm.optArriveDate.addEventListener( "change", disableArriveDate, false);
+  document.getElementById('departWeek').addEventListener( "change", disableDepartDate, false);
+  document.getElementById('arriveWeek').addEventListener( "change", disableArriveDate, false);
   disableArriveDate();
   disableDepartDate();
 }
@@ -179,7 +206,12 @@ function focusOn() {
       <tr>
         <th>Departing Date</th>
         <td>
-        <div><form:select path="departMonth">
+        <div><form:select path="departWeek">
+          <form:option value="">Any week</form:option>
+          <c:forEach items="${weeks}" var="week">
+            <form:option value="${week}">${week.description}</form:option>
+          </c:forEach>
+        </form:select> <form:select path="departMonth">
           <form:option value="1" label="Jan" />
           <form:option value="2" label="Feb" />
           <form:option value="3" label="Mar" />
@@ -203,9 +235,12 @@ function focusOn() {
         </form:select> <input type="button"
           onClick="displayDatePicker('departYear','departMonth','departDay', 'departMonth');"
           value="Calendar" id="departCalendar" /> <form:checkbox path="optDepartDate" /> <label
-          for="optDepartDate1">Enable</label></div>
-        <form:errors path="departMonth" cssClass="error" /> <form:errors path="departDay"
-          cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
+          for="optDepartDate1">Any day</label></div>
+
+        <div><form:errors path="departMonth" cssClass="error" /> <form:errors
+          path="departDay" cssClass="error" /> <form:errors path="departYear" cssClass="error" />
+        <form:errors path="departWeek" cssClass="error" /></div>
+        </td>
       </tr>
 
       <tr>
@@ -219,19 +254,24 @@ function focusOn() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select> Searching Range: <form:select path="departHourRange">
+        </form:select> &#177;<form:select path="departHourRange">
           <form:option value="1" label="1 hour" />
           <c:forEach var="hour" begin="2" end="23" step="1">
             <form:option value="${hour}" label="${hour} hours" />
           </c:forEach>
-        </form:select></div>
+        </form:select> (Search range)</div>
         </td>
       </tr>
 
       <tr>
         <th>Arriving Date</th>
         <td>
-        <div><form:select path="arriveMonth">
+        <div><form:select path="arriveWeek">
+          <form:option value="">Any week</form:option>
+          <c:forEach items="${weeks}" var="week">
+            <form:option value="${week}">${week.description}</form:option>
+          </c:forEach>
+        </form:select> <form:select path="arriveMonth">
           <form:option value="1" label="Jan" />
           <form:option value="2" label="Feb" />
           <form:option value="3" label="Mar" />
@@ -255,9 +295,12 @@ function focusOn() {
         </form:select> <input type="button"
           onClick="displayDatePicker('arriveYear','arriveMonth','arriveDay', 'arriveMonth');"
           value="Calendar" id="returnCalendar" /> <form:checkbox path="optArriveDate" /> <label
-          for="optArriveDate1">Enable</label></div>
-        <form:errors path="arriveMonth" cssClass="error" /> <form:errors path="arriveDay"
-          cssClass="error" /> <form:errors path="arriveYear" cssClass="error" /></td>
+          for="optArriveDate1">Any day</label></div>
+
+        <div><form:errors path="arriveMonth" cssClass="error" /> <form:errors
+          path="arriveDay" cssClass="error" /> <form:errors path="arriveYear" cssClass="error" />
+        <form:errors path="arriveWeek" cssClass="error" /></div>
+        </td>
       </tr>
 
       <tr>
@@ -271,12 +314,12 @@ function focusOn() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select> Searching Range: <form:select path="arriveHourRange">
+        </form:select> &#177;<form:select path="arriveHourRange">
           <form:option value="1" label="1 hour" />
           <c:forEach var="hour" begin="2" end="23" step="1">
             <form:option value="${hour}" label="${hour} hours" />
           </c:forEach>
-        </form:select></div>
+        </form:select> (Search range)</div>
         </td>
       </tr>
 

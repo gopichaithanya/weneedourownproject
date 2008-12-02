@@ -38,11 +38,13 @@ public class AddFlightCommand {
    private int departDay;
    private int departYear;
    private int departHour = -1;
+   private Integer departMin;
 
    private int returnMonth;
    private int returnDay;
    private int returnYear;
    private int returnHour = -1;
+   private Integer returnMin;
 
    public AddFlightCommand() {
       final Calendar calendar = Calendar.getInstance();
@@ -199,5 +201,33 @@ public class AddFlightCommand {
 
    public void setReturnHour(int returnHour) {
       this.returnHour = returnHour;
+   }
+
+   /**
+    * @param returnMin the returnMin to set
+    */
+   public void setReturnMin(Integer returnMin) {
+      this.returnMin = returnMin;
+   }
+
+   /**
+    * @return the returnMin
+    */
+   public Integer getReturnMin() {
+      return returnMin;
+   }
+
+   /**
+    * @param departMin the departMin to set
+    */
+   public void setDepartMin(Integer departMin) {
+      this.departMin = departMin;
+   }
+
+   /**
+    * @return the departMin
+    */
+   public Integer getDepartMin() {
+      return departMin;
    }
 }
