@@ -28,7 +28,8 @@
     <web-resource-collection>
       <web-resource-name>HTMLManger and Manager command</web-resource-name>
       <url-pattern>/addflight.spring</url-pattern>
-      <url-pattern>/enterCreditCardInfo.spring</url-pattern>
+      <url-pattern>/flightSearchForManagerForm.spring</url-pattern>
+      <!--url-pattern>/enterCreditCardInfo.spring</url-pattern-->
       <url-pattern>/inventory.spring</url-pattern>
     </web-resource-collection>
     <auth-constraint>

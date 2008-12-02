@@ -4,6 +4,7 @@ import hibernate.Flight;
 import hibernate.manager.AirlineManager;
 import hibernate.manager.AirportManager;
 import hibernate.manager.FlightManager;
+import hibernate.manager.FlightManager.EWeek;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class FlightSearchForManagerFormController extends SimpleFormController {
       final ModelAndView mv = super.handleRequest(req, resp);
       mv.addObject("airlines", airlines);
       mv.addObject("airports", airports);
+      mv.addObject("weeks", EWeek.values());
       return mv;
    }
 
@@ -55,8 +57,8 @@ public class FlightSearchForManagerFormController extends SimpleFormController {
       final FlightSearchForManagerCommand cmd = (FlightSearchForManagerCommand) super
             .formBackingObject(request);
 
-      cmd.setOptArriveDate(false);
-      cmd.setOptDepartDate(false);
+      cmd.setOptArriveDate(true);
+      cmd.setOptDepartDate(true);
       return cmd;
    }
 
@@ -82,24 +84,26 @@ public class FlightSearchForManagerFormController extends SimpleFormController {
 
          final String dlTmp = cmd.getDepartLocation();
          final String dl = (null == dlTmp || 0 == dlTmp.length() ? null : dlTmp);
-         final Boolean dOpt = cmd.getOptDepartDate();
-         final Integer dy = (dOpt ? cmd.getDepartYear() : null);
-         final Integer dm = (dOpt ? cmd.getDepartMonth() : null);
-         final Integer dd = (dOpt ? cmd.getDepartDay() : null);
-         final Integer dh = (dOpt ? cmd.getDepartHour() : null);
-         final Integer dr = (dOpt ? cmd.getDepartHourRange() : null);
+         final Boolean dAnyday = cmd.getOptDepartDate();
+         final EWeek dw = cmd.getDepartWeek();
+         final Integer dy = (dAnyday || null != dw ? null : cmd.getDepartYear());
+         final Integer dm = (dAnyday || null != dw ? null : cmd.getDepartMonth());
+         final Integer dd = (dAnyday || null != dw ? null : cmd.getDepartDay());
+         final Integer dh = (dAnyday ? null : cmd.getDepartHour());
+         final Integer dr = (dAnyday ? null : cmd.getDepartHourRange());
 
          final String alTmp = cmd.getArrivalLocation();
          final String al = (null == alTmp || 0 == alTmp.length() ? null : alTmp);
-         final Boolean aOpt = cmd.getOptArriveDate();
-         final Integer ay = (aOpt ? cmd.getArriveYear() : null);
-         final Integer am = (aOpt ? cmd.getArriveMonth() : null);
-         final Integer ad = (aOpt ? cmd.getArriveDay() : null);
-         final Integer ah = (aOpt ? cmd.getArriveHour() : null);
-         final Integer ar = (dOpt ? cmd.getArriveHourRange() : null);
+         final Boolean aAnyday = cmd.getOptArriveDate();
+         final EWeek aw = cmd.getArriveWeek();
+         final Integer ay = (aAnyday || null != aw ? null : cmd.getArriveYear());
+         final Integer am = (aAnyday || null != aw ? null : cmd.getArriveMonth());
+         final Integer ad = (aAnyday || null != aw ? null : cmd.getArriveDay());
+         final Integer ah = (aAnyday ? null : cmd.getArriveHour());
+         final Integer ar = (aAnyday ? null : cmd.getArriveHourRange());
 
-         flights.addAll(FlightManager.getFlightList(airline, dl, al, dy, dm, dd, dh, dr, null, ay,
-               am, ad, ah, ar, null));
+         flights.addAll(FlightManager.getFlightList(airline, dl, al, dy, dm, dd, dh, dr, dw, ay,
+               am, ad, ah, ar, aw));
       }
 
       final Map<Integer, Integer[]> seats = new HashMap<Integer, Integer[]>();

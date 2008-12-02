@@ -208,7 +208,7 @@ function initEvents() {
           <c:forEach items="${weeks}" var="week">
             <form:option value="${week}">${week.description}</form:option>
           </c:forEach>
-        </form:select> or <form:select path="departMonth">
+        </form:select> <form:select path="departMonth">
           <form:option value="1" label="Jan" />
           <form:option value="2" label="Feb" />
           <form:option value="3" label="Mar" />
@@ -250,12 +250,12 @@ function initEvents() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select> Search range: &#177;<form:select path="departHourRange">
+        </form:select> &#177;<form:select path="departHourRange">
           <form:option value="1" label="1 hour" />
           <c:forEach var="hour" begin="2" end="24" step="1">
             <form:option value="${hour}" label="${hour} hours" />
           </c:forEach>
-        </form:select></div>
+        </form:select> (Search range)</div>
         </td>
       </tr>
 
@@ -283,7 +283,7 @@ function initEvents() {
           <c:forEach items="${weeks}" var="week">
             <form:option value="${week}">${week.description}</form:option>
           </c:forEach>
-        </form:select> or <form:select path="returnMonth">
+        </form:select> <form:select path="returnMonth">
           <form:option value="1" label="Jan" />
           <form:option value="2" label="Feb" />
           <form:option value="3" label="Mar" />
@@ -325,12 +325,12 @@ function initEvents() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select> Search range: &#177;<form:select path="returnHourRange">
+        </form:select> &#177;<form:select path="returnHourRange">
           <form:option value="1" label="1 hour" />
           <c:forEach var="hour" begin="2" end="24" step="1">
             <form:option value="${hour}" label="${hour} hours" />
           </c:forEach>
-        </form:select></div>
+        </form:select> (Search range)</div>
         </td>
       </tr>
 

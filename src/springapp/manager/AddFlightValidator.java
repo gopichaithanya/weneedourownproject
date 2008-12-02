@@ -121,6 +121,8 @@ public class AddFlightValidator implements Validator {
       final int curMonth = calendar.get(Calendar.MONTH) + 1; // 0-based.
       final int curYear = calendar.get(Calendar.YEAR);
       final int curDay = calendar.get(Calendar.DAY_OF_MONTH);
+//      final int curHour = calendar.get(Calendar.HOUR);
+//      final int curMin = calendar.get(Calendar.MINUTE);
 
       // Checking: departYear
       int dYear;
@@ -167,8 +169,8 @@ public class AddFlightValidator implements Validator {
                "Departing day value is not integer.");
          return;
       }
+      final boolean bSameDepartMonth = (dMonth == curMonth);
       {
-         final boolean bSameDepartMonth = (dMonth == curMonth);
          final Calendar c = Calendar.getInstance();
          c.set(dYear, dMonth - 1, 1);
          final int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -181,6 +183,45 @@ public class AddFlightValidator implements Validator {
          else if (bSameDepartYear && bSameDepartMonth && dDay < curDay)
             err.rejectValue("departDay", "error.addFlight.departDay.pastDay", "Already past day.");
       }
+
+      // Checking: departHour
+      int dHour;
+      try {
+         dHour = Integer.valueOf(cmd.getDepartHour());
+      } catch (NumberFormatException e) {
+         err.rejectValue("departHour", "error.addFlight.departHour.notInteger",
+               "Departing hour value is not integer.");
+         return;
+      }
+//      final boolean bSameDepartDay = (curDay == dDay);
+//      if (dHour < 0)
+//         err.rejectValue("departHour", "error.addFlight.departHour.tooLess",
+//               "Departing hour is too less.");
+//      else if (dHour > 24)
+//         err.rejectValue("departHour", "error.addFlight.departHour.tooMuch",
+//               "Departing hour is too much.");
+//      else if (bSameDepartYear && bSameDepartMonth && bSameDepartDay && dHour < curHour)
+//         err.rejectValue("departHour", "error.addFlight.departHour.pastHour", "Already past hour.");
+
+      // Checking: departMin
+      int dMin;
+      try {
+         dMin = Integer.valueOf(cmd.getDepartMin());
+      } catch (NumberFormatException e) {
+         err.rejectValue("departMin", "error.addFlight.departMin.notInteger",
+               "Departing minute value is not integer.");
+         return;
+      }
+//      final boolean bSameDepartHour = (curHour == dHour);
+//      if (dMin < 0)
+//         err.rejectValue("departMin", "error.addFlight.departMin.tooLess",
+//               "Departing minute is too less.");
+//      else if (dMin > 60)
+//         err.rejectValue("departMin", "error.addFlight.departMin.tooMuch",
+//               "Departing minute is too much.");
+//      else if (bSameDepartYear && bSameDepartMonth && bSameDepartDay && bSameDepartHour
+//            && dMin < curMin)
+//         err.rejectValue("departMin", "error.addFlight.departHour.pastMin", "Already past minute.");
 
       // Checking: returnYear
       int rYear;

@@ -65,16 +65,18 @@ public class AddFlightController extends SimpleFormController {
       final int departMonth = f.getDepartMonth();
       final int departDay = f.getDepartDay();
       final int departHour = f.getDepartHour();
+      final int departMin = f.getDepartMin();
       final Calendar departCalendar = Calendar.getInstance();
-      departCalendar.set(departYear, departMonth - 1, departDay, departHour, 0);
+      departCalendar.set(departYear, departMonth - 1, departDay, departHour, departMin);
       final Date departDate = departCalendar.getTime();
 
       final int arrivalYear = f.getReturnYear();
       final int arrivalMonth = f.getReturnMonth();
       final int arrivalDay = f.getReturnDay();
       final int arrivalHour = f.getReturnHour();
+      final int arrivalMin = f.getReturnMin();
       final Calendar arrivalCalendar = Calendar.getInstance();
-      arrivalCalendar.set(arrivalYear, arrivalMonth - 1, arrivalDay, arrivalHour, 0);
+      arrivalCalendar.set(arrivalYear, arrivalMonth - 1, arrivalDay, arrivalHour, arrivalMin);
       final Date arrivalDate = arrivalCalendar.getTime();
 
       final Airline airline = AirlineManager.getAirline(f.getAirline());
@@ -102,6 +104,10 @@ public class AddFlightController extends SimpleFormController {
       cmd.setAirportByDepartureLocation("IAD");
       cmd.setAirportByArrivalLocation("JFK");
       cmd.setFlightNo(100);
+      cmd.setDepartHour(23);
+      cmd.setDepartMin(50);
+      cmd.setReturnHour(23);
+      cmd.setReturnMin(50);
       cmd.setEconomySeats(30);
       cmd.setBusinessSeats(10);
       cmd.setEconomyPrice(300f);
