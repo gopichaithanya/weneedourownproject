@@ -84,8 +84,13 @@ function book(flightNo) {
             <td><input type="button" value="Cancel"
               onClick="cancelReserved(<c:out value="${iti.flight.flightNo}"/>);" /></td>
 
-            <td><input type="button" value="Book"
-              onClick="book(<c:out value="${iti.flight.flightNo}"/>);" /></td>
+            <td><c:choose>
+              <c:when test="${fn:startsWith(flight.status, 'CANCELED')}">Canceled</c:when>
+              <c:otherwise>
+                <input type="button" value="Book"
+                  onClick="book(<c:out value="${iti.flight.flightNo}"/>);" />
+              </c:otherwise>
+            </c:choose></td>
           </tr>
 
           <tr>
@@ -96,10 +101,6 @@ function book(flightNo) {
     </c:otherwise>
   </c:choose>
 </table>
-
-** When a flight is canceled, the all itineraries that are reserved and booked will become canceled
-as well.
-<BR>
 
 ** The reservation can be canceled by reservation manage, or payment not received after 2 minutes.
 <BR>
@@ -123,7 +124,8 @@ as well.
           and time</th>
           <th>Arrival location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
           and time</th>
-          <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a></th>
+          <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a><br />
+          (Flight #)</th>
           <th>Ticket number</th>
         </tr>
       </thead>
@@ -147,7 +149,8 @@ as well.
                 <td><img
                   src="http://www.expedia.com/pubspec/images/airlines/sm${iti.flight.airline.code}.gif"
                   alt="${iti.flight.airline.code}" /></td>
-                <td><c:out value="${iti.flight.airline.name}" /></td>
+                <td><c:out value="${iti.flight.airline.name}" /><br />
+                (#<c:out value="${iti.flight.flightNoFormatted}" />)</td>
               </tr>
             </table>
             </td>
@@ -178,7 +181,8 @@ as well.
           and time</th>
           <th>Arrival location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
           and time</th>
-          <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a></th>
+          <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a><br />
+          (Flight #)</th>
         </tr>
       </thead>
 
@@ -201,7 +205,8 @@ as well.
                 <td><img
                   src="http://www.expedia.com/pubspec/images/airlines/sm${iti.flight.airline.code}.gif"
                   alt="${iti.flight.airline.code}" /></td>
-                <td><c:out value="${iti.flight.airline.name}" /></td>
+                <td><c:out value="${iti.flight.airline.name}" /><br />
+                (#<c:out value="${iti.flight.flightNoFormatted}" />)</td>
               </tr>
             </table>
             </td>
@@ -211,6 +216,10 @@ as well.
     </c:otherwise>
   </c:choose>
 </table>
+** When a flight is canceled by managers, the all itineraries that are reserved and booked will
+become canceled as well.
+<BR>
+
 </p>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>

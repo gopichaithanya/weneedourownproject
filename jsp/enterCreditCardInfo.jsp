@@ -25,8 +25,8 @@ function onlyNumbers(e) {
 
 function initEvent() {
   document.getElementById('customer.ccNo').addEventListener( "keydown", onlyNumbers, false );
-  document.getElementById('customer.ccNo').setAttribute('maxlength', 16);
   document.getElementById('customer.expiration').addEventListener( "keydown", onlyNumbers, false );
+  document.getElementById('customer.ccNo').setAttribute('maxlength', 16);
   document.getElementById('customer.expiration').setAttribute('maxlength', 4);
 }
 
@@ -61,7 +61,7 @@ function focusOn() {
     </tr>
     <tr>
       <th align="right">Flight number</th>
-      <td><c:out value="${itinerary.flight.flightNo}" /><form:hidden path="flight.flightNo" /></td>
+      <td>#<c:out value="${itinerary.flight.flightNoFormatted}" /><form:hidden path="flight.flightNo" /></td>
     </tr>
     <tr>
       <th align="right">Seat class</th>

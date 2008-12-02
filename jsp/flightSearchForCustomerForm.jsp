@@ -434,7 +434,8 @@ function initEvents() {
             <th>Arrival location (<a href="http://www.orbitz.com/App/global/airportCodes.jsp">Code</a>)<br />
             and time</th>
             <th>cost of economy class (business class)</th>
-            <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a></th>
+            <th><a href="http://www.tvlon.com/resources/airlinecodes.htm">Airline name</a><br />
+            (Flight #)</th>
             <th><b><c:out value="${msgSelectOrReserve}" /></b></th>
           </tr>
         </thead>
@@ -462,12 +463,18 @@ function initEvents() {
                   <td><img
                     src="http://www.expedia.com/pubspec/images/airlines/sm${flight.airline.code}.gif"
                     alt="${flight.airline.code}" /></td>
-                  <td><c:out value="${flight.airline.name}" /></td>
+                  <td><c:out value="${flight.airline.name}" /><br />
+                  (#<c:out value="${flight.flightNoFormatted}" />)</td>
                 </tr>
               </table>
               </td>
-              <td><input type="button" value="<c:out value="${msgSelectOrReserve}"/>"
-                onClick="submitWithDepartFlightNo(<c:out value="${flight.flightNo}"/>);" /></td>
+              <td><c:choose>
+                <c:when test="${fn:startsWith(flight.status, 'CANCELED')}">Canceled</c:when>
+                <c:otherwise>
+                  <input type="button" value="<c:out value="${msgSelectOrReserve}"/>"
+                    onClick="submitWithDepartFlightNo(<c:out value="${flight.flightNo}"/>);" />
+                </c:otherwise>
+              </c:choose></td>
             </tr>
           </c:forEach>
         </tbody>
@@ -572,8 +579,13 @@ function initEvents() {
                 </tr>
               </table>
               </td>
-              <td><input type="button" value="Reserve"
-                onClick="submitWithReturnFlightNo(<c:out value="${flight.flightNo}"/>);" /></td>
+              <td><c:choose>
+                <c:when test="${fn:startsWith(flight.status, 'CANCELED')}">Canceled</c:when>
+                <c:otherwise>
+                  <input type="button" value="Reserve"
+                    onClick="submitWithReturnFlightNo(<c:out value="${flight.flightNo}"/>);" />
+                </c:otherwise>
+              </c:choose></td>
             </tr>
           </c:forEach>
         </tbody>

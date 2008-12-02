@@ -24,7 +24,7 @@
   </tr>
   <tr>
     <th align="right">Flight number</th>
-    <td><c:out value="${itinerary.flight.flightNo}" /></td>
+    <td>#<c:out value="${itinerary.flight.flightNoFormatted}" /></td>
   </tr>
   <tr>
     <th align="right">Seat class</th>
