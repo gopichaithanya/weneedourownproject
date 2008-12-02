@@ -91,18 +91,20 @@ function updateTripType() {
   var d = returnObjById('returnDay');
   var y = returnObjById('returnYear');
   var h = returnObjById('returnHour');
+  var r = returnObjById('returnHourRange');
   var c = returnObjById('returnCalendar');
   var w = returnObjById('returnWeek');
   var roundTrip = returnObjById('ROUND_TRIP');
   var oneWayTrip = returnObjById('ONEWAY_TRIP');
 
   if (oneWayTrip.checked)
-    m.disabled = d.disabled = y.disabled = h.disabled = c.disabled = w.disabled = "true";
+    m.disabled = d.disabled = y.disabled = h.disabled = r.disabled = c.disabled = w.disabled = "true";
   else {
     m.removeAttribute('disabled');
     d.removeAttribute('disabled');
     y.removeAttribute('disabled');
     h.removeAttribute('disabled');
+    r.removeAttribute('disabled');
     c.removeAttribute('disabled');
     w.removeAttribute('disabled');
 
@@ -248,7 +250,9 @@ function initEvents() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select> <form:select path="departHourRange">
+        </form:select> Search range: &#177;<img height="10" width="10"
+          src="http://www.fileformat.info/info/unicode/char/00b1/plusminus_sign.png"><form:select
+          path="departHourRange">
           <form:option value="1" label="1 hour" />
           <c:forEach var="hour" begin="2" end="24" step="1">
             <form:option value="${hour}" label="${hour} hours" />
@@ -323,7 +327,7 @@ function initEvents() {
           <c:forEach var="hour" begin="12" end="23" step="1">
             <form:option value="${hour}" label="${((hour - 1) % 12) +1} PM" />
           </c:forEach>
-        </form:select> <form:select path="returnHourRange">
+        </form:select> Search range: &#177;<form:select path="returnHourRange">
           <form:option value="1" label="1 hour" />
           <c:forEach var="hour" begin="2" end="24" step="1">
             <form:option value="${hour}" label="${hour} hours" />

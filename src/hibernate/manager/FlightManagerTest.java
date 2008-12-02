@@ -23,6 +23,12 @@ public class FlightManagerTest {
       final Flight f = FlightManager.getFlight(157);
       f.getAirline().getName();
    }
+   
+   @Test
+   public void testFlightNoFormatted() {
+      final Flight f = new Flight(2);
+      assertEquals("002", f.getFlightNoFormatted());
+   }
 
    @Test
    public void testListFlightsNull() {

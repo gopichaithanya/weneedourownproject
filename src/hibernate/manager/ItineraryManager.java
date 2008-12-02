@@ -191,6 +191,7 @@ public class ItineraryManager {
       final Integer[] uniq = new Integer[] { 0 };
       HibernateUtil.doTransaction(new IHibernateTransaction() {
          public void transaction(Session session) {
+
             final Query q = session.createQuery("FROM Itinerary WHERE USERNAME = ?").setString(0,
                   userName);
             final List<Itinerary> its = q.list();
@@ -209,7 +210,8 @@ public class ItineraryManager {
       });
 
       final String uniqNum = new DecimalFormat("#000").format(uniq[0]);
-      final String ticketNo = f.getAirline().getCode() + "-" + f.getFlightNo() + "-"
+      final String flightNo = f.getFlightNoFormatted();
+      final String ticketNo = f.getAirline().getCode() + "-" + flightNo + "-"
             + userName.toUpperCase() + "-" + uniqNum;
       return ticketNo;
    }

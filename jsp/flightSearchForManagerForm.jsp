@@ -349,7 +349,7 @@ function focusOn() {
               value="${flight.economySeats}" /> seats</td--%>
             <td><c:out value="${flight.economySeats}" /> seats</td>
 
-            <td>#<c:out value="${flight.flightNo}" /></td>
+            <td>#<c:out value="${flight.flightNoFormatted}" /></td>
           </tr>
 
           <tr>
