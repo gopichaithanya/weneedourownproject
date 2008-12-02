@@ -2,10 +2,14 @@ package hibernate;
 // Generated Oct 15, 2008 10:13:30 PM by Hibernate Tools 3.2.2.GA
 
 
+import hibernate.Itinerary.EStatus;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +19,31 @@ import java.util.Set;
 @SuppressWarnings({"serial", "unused"})
 public class Flight implements java.io.Serializable {
 
+   public enum EFlightStatus {
+      AVAILABLE("Availabe"), CANCELED("Canceled");
+      
+      private String description;
+      
+      private static final HashMap<String, EFlightStatus> reverseMap = new HashMap<String, EFlightStatus>();
+
+      static {
+         for (final EFlightStatus s : EnumSet.allOf(EFlightStatus.class))
+            reverseMap.put(s.toString(), s);
+      }
+
+      EFlightStatus(String desc) {
+         description = desc;
+      }
+      
+      public String getDescription() {
+         return description;
+      }
+
+      public static EFlightStatus get(String name) {
+         return reverseMap.get(name);
+      }
+   }
+   
 	/**
 	 * The flight number
 	 */
@@ -64,6 +93,11 @@ public class Flight implements java.io.Serializable {
      * The cost of business class ticket
      */
     private Float businessPrice;
+    
+    /**
+    * flight status
+    */
+   private EFlightStatus status = EFlightStatus.AVAILABLE;
     
     /**
      * The set of itineraries
@@ -309,6 +343,7 @@ public class Flight implements java.io.Serializable {
     }
     
     /**
+     * sets formatted flight number
     * @param flightNoFormatted the flightNoFormatted to set
     */
    public void setFlightNoFormatted(String flightNoFormatted) {
@@ -316,11 +351,28 @@ public class Flight implements java.io.Serializable {
    }
 
    /**
+    * returns formatted flight number
     * @return the flightNoFormatted
     */
    public String getFlightNoFormatted() {
       final DecimalFormat df = new DecimalFormat("000");
       return df.format(getFlightNo());
+   }
+
+   /**
+    * sets flight status
+    * @param status the status to set
+    */
+   public void setStatus(String status) {
+      this.status = EFlightStatus.get(status);
+   }
+
+   /**
+    * returns flight status
+    * @return the status
+    */
+   public String getStatus() {
+      return status.toString();
    }
 }
 

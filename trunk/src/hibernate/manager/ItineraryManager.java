@@ -41,8 +41,8 @@ public class ItineraryManager {
        * Returns true if the flight was successfully reserved for the customer, false otherwise
        * @param userName - the customer's username
        * @param flightNo - the flight number
-       * @param seatClass TODO
-       * @param passenger TODO
+       * @param seatClass seat class
+       * @param passenger the number of passengers
        * @return true if the flight was successfully reserved for the customer, false otherwise
        */
    public static boolean reserve(final String userName, final int flightNo,
@@ -90,7 +90,7 @@ public class ItineraryManager {
     * Returns true if the flight was successfully booked for the customer, false otherwise
     * @param userName - the customer's user name
     * @param flightNo - the flight number
-    * @param ticketNo TODO
+    * @param ticketNo ticket number
     * @return true if the flight was successfully booked for the customer, false otherwise
     */
    public static boolean book(String userName, final int flightNo, final String ticketNo) {
@@ -245,5 +245,25 @@ public class ItineraryManager {
                + it.getFlight().getFlightNo());
          cancelReserved(it.getCustomer().getUsername(), it.getFlight().getFlightNo());
       }
+   }
+
+   /**
+    * cancels itinerary by flight cancelation.
+    * @param flightNo flight number
+    */
+   public static void cancelByFlightCancel(final int flightNo) {
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+
+            final Query q = session.createQuery("FROM Itinerary");
+            final List<Itinerary> all = q.list();
+            for (final Itinerary i : all) {
+               if (i.getFlight().getFlightNo() != flightNo)
+                  continue;
+
+               i.setStatus(EStatus.CANCELED.toString());
+            }
+         }
+      });
    }
 }
