@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import hibernate.*;
+import hibernate.Flight.EFlightStatus;
 import hibernate.Itinerary.ESeatClass;
 
 import org.apache.log4j.Logger;
@@ -385,5 +386,31 @@ public class FlightManager {
       });
 
       return rst;
+   }
+
+   /**
+    * Cancels flight by flight number
+    * @param flightNo flight number
+    * @return whether it succeed or not
+    */
+   public boolean cancelFlight(final int flightNo) {
+      final Boolean[] bRst = new Boolean[] { false };
+      HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) {
+
+            final Flight f = (Flight) session.get(Flight.class, flightNo);
+            if (null == f)
+               return;
+            if (f.getStatus().equals(EFlightStatus.CANCELED.toString()))
+               return;
+
+            f.setStatus(EFlightStatus.CANCELED.toString());
+            bRst[0] = true;
+            
+         }
+      });
+
+      ItineraryManager.cancelByFlightCancel(flightNo);
+      return bRst[0];
    }
 }

@@ -399,7 +399,12 @@ function focusOn() {
             <%--td><c:out value="${seats[flight.flightNo][2]}" /> / <c:out
               value="${flight.businessSeats}" /> seats</td--%>
             <td><c:out value="${flight.businessSeats}" /> seats</td>
-            <td><input type="button" value="Cancel" /></td>
+            <td><c:choose>
+              <c:when test="${fn:startsWith(flight.status, 'CANCELED')}">Canceled</c:when>
+              <c:otherwise>
+                <input type="button" value="Cancel" />
+              </c:otherwise>
+            </c:choose></td>
           </tr>
         </c:forEach>
       </tbody>

@@ -29,6 +29,7 @@ public class FlightSearchForManagerFormController extends SimpleFormController {
     */
    public static final String URL = "flightSearchForManagerForm.spring";
 
+   @SuppressWarnings("unused")
    private Logger log = Logger.getLogger(getClass());
 
    /**
