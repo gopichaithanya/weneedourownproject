@@ -3,6 +3,7 @@ package hibernate.manager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import hibernate.*;
@@ -18,6 +19,32 @@ import org.hibernate.HibernateException;
  */
 @SuppressWarnings("unchecked")
 public class FlightManager {
+
+   /**
+    * Week enumeration type
+    */
+   public enum EWeek {
+      SUNDAY("Sunday", Calendar.SUNDAY), MONDAY("Monday", Calendar.MONDAY), TUESDAY("Tuesday",
+            Calendar.TUESDAY), WEDNESDAY("Wednesday", Calendar.WEDNESDAY), THURSDAY("Thursday",
+            Calendar.THURSDAY), FRIDAY("Friday", Calendar.FRIDAY), SATURDAY("Saturday",
+            Calendar.SATURDAY);
+
+      private String description;
+      private int calendarWeek;
+
+      EWeek(String desc, int week) {
+         this.description = desc;
+         this.calendarWeek = week;
+      }
+
+      public String getDescription() {
+         return this.description;
+      }
+
+      public int getCalendarWeek() {
+         return this.calendarWeek;
+      }
+   }
 
    private static final Integer defaultHourRange = 3;
    private static Logger log = Logger.getLogger(FlightManager.class);
@@ -103,7 +130,7 @@ public class FlightManager {
     * @return the flight object with the given flightNo, null if there is no such flight
     */
    public static Flight getFlight(int flightNo) {
-      final int fno = Integer.valueOf(flightNo);
+      final int fno = flightNo;
       Session session = HibernateUtil.getSessionFactory().getCurrentSession();
       session.beginTransaction();
       final Flight flight = (Flight) session.get(Flight.class, fno);
@@ -121,17 +148,19 @@ public class FlightManager {
     * @param departDay - depart day
     * @param departHour - depart hour
     * @param departHourRange - the hour range
+    * @param departWeek TODO
     * @param arriveYear arrive year
     * @param arriveMonth arrive month
     * @param arriveDay arrive day
     * @param arriveHour arrive hour
     * @param arriveHourRange TODO
+    * @param arriveWeek TODO
     * @return the list of flights
     */
    public static List<Flight> getFlightList(String airline, String departLoc, String arriveLoc,
          Integer departYear, Integer departMonth, Integer departDay, Integer departHour,
-         Integer departHourRange, Integer arriveYear, Integer arriveMonth, Integer arriveDay,
-         Integer arriveHour, Integer arriveHourRange) {
+         Integer departHourRange, EWeek departWeek, Integer arriveYear, Integer arriveMonth,
+         Integer arriveDay, Integer arriveHour, Integer arriveHourRange, EWeek arriveWeek) {
 
       if (null == departHourRange)
          departHourRange = defaultHourRange;
@@ -139,14 +168,18 @@ public class FlightManager {
          arriveHourRange = defaultHourRange;
 
       Date[] departTimeRange = null;
-      if (null != departYear && null != departMonth && null != departDay && null != departHour)
-         departTimeRange = getTimeRange(departYear, departMonth, departDay, departHour,
-               departHourRange);
+      if (null == departWeek) {
+         if (null != departYear && null != departMonth && null != departDay && null != departHour)
+            departTimeRange = getTimeRange(departYear, departMonth, departDay, departHour,
+                  departHourRange);
+      }
 
       Date[] arriveTimeRange = null;
-      if (null != arriveYear && null != arriveMonth && null != arriveDay && null != arriveHour)
-         arriveTimeRange = getTimeRange(arriveYear, arriveMonth, arriveDay, arriveHour,
-               arriveHourRange);
+      if (null == arriveWeek) {
+         if (null != arriveYear && null != arriveMonth && null != arriveDay && null != arriveHour)
+            arriveTimeRange = getTimeRange(arriveYear, arriveMonth, arriveDay, arriveHour,
+                  arriveHourRange);
+      }
 
       final List<String> whereClause = new ArrayList();
       if (null != airline)
@@ -194,6 +227,32 @@ public class FlightManager {
 
       final List<Flight> flights = q.list();
       session.close();
+
+      if (null != departWeek) {
+         for (final Iterator<Flight> iter = flights.iterator(); iter.hasNext();) {
+            final Flight f = iter.next();
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(f.getDepartureTime());
+            final int week = calendar.get(Calendar.DAY_OF_WEEK);
+
+            if (departWeek.getCalendarWeek() == week)
+               continue;
+            iter.remove();
+         }
+      }
+      if (null != arriveWeek) {
+         for (final Iterator<Flight> iter = flights.iterator(); iter.hasNext();) {
+            final Flight f = iter.next();
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(f.getArrivalTime());
+            final int week = calendar.get(Calendar.DAY_OF_WEEK);
+
+            if (arriveWeek.getCalendarWeek() == week)
+               continue;
+            iter.remove();
+         }
+      }
+
       return flights;
    }
 

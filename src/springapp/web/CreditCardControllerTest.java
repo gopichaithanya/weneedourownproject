@@ -66,7 +66,7 @@ public class CreditCardControllerTest extends AbstractJUnit4SpringContextTests {
 
    @Test
    public void testDefaultObj() throws Exception {
-      ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
+      final boolean bReserve = ItineraryManager.reserve("jjohnson", 157, ESeatClass.ECONOMY, 1);
 
       request.setParameter(CreditCardController.PARAM_FLIGHT_NO, String.valueOf(157));
       session.setAttribute(SessionConstants.LOGIN_USERNAME, "jjohnson");

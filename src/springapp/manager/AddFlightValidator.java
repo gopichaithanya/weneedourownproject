@@ -43,7 +43,7 @@ public class AddFlightValidator implements Validator {
 
       // Checking: flight number
       final int flightNo = cmd.getFlightNo();
-      if (flightNo < 100 || flightNo > 999)
+      if (flightNo < 0 || flightNo > 999)
          err.rejectValue("flightNo", "error.addFlight.flightNo.not3Digits",
                "Flight number is not 3 digits.");
       if (null != FlightManager.getFlight(flightNo))

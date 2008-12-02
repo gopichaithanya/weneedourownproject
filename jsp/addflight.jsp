@@ -116,8 +116,8 @@ function focusOn() {
         </c:forEach>
       </form:select> <input type="button"
         onClick="displayDatePicker('departYear','departMonth','departDay', 'departMonth');"
-        value="Calendar" /> <form:errors path="departMonth" cssClass="error" /> <form:errors
-        path="departDay" cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
+        value="Calendar" /> <form:errors path="departMonth" cssClass="error" /> <form:errors path="departDay"
+        cssClass="error" /> <form:errors path="departYear" cssClass="error" /></td>
     </tr>
 
     <tr>
@@ -168,8 +168,8 @@ function focusOn() {
         </c:forEach>
       </form:select> <input type="button"
         onClick="displayDatePicker('returnYear','returnMonth','returnDay', 'returnMonth');"
-        value="Calendar" /> <form:errors path="returnMonth" cssClass="error" /> <form:errors
-        path="returnDay" cssClass="error" /> <form:errors path="returnYear" cssClass="error" /></td>
+        value="Calendar" /> <form:errors path="returnMonth" cssClass="error" /> <form:errors path="returnDay"
+        cssClass="error" /> <form:errors path="returnYear" cssClass="error" /></td>
     </tr>
 
     <tr>

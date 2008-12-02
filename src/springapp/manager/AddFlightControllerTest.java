@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractFormController;
 
 import springapp.web.MockServletContextWebContextLoader;
+import springapp.web.SessionConstants;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = MockServletContextWebContextLoader.class, locations = { "/xml/springapp-servlet.xml" })
@@ -97,8 +98,10 @@ public class AddFlightControllerTest extends AbstractJUnit4SpringContextTests {
       validator.validate(cmd, err);
       assertFalse(err.hasErrors());
 
+      assertNull(session.getAttribute(SessionConstants.ADDED_NEW_FLIGHT));
       final ModelAndView mv = ctrl.handleRequest(request, response);
-      ModelAndViewAssert.assertModelAttributeAvailable(mv, "newFlight");
+      assertNotNull(mv);
+      assertNotNull(session.getAttribute(SessionConstants.ADDED_NEW_FLIGHT));
       FlightManagerTest.deleteFlight(flightNo);
    }
 }

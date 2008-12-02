@@ -27,7 +27,7 @@ public class FlightManagerTest {
    @Test
    public void testListFlightsNull() {
       final List flightList = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null,
-            null, null, null, null);
+            null, null, null, null, null, null);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }
@@ -35,7 +35,7 @@ public class FlightManagerTest {
    @Test
    public void testListFlightsAnytime() {
       final List flightList = FlightManager.getFlightList(null, "DEN", "BWI", 2009, 1, 4, -99, -99,
-            null, null, null, null, null);
+            null, null, null, null, null, null, null);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }
@@ -43,7 +43,7 @@ public class FlightManagerTest {
    @Test
    public void testListFlightsCertainTime() {
       final List flightList = FlightManager.getFlightList(null, "DEN", "BWI", 2009, 1, 4, 10, 2,
-            null, null, null, null, null);
+            null, null, null, null, null, null, null);
       assertNotNull(flightList);
       assertTrue(flightList.size() > 0);
    }

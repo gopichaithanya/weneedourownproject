@@ -2,6 +2,7 @@ package springapp.web;
 
 import hibernate.Itinerary.ESeatClass;
 import hibernate.manager.AirportManager;
+import hibernate.manager.FlightManager.EWeek;
 
 import java.util.Calendar;
 import java.util.List;
@@ -116,82 +117,22 @@ public class FlightSearchForCustomerValidator implements Validator {
                      + ESeatClass.ECONOMY.name() + ".");
 
       // Checking: numPassengers
-      try {
-         final int numPassengers = Integer.valueOf(o.getNumPassengers());
-         if (numPassengers < 1)
-            errors.rejectValue("numPassengers",
-                  "error.FlightSearchForCustomer.numPassengers.tooLess",
-                  "The number of passengers is too less.");
-      } catch (NumberFormatException e) {
+      if (null == o.getNumPassengers())
          errors.rejectValue("numPassengers",
-               "error.FlightSearchForCustomer.numPassengers.notInteger",
-               "The number of passengers is not integer.");
-      }
-
-      final Calendar calendar = Calendar.getInstance();
-      final int curMonth = calendar.get(Calendar.MONTH) + 1; // 0-based.
-      final int curYear = calendar.get(Calendar.YEAR);
-      final int curDay = calendar.get(Calendar.DAY_OF_MONTH);
-
-      // Checking: departYear
-      int dYear;
-      try {
-         dYear = Integer.valueOf(o.getDepartYear());
-      } catch (NumberFormatException e) {
-         errors.rejectValue("departYear", "error.FlightSearchForCustomer.departYear.notInteger",
-               "Departing year value is not integer.");
-         return;
-      }
-      if (dYear < curYear)
-         errors.rejectValue("departYear", "error.FlightSearchForCustomer.departYear.tooLess",
-               "Departing year is already past.");
-      else if (dYear >= curYear + MAX_YEAR)
-         errors.rejectValue("departYear", "error.FlightSearchForCustomer.departYear.tooMuch",
-               "Departing year is too much future.");
-
-      // Checking: departMonth
-      int dMonth;
-      try {
-         dMonth = Integer.valueOf(o.getDepartMonth());
-      } catch (NumberFormatException e) {
-         errors.rejectValue("departMonth", "error.FlightSearchForCustomer.departMonth.notInteger",
-               "Departing month value is not integer.");
-         return;
-      }
-      final boolean bSameDepartYear = (curYear == dYear);
-      if (dMonth < 1)
-         errors.rejectValue("departMonth", "error.FlightSearchForCustomer.departMonth.tooLess",
-               "Departing month is too less.");
-      else if (dMonth > 12)
-         errors.rejectValue("departMonth", "error.FlightSearchForCustomer.departMonth.tooMuch",
-               "Departing month is too much.");
-      else if (bSameDepartYear && dMonth < curMonth)
-         errors.rejectValue("departMonth", "error.FlightSearchForCustomer.departMonth.pastMonth",
-               "Already past month.");
-
-      // Checking: departDay
-      int dDay;
-      try {
-         dDay = Integer.valueOf(o.getDepartDay());
-      } catch (NumberFormatException e) {
-         errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.notInteger",
-               "Departing day value is not integer.");
-         return;
-      }
-      {
-         final boolean bSameDepartMonth = (dMonth == curMonth);
-         final Calendar c = Calendar.getInstance();
-         c.set(dYear, dMonth - 1, 1);
-         final int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-         if (dDay < 1)
-            errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.tooLess",
-                  "Departing day is too less.");
-         else if (dDay > maxDay)
-            errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.tooMuch",
-                  "Departing day is too much.");
-         else if (bSameDepartYear && bSameDepartMonth && dDay < curDay)
-            errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.pastDay",
-                  "Already past day.");
+               "error.FlightSearchForCustomer.numPassengers.nullPointer",
+               "The number of passenger is null.");
+      else {
+         try {
+            final int numPassengers = Integer.valueOf(o.getNumPassengers());
+            if (numPassengers < 1)
+               errors.rejectValue("numPassengers",
+                     "error.FlightSearchForCustomer.numPassengers.tooLess",
+                     "The number of passengers is too less.");
+         } catch (NumberFormatException e) {
+            errors.rejectValue("numPassengers",
+                  "error.FlightSearchForCustomer.numPassengers.notInteger",
+                  "The number of passengers is not integer.");
+         }
       }
 
       // Checking: departFlightNo
@@ -200,77 +141,187 @@ public class FlightSearchForCustomerValidator implements Validator {
                "error.FlightSearchForCustomer.departFlightNo.not-specified",
                "Flight number of departing flight should be 3 digits.");
 
+      final Calendar calendar = Calendar.getInstance();
+      final int curMonth = calendar.get(Calendar.MONTH) + 1; // 0-based.
+      final int curYear = calendar.get(Calendar.YEAR);
+      final int curDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+      final EWeek departWeek = o.getDepartWeek();
+
+      if (null == departWeek) {
+         // Checking: departYear
+         int dYear;
+         if (null == o.getDepartYear()) {
+            errors.rejectValue("departYear",
+                  "error.FlightSearchForCustomer.departYear.nullPointer",
+                  "Departing year value is null pointer.");
+            return;
+         }
+         try {
+            dYear = Integer.valueOf(o.getDepartYear());
+         } catch (NumberFormatException e) {
+            errors.rejectValue("departYear", "error.FlightSearchForCustomer.departYear.notInteger",
+                  "Departing year value is not integer.");
+            return;
+         }
+         if (dYear < curYear)
+            errors.rejectValue("departYear", "error.FlightSearchForCustomer.departYear.tooLess",
+                  "Departing year is already past.");
+         else if (dYear >= curYear + MAX_YEAR)
+            errors.rejectValue("departYear", "error.FlightSearchForCustomer.departYear.tooMuch",
+                  "Departing year is too much future.");
+
+         // Checking: departMonth
+         int dMonth;
+         if (null == o.getDepartMonth()) {
+            errors.rejectValue("departMonth",
+                  "error.FlightSearchForCustomer.departMonth.nullPointer",
+                  "Departing month value is null pointer.");
+            return;
+         }
+         try {
+            dMonth = Integer.valueOf(o.getDepartMonth());
+         } catch (NumberFormatException e) {
+            errors.rejectValue("departMonth",
+                  "error.FlightSearchForCustomer.departMonth.notInteger",
+                  "Departing month value is not integer.");
+            return;
+         }
+         final boolean bSameDepartYear = (curYear == dYear);
+         if (dMonth < 1)
+            errors.rejectValue("departMonth", "error.FlightSearchForCustomer.departMonth.tooLess",
+                  "Departing month is too less.");
+         else if (dMonth > 12)
+            errors.rejectValue("departMonth", "error.FlightSearchForCustomer.departMonth.tooMuch",
+                  "Departing month is too much.");
+         else if (bSameDepartYear && dMonth < curMonth)
+            errors.rejectValue("departMonth",
+                  "error.FlightSearchForCustomer.departMonth.pastMonth", "Already past month.");
+
+         // Checking: departDay
+         int dDay;
+         if (null == o.getDepartDay()) {
+            errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.nullPointer",
+                  "Departing day value is null pointer.");
+            return;
+         }
+         try {
+            dDay = Integer.valueOf(o.getDepartDay());
+         } catch (NumberFormatException e) {
+            errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.notInteger",
+                  "Departing day value is not integer.");
+            return;
+         }
+         {
+            final boolean bSameDepartMonth = (dMonth == curMonth);
+            final Calendar c = Calendar.getInstance();
+            c.set(dYear, dMonth - 1, 1);
+            final int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+            if (dDay < 1)
+               errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.tooLess",
+                     "Departing day is too less.");
+            else if (dDay > maxDay)
+               errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.tooMuch",
+                     "Departing day is too much.");
+            else if (bSameDepartYear && bSameDepartMonth && dDay < curDay)
+               errors.rejectValue("departDay", "error.FlightSearchForCustomer.departDay.pastDay",
+                     "Already past day.");
+         }
+
+         if (false == bRoundTrip)
+            return;
+
+         // Checking: returnYear
+         int rYear;
+         if (null == o.getReturnYear()) {
+            errors.rejectValue("returnYear",
+                  "error.FlightSearchForCustomer.returnYear.nullPointer",
+                  "Returning year value is null pointer.");
+            return;
+         }
+         try {
+            rYear = Integer.valueOf(o.getReturnYear());
+         } catch (NumberFormatException e) {
+            errors.rejectValue("returnYear", "error.FlightSearchForCustomer.returnYear.notInteger",
+                  "Returning year value is not integer.");
+            return;
+         }
+         if (rYear < dYear)
+            errors.rejectValue("returnYear",
+                  "error.FlightSearchForCustomer.returnYear.earlierThanDepart",
+                  "Returning year should be later than departing year.");
+         else if (rYear >= curYear + MAX_YEAR)
+            errors.rejectValue("returnYear", "error.FlightSearchForCustomer.returnYear.tooMuch",
+                  "Returning year is too much future.");
+
+         // Checking: returnMonth
+         int rMonth;
+         if (null == o.getReturnMonth()) {
+            errors.rejectValue("returnMonth",
+                  "error.FlightSearchForCustomer.returnMonth.notInteger",
+                  "Returning month value is not integer.");
+            return;
+         }
+         try {
+            rMonth = Integer.valueOf(o.getReturnMonth());
+         } catch (NumberFormatException e) {
+            errors.rejectValue("returnMonth",
+                  "error.FlightSearchForCustomer.returnMonth.notInteger",
+                  "Returning month value is not integer.");
+            return;
+         }
+         final boolean bSameReturnYear = (dYear == rYear);
+         if (rMonth < 1)
+            errors.rejectValue("returnMonth", "error.FlightSearchForCustomer.returnMonth.tooLess",
+                  "Returning month is too less.");
+         else if (rMonth > 12)
+            errors.rejectValue("returnMonth", "error.FlightSearchForCustomer.returnMonth.tooMuch",
+                  "Returning month is too much.");
+         else if (bSameReturnYear && rMonth < dMonth)
+            errors.rejectValue("returnMonth",
+                  "error.FlightSearchForCustomer.returnMonth.earlierThanDepart",
+                  "Returning month should be later than departing month.");
+
+         // Checking: returnDay
+         int rDay;
+         if (null == o.getReturnDay()) {
+            errors.rejectValue("returnDay", "error.FlightSearchForCustomer.returnDay.nullPointer",
+                  "Returning day value is null pointer.");
+            return;
+         }
+         try {
+            rDay = Integer.valueOf(o.getReturnDay());
+         } catch (NumberFormatException e) {
+            errors.rejectValue("returnDay", "error.FlightSearchForCustomer.returnDay.notInteger",
+                  "Returning day value is not integer.");
+            return;
+         }
+         {
+            final boolean bSameReturnMonth = (rMonth == dMonth);
+            final Calendar c = Calendar.getInstance();
+            c.set(rYear, rMonth - 1, 1);
+            final int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+            if (rDay < 1)
+               errors.rejectValue("returnDay", "error.FlightSearchForCustomer.returnDay.tooLess",
+                     "Returning day is too less.");
+            else if (rDay > maxDay)
+               errors.rejectValue("returnDay", "error.FlightSearchForCustomer.returnDay.tooMuch",
+                     "Returning day is too much.");
+            else if (bSameReturnYear && bSameReturnMonth && rDay < dDay)
+               errors.rejectValue("returnDay",
+                     "error.FlightSearchForCustomer.returnDay.earlierThanDepart",
+                     "Returning day should be later than departing day.");
+         }
+      }
+
       if (false == bRoundTrip)
          return;
-
-      // Checking: returnYear
-      int rYear;
-      try {
-         rYear = Integer.valueOf(o.getReturnYear());
-      } catch (NumberFormatException e) {
-         errors.rejectValue("returnYear", "error.FlightSearchForCustomer.returnYear.notInteger",
-               "Returning year value is not integer.");
-         return;
-      }
-      if (rYear < dYear)
-         errors.rejectValue("returnYear",
-               "error.FlightSearchForCustomer.returnYear.earlierThanDepart",
-               "Returning year should be later than departing year.");
-      else if (rYear >= curYear + MAX_YEAR)
-         errors.rejectValue("returnYear", "error.FlightSearchForCustomer.returnYear.tooMuch",
-               "Returning year is too much future.");
-
-      // Checking: returnMonth
-      int rMonth;
-      try {
-         rMonth = Integer.valueOf(o.getReturnMonth());
-      } catch (NumberFormatException e) {
-         errors.rejectValue("returnMonth", "error.FlightSearchForCustomer.returnMonth.notInteger",
-               "Returning month value is not integer.");
-         return;
-      }
-      final boolean bSameReturnYear = (dYear == rYear);
-      if (rMonth < 1)
-         errors.rejectValue("returnMonth", "error.FlightSearchForCustomer.returnMonth.tooLess",
-               "Returning month is too less.");
-      else if (rMonth > 12)
-         errors.rejectValue("returnMonth", "error.FlightSearchForCustomer.returnMonth.tooMuch",
-               "Returning month is too much.");
-      else if (bSameReturnYear && rMonth < dMonth)
-         errors.rejectValue("returnMonth",
-               "error.FlightSearchForCustomer.returnMonth.earlierThanDepart",
-               "Returning month should be later than departing month.");
-
-      // Checking: returnDay
-      int rDay;
-      try {
-         rDay = Integer.valueOf(o.getReturnDay());
-      } catch (NumberFormatException e) {
-         errors.rejectValue("returnDay", "error.FlightSearchForCustomer.returnDay.notInteger",
-               "Returning day value is not integer.");
-         return;
-      }
-      {
-         final boolean bSameReturnMonth = (rMonth == dMonth);
-         final Calendar c = Calendar.getInstance();
-         c.set(rYear, rMonth - 1, 1);
-         final int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-         if (rDay < 1)
-            errors.rejectValue("returnDay", "error.FlightSearchForCustomer.returnDay.tooLess",
-                  "Returning day is too less.");
-         else if (rDay > maxDay)
-            errors.rejectValue("returnDay", "error.FlightSearchForCustomer.returnDay.tooMuch",
-                  "Returning day is too much.");
-         else if (bSameReturnYear && bSameReturnMonth && rDay < dDay)
-            errors.rejectValue("returnDay",
-                  "error.FlightSearchForCustomer.returnDay.earlierThanDepart",
-                  "Returning day should be later than departing day.");
-      }
 
       // Checking: returnFlightNo
       if (bFlagFlightNoIsForcedToBe3Digits && false == o.isValidReturnFlightNo())
          errors.rejectValue("returnFlightNo",
                "error.FlightSearchForCustomer.returnFlightNo.not-specified",
                "Flight number of returning flight should be 3 digits.");
+
    }
 }

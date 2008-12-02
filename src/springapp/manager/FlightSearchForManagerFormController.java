@@ -98,13 +98,13 @@ public class FlightSearchForManagerFormController extends SimpleFormController {
          final Integer ah = (aOpt ? cmd.getArriveHour() : null);
          final Integer ar = (dOpt ? cmd.getArriveHourRange() : null);
 
-         flights.addAll(FlightManager.getFlightList(airline, dl, al, dy, dm, dd, dh, dr, ay, am,
-               ad, ah, ar));
+         flights.addAll(FlightManager.getFlightList(airline, dl, al, dy, dm, dd, dh, dr, null, ay,
+               am, ad, ah, ar, null));
       }
 
       final Map<Integer, Integer[]> seats = new HashMap<Integer, Integer[]>();
       for (final Flight f : flights) {
-         final int flightNo = f.getFlightNo();
+         final int flightNo = Integer.valueOf(f.getFlightNo());
          final Integer[] leftSeats = FlightManager.getLeftSeats(flightNo);
          seats.put(flightNo, leftSeats);
       }

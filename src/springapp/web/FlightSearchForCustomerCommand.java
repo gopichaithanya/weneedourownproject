@@ -1,6 +1,7 @@
 package springapp.web;
 
 import hibernate.Itinerary.ESeatClass;
+import hibernate.manager.FlightManager.EWeek;
 
 import java.util.Calendar;
 
@@ -45,19 +46,22 @@ public class FlightSearchForCustomerCommand {
    private String departLocation = "IAD";
    private String arrivalLocation = "JFK";
 
-   private int departMonth;
-   private int departDay;
-   private int departYear;
-   private int departHour = -1;
+   private Integer departMonth;
+   private Integer departDay;
+   private Integer departYear;
+   private Integer departHour = -1;
+   private Integer departHourRange = 3;
+   private EWeek departWeek;
 
-   private int searchingHourRange = 3;
-   private int numPassengers = 1;
+   private Integer numPassengers = 1;
    private ETripType tripType = ETripType.ONEWAY_TRIP;
 
-   private int returnMonth;
-   private int returnDay;
-   private int returnYear;
-   private int returnHour = -1;
+   private Integer returnMonth;
+   private Integer returnDay;
+   private Integer returnYear;
+   private Integer returnHour = -1;
+   private Integer returnHourRange = 3;
+   private EWeek returnWeek;
 
    private ESeatClass seatClass = ESeatClass.ECONOMY;
 
@@ -117,8 +121,8 @@ public class FlightSearchForCustomerCommand {
    public boolean isValidDepartFlightNo() {
       if (null == getDepartFlightNo())
          return true;
-      final int no = getDepartFlightNo();
-      return (no >= 100 && no <= 999);
+      final Integer no = getDepartFlightNo();
+      return (null != no && no >= 0 && no <= 999);
    }
 
    /**
@@ -128,15 +132,15 @@ public class FlightSearchForCustomerCommand {
    public boolean isValidReturnFlightNo() {
       if (null == getReturnFlightNo())
          return true;
-      final int no = getReturnFlightNo();
-      return (no >= 100 && no <= 999);
+      final Integer no = getReturnFlightNo();
+      return (null != no && no >= 0 && no <= 999);
    }
 
    /**
     * sets departing month
     * @param departMonth departing month from 1 to 12
     */
-   public void setDepartMonth(int departMonth) {
+   public void setDepartMonth(Integer departMonth) {
       this.departMonth = departMonth;
    }
 
@@ -144,7 +148,7 @@ public class FlightSearchForCustomerCommand {
     * returns departing month
     * @return departing month from 1 to 12
     */
-   public int getDepartMonth() {
+   public Integer getDepartMonth() {
       return departMonth;
    }
 
@@ -152,7 +156,7 @@ public class FlightSearchForCustomerCommand {
     * sets departing day
     * @param departDay departing day from 1 to 31; the last day is depending on the month
     */
-   public void setDepartDay(int departDay) {
+   public void setDepartDay(Integer departDay) {
       this.departDay = departDay;
    }
 
@@ -160,7 +164,7 @@ public class FlightSearchForCustomerCommand {
     * returns departing day
     * @return departing day from 1 to 31; the last day is depending on the month
     */
-   public int getDepartDay() {
+   public Integer getDepartDay() {
       return departDay;
    }
 
@@ -168,7 +172,7 @@ public class FlightSearchForCustomerCommand {
     * sets departing year
     * @param departYear departing year after 2008
     */
-   public void setDepartYear(int departYear) {
+   public void setDepartYear(Integer departYear) {
       this.departYear = departYear;
    }
 
@@ -176,7 +180,7 @@ public class FlightSearchForCustomerCommand {
     * returns departing year
     * @return departing year after 2008
     */
-   public int getDepartYear() {
+   public Integer getDepartYear() {
       return departYear;
    }
 
@@ -184,7 +188,7 @@ public class FlightSearchForCustomerCommand {
     * sets departing hour
     * @param departHour departing hour from 1 to 23. The other values will be interpreted as "anytime"
     */
-   public void setDepartHour(int departHour) {
+   public void setDepartHour(Integer departHour) {
       this.departHour = departHour;
    }
 
@@ -192,7 +196,7 @@ public class FlightSearchForCustomerCommand {
     * returns departing hour
     * @return departing hour from 1 to 23. The other values mean "anytime"
     */
-   public int getDepartHour() {
+   public Integer getDepartHour() {
       return departHour;
    }
 
@@ -216,7 +220,7 @@ public class FlightSearchForCustomerCommand {
     * sets returning month
     * @param returnMonth returning month from 1 to 12
     */
-   public void setReturnMonth(int returnMonth) {
+   public void setReturnMonth(Integer returnMonth) {
       this.returnMonth = returnMonth;
    }
 
@@ -224,7 +228,7 @@ public class FlightSearchForCustomerCommand {
     * returns returning month
     * @return returning month from 1 to 12
     */
-   public int getReturnMonth() {
+   public Integer getReturnMonth() {
       return returnMonth;
    }
 
@@ -232,7 +236,7 @@ public class FlightSearchForCustomerCommand {
     * sets returning day
     * @param returnDay returning day from 1 to 31; the last day is depending on the month
     */
-   public void setReturnDay(int returnDay) {
+   public void setReturnDay(Integer returnDay) {
       this.returnDay = returnDay;
    }
 
@@ -240,7 +244,7 @@ public class FlightSearchForCustomerCommand {
     * returns returning day
     * @return rturning day from 1 to 31; the last day is depending on the month
     */
-   public int getReturnDay() {
+   public Integer getReturnDay() {
       return returnDay;
    }
 
@@ -248,7 +252,7 @@ public class FlightSearchForCustomerCommand {
     * sets returning year
     * @param returnYear after 2008
     */
-   public void setReturnYear(int returnYear) {
+   public void setReturnYear(Integer returnYear) {
       this.returnYear = returnYear;
    }
 
@@ -256,7 +260,7 @@ public class FlightSearchForCustomerCommand {
     * returns returning year
     * @return returning year after 2008
     */
-   public int getReturnYear() {
+   public Integer getReturnYear() {
       return returnYear;
    }
 
@@ -264,7 +268,7 @@ public class FlightSearchForCustomerCommand {
     * sets returning hour
     * @param returnHour returning hour from 1 to 23; the other values will be interpreted as "anytime"
     */
-   public void setReturnHour(int returnHour) {
+   public void setReturnHour(Integer returnHour) {
       this.returnHour = returnHour;
    }
 
@@ -272,7 +276,7 @@ public class FlightSearchForCustomerCommand {
     * returns returning hour
     * @return returning hour from 1 to 23; the other values mean "anytime"
     */
-   public int getReturnHour() {
+   public Integer getReturnHour() {
       return returnHour;
    }
 
@@ -296,7 +300,7 @@ public class FlightSearchForCustomerCommand {
     * sets number of passengers
     * @param numPassengers number of passengers
     */
-   public void setNumPassengers(int numPassengers) {
+   public void setNumPassengers(Integer numPassengers) {
       this.numPassengers = numPassengers;
    }
 
@@ -304,7 +308,7 @@ public class FlightSearchForCustomerCommand {
     * returns number of passengers
     * @return number of passengers; bigger than 0
     */
-   public int getNumPassengers() {
+   public Integer getNumPassengers() {
       return numPassengers;
    }
 
@@ -326,18 +330,18 @@ public class FlightSearchForCustomerCommand {
 
    /**
     * sets the searching hour range
-    * @param searchingTimeRange searching hour range
+    * @param departHourRange searching hour range
     */
-   public void setSearchingHourRange(int searchingTimeRange) {
-      this.searchingHourRange = searchingTimeRange;
+   public void setDepartHourRange(Integer departHourRange) {
+      this.departHourRange = departHourRange;
    }
 
    /**
     * returns searching hour range
     * @return searching hour range
     */
-   public int getSearchingHourRange() {
-      return searchingHourRange;
+   public Integer getDepartHourRange() {
+      return departHourRange;
    }
 
    /**
@@ -402,5 +406,47 @@ public class FlightSearchForCustomerCommand {
     */
    public boolean isEconomySeat() {
       return seatClass == ESeatClass.ECONOMY;
+   }
+
+   /**
+    * @param departWeek the departWeek to set
+    */
+   public void setDepartWeek(EWeek departWeek) {
+      this.departWeek = departWeek;
+   }
+
+   /**
+    * @return the departWeek
+    */
+   public EWeek getDepartWeek() {
+      return departWeek;
+   }
+
+   /**
+    * @param returnWeek the returnWeek to set
+    */
+   public void setReturnWeek(EWeek returnWeek) {
+      this.returnWeek = returnWeek;
+   }
+
+   /**
+    * @return the returnWeek
+    */
+   public EWeek getReturnWeek() {
+      return returnWeek;
+   }
+
+   /**
+    * @param returnHourRange the returnHourRange to set
+    */
+   public void setReturnHourRange(Integer returnHourRange) {
+      this.returnHourRange = returnHourRange;
+   }
+
+   /**
+    * @return the returnHourRange
+    */
+   public Integer getReturnHourRange() {
+      return returnHourRange;
    }
 }

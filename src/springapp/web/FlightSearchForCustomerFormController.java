@@ -4,6 +4,7 @@ import hibernate.Flight;
 import hibernate.Itinerary.ESeatClass;
 import hibernate.manager.AirportManager;
 import hibernate.manager.FlightManager;
+import hibernate.manager.FlightManager.EWeek;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       mv.addObject("airports", airports);
       mv.addObject("tripTypes", FlightSearchForCustomerCommand.ETripType.values());
       mv.addObject("seatClass", ESeatClass.values());
+      mv.addObject("weeks", EWeek.values());
 
       return mv;
    }
@@ -100,11 +102,13 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final FlightSearchForCustomerCommand cmd = ((FlightSearchForCustomerCommand) command);
       List flights;
       if (bFlagSearch)
-         flights = FlightManager.getFlightList(null, cmd.getDepartLocation(), cmd.getArrivalLocation(),
-               cmd.getDepartYear(), cmd.getDepartMonth(), cmd.getDepartDay(), cmd.getDepartHour(),
-               cmd.getSearchingHourRange(), null, null, null, null, null);
+         flights = FlightManager.getFlightList(null, cmd.getDepartLocation(), cmd
+               .getArrivalLocation(), cmd.getDepartYear(), cmd.getDepartMonth(),
+               cmd.getDepartDay(), cmd.getDepartHour(), cmd.getDepartHourRange(), cmd
+                     .getDepartWeek(), null, null, null, null, null, null);
       else
-         flights = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null, null, null, null, null);
+         flights = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null, null, null,
+               null, null, null, null);
 
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedDepartFlights", flights);
@@ -137,11 +141,13 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       final FlightSearchForCustomerCommand cmd = ((FlightSearchForCustomerCommand) command);
       List flights;
       if (bFlagSearch)
-         flights = FlightManager.getFlightList(null, cmd.getArrivalLocation(), cmd.getDepartLocation(),
-               cmd.getReturnYear(), cmd.getReturnMonth(), cmd.getReturnDay(), cmd.getReturnHour(),
-               cmd.getSearchingHourRange(), null, null, null, null, null);
+         flights = FlightManager.getFlightList(null, cmd.getArrivalLocation(), cmd
+               .getDepartLocation(), cmd.getReturnYear(), cmd.getReturnMonth(), cmd.getReturnDay(),
+               cmd.getReturnHour(), cmd.getDepartHourRange(), cmd.getDepartWeek(), null, null,
+               null, null, null, null);
       else
-         flights = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null, null, null, null, null);
+         flights = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null, null, null,
+               null, null, null, null);
 
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedReturnFlights", flights);
@@ -179,7 +185,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
          flights = new Integer[] { cmd.getDepartFlightNo() };
       else if (cmd.isRoundTrip())
          flights = new Integer[] { cmd.getDepartFlightNo(), cmd.getReturnFlightNo() };
-      
+
       final ESeatClass seatClass = cmd.getSeatClass();
       final int numPassengers = cmd.getNumPassengers();
 
