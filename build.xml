@@ -23,8 +23,9 @@
 	<property name="name" value="proj4398" />
     <property name="client.target" value="${build.dir}/client"/>
     <property name="AXIS2_HOME" value="${deploy.path}/axis2/WEB-INF"/>
-    <property name="resources.dir" value="${build.dir}/resources/META-INF"/>
-    <property name="wsdl.uri" value="${resources.dir}/InventoryStatusService.wsdl"/>
+    <property name="resources.dir" value="resources"/>
+    <property name="build.resources.dir" value="${build.dir}/resources"/>
+    <property name="wsdl.uri" value="${build.resources.dir}/META-INF/InventoryStatusService.wsdl"/>
 
 	
 	<path id="master-classpath">
@@ -166,6 +167,7 @@
         <delete file="${dist.dir}/${name}.war"/>
         <delete dir="${build.war.dir}"/>
         <delete dir="${build.classes.dir}"/>
+        <delete dir="${build.resources.dir}"/>
         <delete dir="${build.docs.dir}"/>
         <delete>
 			<fileset dir="${build.dir}">
@@ -464,26 +466,40 @@
 	</target>
 
 	<target name="generate.wsdl" depends="compile.service">
-        <mkdir dir="${resources.dir}" />
-        <echo message="output location: ${resources.dir}" />
+		<copy toDir="${build.resources.dir}" preservelastmodified="true">
+            <fileset dir="${resources.dir}">
+				<include name="**/*.xml"/>
+	        </fileset>
+	    </copy>
+        <!--mkdir dir="${build.resources.dir}"/-->
+        <echo message="output location: ${build.resources.dir}/META-INF" />
 		<taskdef name="java2wsdl" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="axis2.classpath"/>
-		<java2wsdl className="edu.gmu.swe642.InventoryStatusService" outputLocation="${resources.dir}" targetNamespace="http://ise.gmu.edu/~nduan/swe642/fall08" schemaTargetNamespace="http://ise.gmu.edu/~nduan/swe642/fall08/xsd">
+        <java2wsdl className="edu.gmu.swe642.InventoryStatusService"
+            outputLocation="${build.resources.dir}/META-INF"
+            targetNamespace="http://ise.gmu.edu/~nduan/swe642/fall08"
+            schemaTargetNamespace="http://ise.gmu.edu/~nduan/swe642/fall08/xsd">
 			<classpath>
 				<pathelement path="${axis2.classpath}"/>
-	            <pathelement location="${build.dir}/classes"/>
+                <pathelement location="${build.classes.dir}"/>
 	        </classpath>
 	    </java2wsdl>
 	</target>
 
-	<target name="generate.service" depends="generate.wsdl">
+	<target name="generate.service" depends="generate.wsdl, build">
 		<!--aar them up -->
-		<copy toDir="${build.dir}/classes" failonerror="false">
-			<fileset dir="${basedir}/resources">
-				<include name="**/*.xml"/>
-	        </fileset>
-	    </copy>
 	    <jar destfile="${dist.dir}/InventoryStatusService.aar">
-            <fileset excludes="**/Test.class, **/client/** **/*Tests.class" dir="${build.dir}/classes"/>
+            <fileset dir="${build.classes.dir}">
+				<include name="**/*.class" />
+                <exclude name="**/client/**"/>
+                <exclude name="**/*Test.class"/>
+                <exclude name="**/*Tests.class"/>
+			</fileset>
+            <fileset dir="${build.resources.dir}"/>
+			<fileset dir="${build.classes.dir}">
+				<include name="**/*.hbm.xml" />
+			</fileset>
+			<fileset file="${xml.dir}/hibernate.cfg.xml"/>
+            <fileset file="${xml.dir}/log4j.properties"/>
 	    </jar>
 	</target>
 
