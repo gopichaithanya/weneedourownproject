@@ -193,8 +193,8 @@
                 <exclude name="springapp/web/MockServletContextWebContextLoader.java"/>
             </fileset>
 
-            <!--link href="http://static.springframework.org/spring/docs/2.5.x/api" />
-            <link href="http://www.hibernate.org/hib_docs/v3/api/" /-->
+            <link href="http://static.springframework.org/spring/docs/2.5.x/api" />
+            <link href="http://www.hibernate.org/hib_docs/v3/api/" />
         </javadoc>
         <echo message="Java doc files are accessable at here: http://localhost:8080/${name}/docs/api/" />
     </target>
