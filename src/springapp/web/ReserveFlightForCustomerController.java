@@ -22,7 +22,7 @@ public class ReserveFlightForCustomerController implements Controller {
     * bean name 
     */
    public static final String URL = "reserveFlightForCustomer.spring";
-   
+
    private Logger logger = Logger.getLogger(getClass().getName());
 
    /**
@@ -38,30 +38,28 @@ public class ReserveFlightForCustomerController implements Controller {
       if (null == userName)
          return LoginController.redirectToLogin(session, URL);
 
-      final ModelAndView mv = new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
-      {
-         boolean bRst = false;
-         final Integer[] flights = (Integer[]) session
-               .getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER);
-         session.removeAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER);
+      Boolean bRst = false;
+      final Integer[] flights = (Integer[]) session
+            .getAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER);
+      session.removeAttribute(SessionConstants.RESERVE_FLIGHTS_FOR_CUSTOMER);
 
-         final ESeatClass seatClass = (ESeatClass) session
-               .getAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER);
-         session.removeAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER);
+      final ESeatClass seatClass = (ESeatClass) session
+            .getAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER);
+      session.removeAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER);
 
-         final int numPassengers = (Integer) session
-               .getAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER);
-         session.removeAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER);
+      final int numPassengers = (Integer) session
+            .getAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER);
+      session.removeAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER);
 
-         if (null != flights && flights.length > 0 && null != seatClass && numPassengers > 0) {
-            bRst = true;
-            for (final Object flight : flights)
-               bRst &= ItineraryManager.reserve(userName, (Integer) flight, seatClass,
-                     numPassengers);
-         }
-         mv.addObject("result", bRst);
-         logger.info("Reservation result: " + bRst);
+      if (null != flights && flights.length > 0 && null != seatClass && numPassengers > 0) {
+         bRst = true;
+         for (final Object flight : flights)
+            bRst &= ItineraryManager.reserve(userName, (Integer) flight, seatClass, numPassengers);
       }
+      session.setAttribute(SessionConstants.RESERVATION_RESULT, bRst);
+      logger.info("Reservation result: " + bRst);
+
+      final ModelAndView mv = new ModelAndView(new RedirectView(ItineraryForCustomerController.URL));
       return mv;
    }
 }

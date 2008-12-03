@@ -14,10 +14,8 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = MockServletContextWebContextLoader.class, locations = { "/xml/springapp-servlet.xml" })
@@ -53,6 +51,7 @@ public class ReserveFlightForCustomerControllerTest extends AbstractJUnit4Spring
    @Test
    public void testReserveFlight1() throws Exception {
       final String userName = "jjohnson";
+      ItineraryManagerTest.deleteItinerary(new ItineraryId(182, userName));
       final boolean bRst = testReserveFlight(userName, new Integer[] { 182 }, ESeatClass.BUSINESS,
             1);
       assertTrue(bRst);
@@ -129,10 +128,13 @@ public class ReserveFlightForCustomerControllerTest extends AbstractJUnit4Spring
       session.setAttribute(SessionConstants.RESERVE_SEATCLASS_FOR_CUSTOMER, argSeatType);
       session.setAttribute(SessionConstants.RESERVE_NUM_PASSENGERS_FOR_CUSTOMER, argNumPassengers);
 
-      final ModelAndView mv = ctrl.handleRequest(request, response);
-      final boolean bRst = (Boolean) ModelAndViewAssert.assertAndReturnModelAttributeOfType(mv,
-            "result", Boolean.class);
-      return bRst;
+      boolean bRst1 = (null == session.getAttribute(SessionConstants.RESERVATION_RESULT));
+      ctrl.handleRequest(request, response);
+      final Boolean bRst2 = (Boolean) session.getAttribute(SessionConstants.RESERVATION_RESULT);
+      bRst1 &= (null != bRst2);
+      bRst1 &= bRst2;
+
+      return bRst1;
    }
 
    @Test

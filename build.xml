@@ -4,7 +4,8 @@
 	<property file="build.properties" />
 	
 	<property environment="env"/>
-	<property name="AXIS2_HOME" value="/axis2-1.4.1"/>
+    <property name="AXIS2_HOME" value="${deploy.path}/axis2/WEB-INF"/>
+
 	
 	<!--property name="bin.dir" value="bin"/-->
 	<property name="src.dir" value="src" />

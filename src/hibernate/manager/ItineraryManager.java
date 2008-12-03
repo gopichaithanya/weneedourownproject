@@ -70,7 +70,8 @@ public class ItineraryManager {
                newIt.setReservedTime(curDate);
                session.save(newIt);
 
-            } else if (false == it.getStatus().equals(EStatus.RESERVED.toString())) {
+            } else if (false == it.getStatus().equals(EStatus.RESERVED.toString())
+                  && false == it.getStatus().equals(EStatus.BOOKED.toString())) {
                it.setCustomer(customer);
                it.setFlight(flight);
                it.setSeatClass(seatClass);

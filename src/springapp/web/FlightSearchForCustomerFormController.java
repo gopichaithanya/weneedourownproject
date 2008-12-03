@@ -6,6 +6,7 @@ import hibernate.manager.AirportManager;
 import hibernate.manager.FlightManager;
 import hibernate.manager.FlightManager.EWeek;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -110,6 +111,17 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
          flights = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null, null, null,
                null, null, null, null);
 
+      for (Iterator<Flight> iter = flights.iterator(); iter.hasNext();) {
+         final Flight f = iter.next();
+         if (cmd.getSeatClass().equals(ESeatClass.ECONOMY.toString())) {
+            if (f.getEconomySeats() < cmd.getNumPassengers())
+               iter.remove();
+         } else {
+            if (f.getBusinessSeats() < cmd.getNumPassengers())
+               iter.remove();
+         }
+      }
+
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedDepartFlights", flights);
       mv.addObject("isOneWayTrip", cmd.isOneWayTrip());
@@ -139,7 +151,7 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
          Object command, BindException errors) throws Exception {
 
       final FlightSearchForCustomerCommand cmd = ((FlightSearchForCustomerCommand) command);
-      List flights;
+      List<Flight> flights;
       if (bFlagSearch)
          flights = FlightManager.getFlightList(null, cmd.getArrivalLocation(), cmd
                .getDepartLocation(), cmd.getReturnYear(), cmd.getReturnMonth(), cmd.getReturnDay(),
@@ -148,6 +160,17 @@ public class FlightSearchForCustomerFormController extends SimpleFormController 
       else
          flights = FlightManager.getFlightList(null, null, null, 0, 0, 0, 0, 0, null, null, null,
                null, null, null, null);
+
+      for (Iterator<Flight> iter = flights.iterator(); iter.hasNext();) {
+         final Flight f = iter.next();
+         if (cmd.getSeatClass().equals(ESeatClass.ECONOMY.toString())) {
+            if (f.getEconomySeats() < cmd.getNumPassengers())
+               iter.remove();
+         } else {
+            if (f.getBusinessSeats() < cmd.getNumPassengers())
+               iter.remove();
+         }
+      }
 
       final ModelAndView mv = new ModelAndView(this.getFormView());
       mv.addObject("searchedReturnFlights", flights);
