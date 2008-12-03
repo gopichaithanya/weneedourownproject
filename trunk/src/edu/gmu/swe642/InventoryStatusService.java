@@ -16,12 +16,17 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 /**
  * Inventory Status on number of available seats on flights
  */
 public class InventoryStatusService {
 
-	public InventoryStatusService() {
+   @SuppressWarnings("unused")
+   private static Logger log = Logger.getLogger(InventoryStatusService.class);
+
+   public InventoryStatusService() {
 
 	}
 
@@ -32,14 +37,14 @@ public class InventoryStatusService {
 		final String[] classPaths = Pattern.compile(String.valueOf(sep)).split(
 				classPath);
 		for (final String cp : classPaths) { // cp will be
+		   log.info("classPath: "+cp);
 			// "catalina.base/webapps/proj4398/WEB-INF/classes
-			final File fileWebInf = new File(cp).getParentFile();
-			if (null == fileWebInf)
+			final File fileBin = new File(cp).getParentFile();
+			if (null == fileBin)
 				continue;
-			if (false == fileWebInf.getName().equals("WEB-INF"))
+			if (false == fileBin.getName().equals("bin"))
 				continue;
-			return fileWebInf.getParentFile().getParentFile().getParentFile()
-					.getAbsolutePath();
+			return fileBin.getParentFile().getAbsolutePath();
 		}
 		return null;
 	}
@@ -60,12 +65,18 @@ public class InventoryStatusService {
 			// System.out.println(catalBase);
 			// create an instance of properties class
 
-			Properties props = new Properties();
-			props.load(new FileInputStream("build.properties"));
-			String tomcatpath = props.getProperty("appserver.home");
-			System.out.println(tomcatpath);
-			System.out.println(date.toString());
-			final String url = "jdbc:hsqldb:file:build/mydb";
+//			Properties props = new Properties();
+//			props.load(new FileInputStream("build.properties"));
+//			String tomcatpath = props.getProperty("appserver.home");
+//			System.out.println(tomcatpath);
+//			System.out.println(date.toString());
+	      final String curPath = System.getProperty("user.dir", ".");
+	      log.info("Current: "+curPath);
+			final String catalina = findCatalinaBase();
+			log.info("Catalina: "+catalina);
+         final String url = "jdbc:hsqldb:file:"+catalina+"/webapps/proj4398/WEB-INF/data/mydb";
+         //final String url = "jdbc:hsqldb:file:/Users/wrice/workspace3/apache-tomcat-6.0.18/webapps/proj4398/WEB-INF/data/mydb";
+         log.info("URL: " + url);
 			final String username = "sa";
 			final String password = "";
 			//Date date = getDate(testdate);
