@@ -33,6 +33,7 @@ public class AddFlightValidator implements Validator {
     * validate the command object that will be given by Spring Framework.
     * @see org.springframework.validation.Validator#validate(java.lang.Object, org.springframework.validation.Errors)
     */
+   @SuppressWarnings("unused")
    public void validate(Object cmdObj, Errors err) {
       final AddFlightCommand cmd = (AddFlightCommand) cmdObj;
       if (null == cmd) {

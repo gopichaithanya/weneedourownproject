@@ -20,6 +20,7 @@
   <LI>Etc
   <UL>
     <LI><a href="http://localhost:8080/proj4398/docs/api">JavaDoc</a></LI>
+    <LI><a href="http://localhost:8080/axis2/services/InventoryStatusService?wsdl">Web service</a></LI>
   </UL>
   </LI>
 </UL>

@@ -31,11 +31,14 @@ public class ItineraryForCustomerController implements Controller {
     */
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response)
          throws ServletException, IOException {
-      
+
       final HttpSession session = request.getSession();
       String userName = LoginController.getUserName(session);
       if (null == userName)
          return LoginController.redirectToLogin(session, URL);
+
+      final Boolean bReserve = (Boolean) session.getAttribute(SessionConstants.RESERVATION_RESULT);
+      session.removeAttribute(SessionConstants.RESERVATION_RESULT);
 
       final List<Itinerary> reserved = ItineraryManager.getReserved(userName);
       final List<Itinerary> booked = ItineraryManager.getBooked(userName);
@@ -45,6 +48,7 @@ public class ItineraryForCustomerController implements Controller {
       mv.addObject("reservedItinerary", reserved);
       mv.addObject("bookedItinerary", booked);
       mv.addObject("canceledItinerary", canceled);
+      mv.addObject("reservationResult", bReserve);
       return mv;
    }
 }

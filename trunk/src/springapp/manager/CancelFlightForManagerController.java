@@ -1,7 +1,6 @@
 package springapp.manager;
 
 import hibernate.manager.FlightManager;
-import hibernate.manager.ItineraryManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

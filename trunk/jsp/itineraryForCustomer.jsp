@@ -22,7 +22,10 @@ function book(flightNo) {
   <jsp:param name="title2" value="Itinerary" />
 </jsp:include>
 
-<p>
+<p><c:if test="${!empty reservationResult && false == reservationResult}">
+  <div class="error">Your flight reservation is failed. It might because the flight is already
+  booked or canceled by manager.</div>
+</c:if>
 <table border="1" class="itineraryForCustomerReserved">
   <caption class="itineraryForCustomerReservedTitle">Reserved</caption>
   <c:choose>
@@ -94,7 +97,7 @@ function book(flightNo) {
           </tr>
 
           <tr>
-            <td colspan="2">Reserved time: <c:out value="${iti.reservedTime}" /></td>
+            <td colspan="2">Reserved time for #<c:out value="${iti.flight.flightNoFormatted}"/>: <c:out value="${iti.reservedTime}" /></td>
           </tr>
         </c:forEach>
       </tbody>
