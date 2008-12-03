@@ -500,6 +500,9 @@
 			</fileset>
 			<fileset file="${xml.dir}/hibernate.cfg.xml"/>
             <fileset file="${xml.dir}/log4j.properties"/>
+            <fileset dir="${basedir}">
+                <include name="lib/hsqldb.jar"/>
+            </fileset>
 	    </jar>
 	</target>
 

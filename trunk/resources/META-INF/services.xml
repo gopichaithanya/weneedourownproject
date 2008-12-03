@@ -19,7 +19,7 @@
 
 <service name="InventoryStatusService" scope="application" targetNamespace="http://ise.gmu.edu/~nduan/swe642/fall08">
     <description>
-        Stock Quote Service
+        Proj4398: Stock Quote Service
     </description>
     <messageReceivers>
         <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
