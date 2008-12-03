@@ -36,6 +36,11 @@ public class InventoryStatusServiceTest {
 
    @Test
    public void test() {
+   }
+   
+//   @Test
+//   public void test() {
+   public static void main(String[] args) {
       InventoryStatusService test = new InventoryStatusService();
 
       DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");

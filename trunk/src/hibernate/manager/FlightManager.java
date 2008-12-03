@@ -1,5 +1,6 @@
 package hibernate.manager;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -422,5 +423,39 @@ public class FlightManager {
 
       ItineraryManager.cancelByFlightCancel(flightNo);
       return bRst[0];
+   }
+
+   public static int getNumOfEmptySeats(final Date date) {
+      final Calendar c1 = Calendar.getInstance();
+      c1.setTime(date);
+      c1.set(Calendar.HOUR_OF_DAY, 0);
+      c1.set(Calendar.MINUTE, 0);
+      final Date date1 = c1.getTime();
+
+      final Calendar c2 = Calendar.getInstance();
+      c2.setTime(date);
+      c2.set(Calendar.HOUR_OF_DAY, 23);
+      c2.set(Calendar.MINUTE, 59);
+      final Date date2 = c2.getTime();
+
+      final Integer[] rst = new Integer[] { 0 };
+      final SQLException transaction = HibernateUtil.doTransaction(new IHibernateTransaction() {
+         public void transaction(Session session) throws SQLException {
+            final Query q = session.createQuery(
+                  "SELECT SUM(BUSINESS_SEATS), SUM(ECONOMY_SEATS) FROM Flight "
+                        + " WHERE DEPARTURE_TIME >= ? AND DEPARTURE_TIME <= ?").setDate(0, date1)
+                  .setDate(1, date2);
+            final Object[] rsts = (Object[]) q.uniqueResult();
+            if (null == q)
+               throw new SQLException();
+
+            rst[0] = ((Integer) (rsts[0])) + ((Integer) rsts[1]);
+         }
+      });
+      if (null != transaction)
+         throw new IllegalStateException(transaction);
+
+      return rst[0];
+
    }
 }

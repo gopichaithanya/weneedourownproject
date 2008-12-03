@@ -91,6 +91,8 @@
     <property name="prefix" value="/WEB-INF/jsp/"></property>
     <property name="suffix" value=".jsp"></property>        
   </bean>
-  
+
+  <!-- Configure spring to give a hook to axis2 without a ServletContext -->
+  <bean id="applicationContext" class="org.apache.axis2.extensions.spring.receivers.ApplicationContextHolder" />
 
 </beans>

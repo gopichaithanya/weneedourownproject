@@ -1,6 +1,7 @@
 package hibernate.manager;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 import org.hibernate.*;
@@ -57,12 +58,11 @@ class HibernateUtil {
             continue;
          if (false == fileWebInf.getName().equals("WEB-INF"))
             continue;
-         
+
          final String catalinaBase = fileWebInf.getParentFile().getParentFile().getParentFile()
                .getAbsolutePath();
-         final File webapps = new File(catalinaBase + File.separator
-               + "webapps");
-         if(false == webapps.exists())
+         final File webapps = new File(catalinaBase + File.separator + "webapps");
+         if (false == webapps.exists())
             continue;
 
          return catalinaBase;
@@ -78,10 +78,19 @@ class HibernateUtil {
       return sessionFactory;
    }
 
-   public static void doTransaction(IHibernateTransaction trans) {
+   public static SQLException doTransaction(IHibernateTransaction trans) {
       final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
       session.beginTransaction();
-      trans.transaction(session);
+
+      SQLException rst = null;
+      try {
+         trans.transaction(session);
+      } catch (SQLException e) {
+         e.printStackTrace();
+         rst = e;
+      }
+
       session.getTransaction().commit();
+      return rst;
    }
 }
