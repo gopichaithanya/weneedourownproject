@@ -82,7 +82,7 @@ public class InventoryStatusService {
          if (false == new File(fileDB + ".script").exists())
             throw new IllegalStateException("Database folder is not found.");
          
-         final String url = "jdbc:hsqldb:file:" + fileDB;
+         final String url = "jdbc:hsqldb:file:" + fileDB + ";shutdown=true";
          //final String url = "jdbc:hsqldb:file:/Users/wrice/workspace3/apache-tomcat-6.0.18/webapps/proj4398/WEB-INF/data/mydb";
          log.info("URL: " + url);
          final String username = "sa";
@@ -145,7 +145,8 @@ public class InventoryStatusService {
             totalSeats += rs.getInt("Economy_Seats");
 
          }
-         
+
+         rs.close();
          pstmt.close();
          conn.close();
 
