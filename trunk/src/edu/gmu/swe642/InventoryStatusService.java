@@ -87,14 +87,14 @@ public class InventoryStatusService {
 
          // Configuration cfg = new Configuration().configure();
          // final String catalBase = findCatalinaBase();
-         // System.out.println(catalBase);
+         // log.info(catalBase);
          // create an instance of properties class
 
 //			Properties props = new Properties();
 //			props.load(new FileInputStream("build.properties"));
 //			String tomcatpath = props.getProperty("appserver.home");
-//			System.out.println(tomcatpath);
-//			System.out.println(date.toString());
+//			log.info(tomcatpath);
+//			log.info(date.toString());
          //final String curPath = System.getProperty("user.dir", ".");
          final String catalina = findCatalinaBase();
          log.info("Catalina: " + catalina);
@@ -107,29 +107,29 @@ public class InventoryStatusService {
          final String password = "";
          //Date date = getDate(testdate);
 
-         DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy/hh");
-         String s = formatter.format(date);
+         final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy/hh");
+         final String s = formatter.format(date);
 
-         System.out.println("Today is " + s);
+         log.info("Today is " + s);
 
-         String[] dateParts = s.split("/");
+         final String[] dateParts = s.split("/");
 
          int month = Integer.parseInt(dateParts[0]);
          int day = Integer.parseInt(dateParts[1]);
          int year = Integer.parseInt(dateParts[2]);
          //int hour = Integer.parseInt(dateParts[3]);
-         System.out.print(month + "" + year + "");
+         log.info(month + "" + year + "");
 
          Class.forName("org.hsqldb.jdbcDriver");
 
-         System.out.println(url);
+         log.info(url);
 
          Connection conn = null;
          //Date tdate = new Date();
          //long time = tdate.getTime();
          PreparedStatement pstmt = null;
          // Timestamp stamptime = new Timestamp(time);
-         // System.out.println(stamptime.toString());
+         // log.info(stamptime.toString());
 
          conn = DriverManager.getConnection(url, // filenames
                username, // username
@@ -137,22 +137,22 @@ public class InventoryStatusService {
 
          // Statement stmt = conn.createStatement();
          pstmt = conn.prepareStatement("select Business_Seats, Economy_Seats from Flight where "
-               + "  DEPARTURE_TIME > ?  and  DEPARTURE_TIME < ?");
-         String sql = "select Business_Seats, Economy_Seats from Flight DEPARTURE_TIME >" + date;
-         System.out.println("The sql is" + sql);
+               + "  DEPARTURE_TIME >= ?  and  DEPARTURE_TIME <= ?");
+         final String sql = "select Business_Seats, Economy_Seats from Flight DEPARTURE_TIME >" + date;
+         log.info("The sql is" + sql);
          // pstmt.setDate(0, (java.sql.Date) tdate);
-         Date[] dates = getTimeRange(year, month, day, 12, 12);
+         final Date[] dates = getTimeRange(year, month, day, 12, 12);
 
-         Timestamp time1 = new Timestamp(dates[0].getTime());
-         Timestamp time2 = new Timestamp(dates[1].getTime());
-         System.out.println(time1);
-         System.out.println(time2);
+         final Timestamp time1 = new Timestamp(dates[0].getTime());
+         final Timestamp time2 = new Timestamp(dates[1].getTime());
+         log.info(time1);
+         log.info(time2);
 
          pstmt.setTimestamp(1, time1);
 
          pstmt.setTimestamp(2, time2);
 
-         System.out.println("The sql is" + pstmt.toString());
+         log.info("The sql is" + pstmt.toString());
 
          ResultSet rs = pstmt.executeQuery();
 
@@ -165,15 +165,19 @@ public class InventoryStatusService {
 
          //date = date;
       } catch (NullPointerException e) {
-         return -1;
+         log.error(e.getMessage());
+         throw new IllegalStateException(e);
+         //return -1;
 
       } catch (Exception e) {
-         return -3;
+         log.error(e.getMessage());
+         throw new IllegalStateException(e);
+         //return -3;
       }
       return totalSeats;
    }
 
-   public static Date[] getTimeRange(int year, int month, int day, int hour, int searchingHourRange) {
+   private static Date[] getTimeRange(int year, int month, int day, int hour, int searchingHourRange) {
       if (month <= 0 || month > 12)
          return null;
       if (day <= 0 || day > 31)
@@ -232,8 +236,8 @@ public class InventoryStatusService {
 
          Date currDate = new Date();
 
-         System.out.println("Current date: " + currDate);
-         System.out.println("Input date: " + date);
+         log.info("Current date: " + currDate);
+         log.info("Input date: " + date);
 
          // Converting Date to Calendar type in order to increment date
          DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy/hh/mm/ss");
@@ -251,63 +255,23 @@ public class InventoryStatusService {
          Calendar currCal = Calendar.getInstance();
          currCal.set(currYear, currMonth, currDay, currHrs, currMins, currSecs);
          currDate = currCal.getTime();
-         System.out.println("Today's date using Calendar: " + currDate);
+         log.info("Today's date using Calendar: " + currDate);
 
          // Fetch the total seats for date range ---> today, date input by user
          while (currDate.before(date)) {
             totalSeats = totalSeats + getNumOfEmptySeats(currDate);
-            System.out.println("Total seats inside while loop for date " + totalSeats + " "
+            log.info("Total seats inside while loop for date " + totalSeats + " "
                   + currDate);
             currCal.add(Calendar.DATE, 1);
             currDate = currCal.getTime();
          }
          if (PM)
             totalSeats = totalSeats + getNumOfEmptySeats(date);
-      } catch (Exception E) {
-         return -1;
+      } catch (Exception e) {
+         throw new IllegalStateException(e);
+         //return -1;
       }
       return totalSeats;
    }
 
-   /**
-    * 
-    * @param test
-    * @return
-    */
-   static public Date getDate(String test) {
-
-      Date date = new Date();
-
-      try {
-         DateFormat formatter = new SimpleDateFormat();
-         test = test.replaceAll("-", "/");
-         test = test.replaceAll(" ", "/");
-
-         // String[] dateParts = test.split("/");
-         formatter = new SimpleDateFormat("MM/dd/yyyy/hh");
-         date = (Date) formatter.parse(test);
-
-      } catch (ParseException e) {
-         return date;
-      }
-
-      return date;
-   }
-
-   public static void main(String[] args) {
-      InventoryStatusService test = new InventoryStatusService();
-
-      DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-
-      try {
-         Date today = (Date) formatter.parse("2008-12-26T08:10:00-12:00");
-         System.out.println(today.toString());
-         int e = test.getNumOfEmptySeats(today);
-         System.out.println(e);
-      } catch (ParseException p) {
-         System.out.println(p.toString());
-      }
-      // System.out.println(formatter.format(today));
-
-   }
 }

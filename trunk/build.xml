@@ -3,10 +3,6 @@
 <project name="proj4398" basedir="." default="usage">
 	<property file="build.properties" />
 	
-	<property environment="env"/>
-    <property name="AXIS2_HOME" value="${deploy.path}/axis2/WEB-INF"/>
-
-	
 	<!--property name="bin.dir" value="bin"/-->
 	<property name="src.dir" value="src" />
 	<property name="xml.dir" value="xml" />
@@ -22,11 +18,15 @@
 	<property name="build.hbm.dir" value="build/hbm" />
 	<property name="build.war.dir" value="build/war" />
 	<property name="build.docs.dir" value="build/docs" />
-	<property name="name" value="proj4398" />
-	<property name="client.target" value="build/client"/>
-	<property name="resources.dir" value="resources/META-INF"/>
-	<property name="wsdl.uri" value="./resources/META-INF/InventoryStatusService.wsdl"/>
 
+	<property environment="env"/>
+	<property name="name" value="proj4398" />
+    <property name="client.target" value="${build.dir}/client"/>
+    <property name="AXIS2_HOME" value="${deploy.path}/axis2/WEB-INF"/>
+    <property name="resources.dir" value="${build.dir}/resources/META-INF"/>
+    <property name="wsdl.uri" value="${resources.dir}/InventoryStatusService.wsdl"/>
+
+	
 	<path id="master-classpath">
 		<!-- We need the servlet API classes: -->
 		<!--  * for Tomcat 5/6 use servlet-api.jar -->
@@ -455,10 +455,17 @@
 		<mkdir dir="${build.dir}"/>
 	    <mkdir dir="${build.dir}/classes"/>
 	    <!--First let's compile the classes-->
-	    <javac debug="on" fork="true" destdir="${build.dir}/classes" srcdir="${basedir}/src/edu" classpathref="axis2.classpath"/>
+	    <javac debug="on" fork="true" destdir="${build.dir}/classes" classpathref="axis2.classpath">
+			<src path="${basedir}/src/edu" />
+            <exclude name="**/*Test.java"/>
+            <exclude name="**/*Tests.java"/>
+        </javac>
+
 	</target>
 
 	<target name="generate.wsdl" depends="compile.service">
+        <mkdir dir="${resources.dir}" />
+        <echo message="output location: ${resources.dir}" />
 		<taskdef name="java2wsdl" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="axis2.classpath"/>
 		<java2wsdl className="edu.gmu.swe642.InventoryStatusService" outputLocation="${resources.dir}" targetNamespace="http://ise.gmu.edu/~nduan/swe642/fall08" schemaTargetNamespace="http://ise.gmu.edu/~nduan/swe642/fall08/xsd">
 			<classpath>
@@ -475,8 +482,8 @@
 				<include name="**/*.xml"/>
 	        </fileset>
 	    </copy>
-	    <jar destfile="${build.dir}/InventoryStatusService.aar">
-			<fileset excludes="**/Test.class, **/client/**" dir="${build.dir}/classes"/>
+	    <jar destfile="${dist.dir}/InventoryStatusService.aar">
+            <fileset excludes="**/Test.class, **/client/** **/*Tests.class" dir="${build.dir}/classes"/>
 	    </jar>
 	</target>
 
@@ -501,14 +508,9 @@
 		</ant>	
 	</target>
 
-	<target name="deploy.service" description="Deploys webservice">
+	<target name="deploy.service" description="Deploys webservice" depends="generate.service">
 		<copy todir="${deploy.path}/axis2/WEB-INF/services" preservelastmodified="true">
-			<fileset dir="${build.dir}">
-				<include name="*.aar" />
-			</fileset>
-		</copy>
-		<copy todir="${dist.dir}" preservelastmodified="true">
-			<fileset dir="${build.dir}">
+			<fileset dir="${dist.dir}">
 				<include name="*.aar" />
 			</fileset>
 		</copy>
