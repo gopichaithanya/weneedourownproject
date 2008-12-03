@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
+@SuppressWarnings("unused")
 public class InventoryStatusServiceTest {
 
    /**
@@ -35,12 +36,12 @@ public class InventoryStatusServiceTest {
    }
 
    @Test
-   public void test() {
+   public void testNothing() {
    }
-   
-//   @Test
-//   public void test() {
-   public static void main(String[] args) {
+
+   @Test(expected = IllegalStateException.class)
+   public void test() {
+//   public static void main(String[] args) {
       InventoryStatusService test = new InventoryStatusService();
 
       DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");

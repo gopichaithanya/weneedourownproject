@@ -45,34 +45,13 @@ public class InventoryStatusService {
             continue;
 
          final String catalinaBase = fileBin.getParentFile().getAbsolutePath();
-         final File webapps = new File(catalinaBase + File.separator
-               + "webapps");
-         if(false == webapps.exists())
+         final File webapps = new File(catalinaBase + File.separator + "webapps");
+         if (false == webapps.exists())
             continue;
+         
          return catalinaBase;
       }
       return null;
-   }
-
-   private static void updateClassPath() {
-      final String classPath = System.getProperty("java.class.path");
-      final String sep = String.valueOf(File.pathSeparatorChar);
-      final String catalina = findCatalinaBase();
-      final String jarHSQL = catalina + "/webapps/proj4398/WEB-INF/lib/hsqldb.jar";
-
-      boolean bFound = false;
-      final String[] classPaths = Pattern.compile(String.valueOf(sep)).split(classPath);
-      for (final String cp : classPaths) {
-         if (cp.equals(jarHSQL))
-            bFound = true;
-      }
-
-      String newClassPath = classPath;
-      if (false == bFound)
-         newClassPath += sep + jarHSQL;
-      log.info("New class path: " + newClassPath);
-
-      System.setProperty("java.class.path", newClassPath);
    }
 
    /**
@@ -98,9 +77,12 @@ public class InventoryStatusService {
          //final String curPath = System.getProperty("user.dir", ".");
          final String catalina = findCatalinaBase();
          log.info("Catalina: " + catalina);
-         updateClassPath();
 
-         final String url = "jdbc:hsqldb:file:" + catalina + "/webapps/proj4398/WEB-INF/data/mydb";
+         final String fileDB = catalina + "/webapps/proj4398/WEB-INF/data/mydb";
+         if (false == new File(fileDB + ".script").exists())
+            throw new IllegalStateException("Database folder is not found.");
+         
+         final String url = "jdbc:hsqldb:file:" + fileDB;
          //final String url = "jdbc:hsqldb:file:/Users/wrice/workspace3/apache-tomcat-6.0.18/webapps/proj4398/WEB-INF/data/mydb";
          log.info("URL: " + url);
          final String username = "sa";
@@ -138,7 +120,8 @@ public class InventoryStatusService {
          // Statement stmt = conn.createStatement();
          pstmt = conn.prepareStatement("select Business_Seats, Economy_Seats from Flight where "
                + "  DEPARTURE_TIME >= ?  and  DEPARTURE_TIME <= ?");
-         final String sql = "select Business_Seats, Economy_Seats from Flight DEPARTURE_TIME >" + date;
+         final String sql = "select Business_Seats, Economy_Seats from Flight DEPARTURE_TIME >"
+               + date;
          log.info("The sql is" + sql);
          // pstmt.setDate(0, (java.sql.Date) tdate);
          final Date[] dates = getTimeRange(year, month, day, 12, 12);
@@ -260,8 +243,7 @@ public class InventoryStatusService {
          // Fetch the total seats for date range ---> today, date input by user
          while (currDate.before(date)) {
             totalSeats = totalSeats + getNumOfEmptySeats(currDate);
-            log.info("Total seats inside while loop for date " + totalSeats + " "
-                  + currDate);
+            log.info("Total seats inside while loop for date " + totalSeats + " " + currDate);
             currCal.add(Calendar.DATE, 1);
             currDate = currCal.getTime();
          }
