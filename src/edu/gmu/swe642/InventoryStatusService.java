@@ -32,7 +32,7 @@ public class InventoryStatusService {
 
    private static String findCatalinaBase() {
       final String classPath = System.getProperty("java.class.path", ".");
-      final String sep = String.valueOf(File.pathSeparatorChar);
+      final String sep = File.pathSeparator;
 
       final String[] classPaths = Pattern.compile(String.valueOf(sep)).split(classPath);
       for (final String cp : classPaths) { // cp will be
@@ -43,7 +43,13 @@ public class InventoryStatusService {
             continue;
          if (false == fileBin.getName().equals("bin"))
             continue;
-         return fileBin.getParentFile().getAbsolutePath();
+
+         final String catalinaBase = fileBin.getParentFile().getAbsolutePath();
+         final File webapps = new File(catalinaBase + File.separator
+               + "webapps");
+         if(false == webapps.exists())
+            continue;
+         return catalinaBase;
       }
       return null;
    }
@@ -53,15 +59,16 @@ public class InventoryStatusService {
       final String sep = String.valueOf(File.pathSeparatorChar);
       final String catalina = findCatalinaBase();
       final String jarHSQL = catalina + "/webapps/proj4398/WEB-INF/lib/hsqldb.jar";
-      
+
       boolean bFound = false;
       final String[] classPaths = Pattern.compile(String.valueOf(sep)).split(classPath);
-      for(final String cp : classPaths) {
-         if(cp.equals(jarHSQL)) bFound = true;
+      for (final String cp : classPaths) {
+         if (cp.equals(jarHSQL))
+            bFound = true;
       }
-      
+
       String newClassPath = classPath;
-      if(false == bFound)
+      if (false == bFound)
          newClassPath += sep + jarHSQL;
       log.info("New class path: " + newClassPath);
 

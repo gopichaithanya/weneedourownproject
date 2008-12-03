@@ -57,7 +57,15 @@ class HibernateUtil {
             continue;
          if (false == fileWebInf.getName().equals("WEB-INF"))
             continue;
-         return fileWebInf.getParentFile().getParentFile().getParentFile().getAbsolutePath();
+         
+         final String catalinaBase = fileWebInf.getParentFile().getParentFile().getParentFile()
+               .getAbsolutePath();
+         final File webapps = new File(catalinaBase + File.separator
+               + "webapps");
+         if(false == webapps.exists())
+            continue;
+
+         return catalinaBase;
       }
       return null;
    }
