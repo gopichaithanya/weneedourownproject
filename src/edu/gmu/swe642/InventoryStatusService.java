@@ -145,6 +145,9 @@ public class InventoryStatusService {
             totalSeats += rs.getInt("Economy_Seats");
 
          }
+         
+         pstmt.close();
+         conn.close();
 
          //date = date;
       } catch (NullPointerException e) {
